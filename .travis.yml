@@ -1,15 +1,16 @@
 branches:
   only:
   - master
-
 language: node_js
 node_js:
-  - "10"
+- '10'
 cache:
   directories:
-    - "node_modules"
-
+  - node_modules
 before_install:
-  - echo -e "machine github.com\n  login $GH_TOKEN" > ~/.netrc
+- echo -e "machine github.com\n  login $GH_TOKEN" > ~/.netrc
 install: npm install
 script: npm run deploy
+notifications:
+  slack:
+    secure: m1nkFOAlzxVExdSS9tmie6Vo7/bL9rWtBaumkF5BHQiSKnxS+1Qz0+ZCF9CzNCAT2y+QURz/NKEuqjY6peeZYW/QxuMo7EEx8bbzKcskyTo5VLE947M9cP5e6o9xTWfLqAHb+f5dnUP+Rw4tRqJGN+KMM7bJtE1QZ/xxeWHnktcEcXZWw8BLpBRHzI+mPrkT0bTXENCQIe7M81MHv7eN2FrDYJcuhb2KmrV/Tk1+X+8I3bLmBlA4+YPzYJkz5tmHESH88/Ir2Umns1PcOjEK8rpBFqEL4EIg/2Gn3x8eGCgia+YxesF/zJLhoG3WNbN6CDyIfG21tcqkAghK4AJyBi139D2srhL+/G6e2a9GguRfxbSn5E3BDuXFN1xR0U1NvTlUCuiTYOp/+lEPSzB6oKEgE2ydblE2m3YlxnvmI8UY9yvCNjFzZRcGaDiKGMch7pl4WKNuNiXJbzWbsnac54YgENT34m+8R49r4N3M/YDqQfwokrz+IbuEanCspSI1LrU8rCW5WXX4/B8t8ueYc/tKGX1Ewpo2UJWh6s+A4G63mxNhWxab6o44ohCeXBmtDfi9B5gg+csaVKrJIRbZP98YD2dmbNyOwRV63Bj0BNGTlzQaRRksn07CkZFmfMFzrSbn94MC1yA5M2aoq8NDfB3f6RyxnSowy9zTzB55x2I=
