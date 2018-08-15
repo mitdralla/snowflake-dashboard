@@ -1,20 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ModalLink from './ModalLink';
-import * as Resolvers from './resolverComponents';
+import Web3Provider from 'web3-webpacked-react';
+import App from './App'
 
-const renderResolvers = (hydroId, resolvers, resolverContracts, updateState) => {
-  for (let i = 0; i < resolvers.length; i++) {
-    if (Object.keys(Resolvers.default).includes(resolvers[i])) {
-      let Resolver = Resolvers.default[resolvers[i]]
-      ReactDOM.render(
-        <ModalLink resolver={resolvers[i]}>
-          <Resolver hydroId={hydroId} resolverContract={resolverContracts[i]} updateState={updateState} />
-        </ModalLink>,
-        document.getElementById(resolvers[i])
-      );
-    }
-  }
-}
+const Page = (
+  <Web3Provider>
+    <App />
+  </Web3Provider>
+)
 
-window.renderResolvers = renderResolvers
+ReactDOM.render(Page, document.getElementById('root'));
