@@ -24,7 +24,6 @@ class HydroKYCView extends Component {
   }
 
   getPassedStandards() {
-    let standardStrings = []
     this.props.resolverContract.methods.getPassedStandards(this.props.hydroId).call()
       .then(standards => {
         var standardPromises = standards.map(standard => {
@@ -49,7 +48,7 @@ class HydroKYCView extends Component {
       for (var i = 0; i < counter; i++) {
         standardCount[i] = {}
         standardCount[i]["standard"] = standards[i]
-        standardCount[i]["attestations"] = parseInt(results[i])
+        standardCount[i]["attestations"] = parseInt(results[i], 10)
       }
       this.setState({standardCounts: standardCount})
     })
@@ -57,7 +56,6 @@ class HydroKYCView extends Component {
   }
 
   getAllStandards() {
-    let standardStrings = []
     this.props.resolverContract.methods.getAllStandards().call()
       .then(standards => {
         var standardPromises = standards.map(standard => {
