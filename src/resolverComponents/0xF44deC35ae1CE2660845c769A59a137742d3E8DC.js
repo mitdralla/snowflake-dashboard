@@ -257,20 +257,6 @@ class HydroKYCView extends Component {
         </div>
 
         <div>
-          <h2>Attest To A Standard</h2>
-          <form onSubmit={this.handleSubmitAttest}>
-            <select onChange={this.handleChangeAttest}>
-              {options}
-            </select>
-            <input type="text" value={this.state.attestedHydroId} onChange={this.handleChangeHydroId} placeholder="Hydro ID" />
-            <input type="submit" value="Attest A Standard" />
-            <div>
-              {this.state.messageAttest}
-            </div>
-          </form>
-        </div>
-
-        <div>
           <h2>Load Hydro ID Info</h2>
           <form onSubmit={this.handleSubmitLoad}>
             <input type="text" value={this.state.lookupHydroId} onChange={this.handleChangeHydroIdLookup} placeholder="Hydro ID" />
