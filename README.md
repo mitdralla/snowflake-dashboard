@@ -13,4 +13,4 @@ Note that for a user to add a resolver, you must first whitelist it from an addr
 
 ## Known Resolvers
 1. Status: [`0x1784b4ffc7c507a1110947848F6D32C6122E0bdD`](https://rinkeby.etherscan.io/address/0x1784b4ffc7c507a1110947848F6D32C6122E0bdD). Note that you must set the allowance as 1 for this resolver.
-2. KYC: [`0xaa8b3cF220aE839566331e5925985B19fe78c6e1`](https://rinkeby.etherscan.io/address/0xaa8b3cf220ae839566331e5925985b19fe78c6e1).
+2. KYC: [`0xC73564202A2392337F37bCE8326F21A98500745a`](https://rinkeby.etherscan.io/address/0xC73564202A2392337F37bCE8326F21A98500745a).
