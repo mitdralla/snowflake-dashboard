@@ -30,39 +30,6 @@
     You need to enable JavaScript to run this app.
   </noscript>
   <div class="container" id="root">
-    <!-- Header -->
-    <h1 class="centered">Snowflake Demo <span id="networkLink"></span></h1>
-    <h2 class="centered"><span id="hydroId"></span></h2>
-    <p id="addressLink" class="centered"></p>
-    <hr/>
-
-    <!-- Error -->
-    <div id="errorSplash">
-      <h2 class="centered">Javascript Error</h2>
-      <p>Could not run Javascript, please check your permissions settings or visit from a newer browser.</p>
-    </div>
-
-    <!-- No HydroID -->
-    <div id="noHydroId">
-      <h2 class="centered">No HydroID Detected</h2>
-      <p>There isn't a HydroID associated with your current address. Please sign up for a HydroID via the Hydro mobile app. If you know what you're doing, claim a HydroID manually below.</p>
-      <form id="getHydroId">
-        <input type="text" placeholder="HydroID">
-        <button type="button">Get HydroID</button>
-        <div></div>
-      </form>
-    </div>
-
-    <!-- HydroID but no Snowflake -->
-    <div id="noSnowflake">
-      <h2 class="centered">HydroID: </h2>
-      <p>You have a HydroID, but haven't minted a Snowflake identity yet. Please do so below.</p>
-      <form id="mintSnowflake">
-        <button type="button">Mint Snowflake</button>
-        <div></div>
-      </form>
-    </div>
-
     <!-- Snowflake -->
     <div id="hasSnowflake">
       <div id="snowflakeInfo">

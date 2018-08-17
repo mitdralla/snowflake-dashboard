@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
 
+// <ModalLink resolver={resolvers[i]}>
+//   <Resolver hydroId={hydroId} resolverContract={resolverContracts[i]} updateState={updateState} />
+// </ModalLink>
+
 Modal.setAppElement('#root')
 
 class ModalView extends Component {
