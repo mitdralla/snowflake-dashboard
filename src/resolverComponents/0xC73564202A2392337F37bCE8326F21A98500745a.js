@@ -15,7 +15,10 @@ class HydroKYCView extends Component {
       attestedStandard: '',
       lookupHydroId: '',
       currentHydroId: '',
-      lookupStandardCounts: []
+      lookupStandardCounts: [],
+      messageRemoveAttest: '',
+      removeAttestHydroId: '',
+      removeAttestedStandard: ''
     }
 
     this.handleChangeStandard = this.handleChangeStandard.bind(this);
@@ -24,6 +27,10 @@ class HydroKYCView extends Component {
     this.handleChangeHydroId = this.handleChangeHydroId.bind(this);
     this.handleChangeAttest = this.handleChangeAttest.bind(this);
     this.handleSubmitAttest = this.handleSubmitAttest.bind(this);
+
+    this.handleChangeRemoveHydroId = this.handleChangeRemoveHydroId.bind(this);
+    this.handleChangeRemoveAttest = this.handleChangeRemoveAttest.bind(this);
+    this.handleSubmitRemoveAttest = this.handleSubmitRemoveAttest.bind(this);
 
     this.handleChangeHydroIdLookup  = this.handleChangeHydroIdLookup.bind(this);
     this.handleSubmitLoad = this.handleSubmitLoad.bind(this);
@@ -108,7 +115,7 @@ class HydroKYCView extends Component {
           return this.props.resolverContract.methods.getStandardString(standard).call()
         })
         Promise.all(standardPromises).then( results => {
-            this.setState({allStandards: results})
+            this.setState({allStandards: results, removeAttestedStandard: results[0], attestedStandard: results[0]})
           })
       })
   }
@@ -179,6 +186,37 @@ class HydroKYCView extends Component {
     })
   }
 
+  handleChangeRemoveHydroId(event)  {
+    this.setState({removeAttestHydroId: event.target.value})
+  }
+
+  handleChangeRemoveAttest(event) {
+    this.setState({removeAttestedStandard: event.target.value})
+  }
+
+  handleSubmitRemoveAttest(event) {
+    event.preventDefault();
+    this.sendTransactionRemoveAttest()
+  }
+
+  sendTransactionRemoveAttest() {
+    let method = this.props.resolverContract.methods.removeUserKYC(this.state.removeAttestedStandard, this.state.removeAttestHydroId)
+    window.w3w.sendTransaction(method, {
+      error: (error, message) => {
+        console.error(error)
+        this.setState({messageRemoveAttest: <p>{message}</p>})
+      },
+      transactionHash: (transactionHash) => {
+        this.setState({messageRemoveAttest: (<a href={window.w3w.etherscanFormat('transaction', transactionHash)} target="_blank">Pending</a>)})
+      },
+      confirmation: (confirmationNumber, receipt) => {
+        if (confirmationNumber === 0) {
+          this.setState({messageRemoveAttest: <p>Success!</p>})
+        }
+      }
+    })
+  }
+
   render() {
 
     let rows = this.state.standardCounts.map(standard => {
@@ -200,8 +238,6 @@ class HydroKYCView extends Component {
       }
       />
     })
-
-    console.log(lookupRows)
 
     let options = this.state.allStandards.map(standard => {
       return <CustomOption key = {
@@ -252,6 +288,20 @@ class HydroKYCView extends Component {
             <input type="submit" value="Attest A Standard" />
             <div>
               {this.state.messageAttest}
+            </div>
+          </form>
+        </div>
+
+        <div>
+          <h2>Remove Attestation To A Standard</h2>
+          <form onSubmit={this.handleSubmitRemoveAttest}>
+            <select onChange={this.handleChangeRemoveAttest}>
+              {options}
+            </select>
+            <input type="text" value={this.state.removeAttestHydroId} onChange={this.handleChangeRemoveHydroId} placeholder="Hydro ID" />
+            <input type="submit" value="Remove Attestation To A Standard" />
+            <div>
+              {this.state.messageRemoveAttest}
             </div>
           </form>
         </div>
