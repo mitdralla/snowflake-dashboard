@@ -7,13 +7,30 @@ class Header extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      etherBalance: undefined,
+      hydroBalance: undefined
+    }
+
     this.linkify = linkify.bind(this)
     this.getContract = getContract.bind(this)
+
+    this.props.w3w.getERC20Balance(this.getContract('token')._address)
+      .then(balance => {
+        this.setState({hydroBalance: Number(balance).toLocaleString(undefined, { maximumFractionDigits: 3 })})
+      })
+
+    this.props.w3w.getBalance()
+      .then(balance => {
+        this.setState({etherBalance: Number(balance).toLocaleString(undefined, { maximumFractionDigits: 3 })})
+      })
+
+    this.props.getHydroId()
   }
 
   render() {
     const networkName = this.props.w3w.getNetworkName()
-    const snowflakeAddress = this.getContract('snowflake').address
+    const snowflakeAddress = this.getContract('snowflake')._address
 
     return (
       <div>
@@ -25,6 +42,12 @@ class Header extends Component {
         </Typography>
         <Typography variant="subheading" gutterBottom align="center" color="textPrimary">
           {this.props.hydroId}
+        </Typography>
+        <Typography variant="subheading" gutterBottom align="center" color="textPrimary">
+          Ether: {this.state.etherBalance}
+        </Typography>
+        <Typography variant="subheading" gutterBottom align="center" color="textPrimary">
+          Hydro: {this.state.hydroBalance}
         </Typography>
       </div>
     )

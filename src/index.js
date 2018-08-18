@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Web3Provider, { AccountUpdater } from 'web3-webpacked-react';
+import Web3Provider from 'web3-webpacked-react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import App from './components/App'
 
@@ -15,9 +15,7 @@ const theme = createMuiTheme({
 const Page = (
   <MuiThemeProvider theme={theme}>
     <Web3Provider supportedNetworks={[4]}>
-      <AccountUpdater>
-        <App />
-      </AccountUpdater>
+      <App />
     </Web3Provider>
   </MuiThemeProvider>
 )

@@ -4,27 +4,31 @@ import { TextField, Typography, Button } from '@material-ui/core';
 
 import { getContract, linkify } from '../common/utilities'
 
-class NoHydroId extends Component {
+class SnowflakeTokens extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      message: '',
-      hydroId: ''
+      amount: '',
+      message: ''
     }
 
-    this.getContract = getContract.bind(this)
     this.linkify = linkify.bind(this)
+    this.getContract = getContract.bind(this)
   }
 
   handleChange = event => {
-    this.setState({hydroId: event.target.value});
+    this.setState({amount: event.target.value});
   };
 
-  claimHydroId = event => {
+  depositHydro = event => {
     this.setState({message: 'Preparing Transaction'})
 
-    let method = this.getContract('clientRaindrop').methods.signUpUser(this.state.hydroId)
+    const amount = this.props.w3w.fromDecimal(String(this.state.amount), 18)
+
+    const method = this.getContract('token').methods.approveAndCall(
+      this.getContract('snowflake')._address, amount, '0x00'
+    )
     this.props.w3w.sendTransaction(method, {
       error: (error, message) => {
         console.error(error.message)
@@ -44,24 +48,18 @@ class NoHydroId extends Component {
   render() {
     return (
       <div>
-        <Typography variant='display1' gutterBottom align="center" color="textPrimary">
-          No HydroID Detected
-        </Typography>
-        <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-          There isn't a HydroID associated with your current address. Please sign up for a HydroID via the Hydro mobile app. If you know what you're doing, claim a HydroID manually below.
-        </Typography>
-
         <form noValidate autoComplete="off" align="center">
           <TextField
             id="required"
-            label="Hydro ID"
-            helperText="This will be your public identifier."
+            label="Amount"
+            type="number"
+            helperText="Number of Hydro tokens to deposit."
             margin="normal"
-            value={this.state.hydroId}
+            value={this.state.amount}
             onChange={this.handleChange}
           />
-          <Button variant="contained" color="primary" onClick={this.claimHydroId}>
-            Claim Hydro ID
+        <Button variant="contained" color="primary" onClick={this.depositHydro}>
+            Deposit Hydro
           </Button>
           <Typography variant='body1' gutterBottom align="center" color="textPrimary">
             {this.state.message}
@@ -72,4 +70,4 @@ class NoHydroId extends Component {
   }
 }
 
-export default withWeb3(NoHydroId)
+export default withWeb3(SnowflakeTokens)

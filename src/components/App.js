@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { withWeb3 } from 'web3-webpacked-react';
+import { withWeb3, AccountUpdater } from 'web3-webpacked-react';
 
 import { getContract } from '../common/utilities'
 import Header from './Header'
+import FinalizeClaim from './FinalizeClaim'
 import Body from './Body'
 
 
@@ -11,48 +12,68 @@ class App extends Component {
     super(props);
 
     this.state = {
-      hydroId: null,
-      raindropOnly: false
+      hydroId: undefined,
+      raindropOnly: undefined,
+      claims: {}
     }
 
     this.getHydroId = this.getHydroId.bind(this)
     this.getContract = getContract.bind(this)
+    this.addClaim = this.addClaim.bind(this)
 
     this.getHydroId()
   }
 
+  addClaim(address, claim) {
+    this.setState(oldState => {
+      const newClaim = {}
+      newClaim[address] = claim
+      return {claims: {...oldState.claims, ...newClaim}}
+    })
+  }
+
   getHydroId() {
     const raindropHydroId = this.getContract('clientRaindrop').methods.getUserByAddress(this.props.w3w.account).call()
-      .catch(() => {
-        return null
-      })
+      .catch(() => { return null })
 
     const snowflakeHydroId = this.getContract('snowflake').methods.getHydroId(this.props.w3w.account).call()
-      .catch(() => {
-        return null
-      })
+      .catch(() => { return null })
 
     Promise.all([raindropHydroId, snowflakeHydroId])
       .then(([raindrop, snowflake]) => {
-        let hydroId
         if (snowflake !== null) {
-          hydroId = snowflake
+          this.setState({hydroId: snowflake, raindropOnly: false})
         } else {
           if (raindrop !== null) {
-            this.setState({raindropOnly: true})
+            this.setState({hydroId: raindrop, raindropOnly: true})
+          } else {
+            this.setState({hydroId: undefined, raindropOnly: undefined})
           }
-          hydroId = raindrop
         }
-        this.setState({hydroId: hydroId})
       })
   }
 
   render() {
+    // console.log(this.state.claims)
+    const claim = this.state.claims[this.props.w3w.account.toLowerCase()]
+    const finalizeClaim = claim !== undefined ?
+      <FinalizeClaim claim={claim} getHydroId={this.getHydroId} /> :
+      ''
+
     return (
       <div>
-        <Header hydroId={this.state.hydroId} />
+        <AccountUpdater>
+          <Header hydroId={this.state.hydroId} getHydroId={this.getHydroId}/>
+        </AccountUpdater>
         <hr/>
-        <Body hydroId={this.state.hydroId} raindropOnly={this.state.raindropOnly} getHydroId={this.getHydroId} />
+        {finalizeClaim}
+        <Body
+          key={this.state.hydroId}
+          hydroId={this.state.hydroId}
+          raindropOnly={this.state.raindropOnly}
+          getHydroId={this.getHydroId}
+          addClaim={this.addClaim}
+        />
       </div>
     )
   }

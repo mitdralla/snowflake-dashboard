@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
 import Modal from 'react-modal';
-
-// <ModalLink resolver={resolvers[i]}>
-//   <Resolver hydroId={hydroId} resolverContract={resolverContracts[i]} updateState={updateState} />
-// </ModalLink>
 
 Modal.setAppElement('#root')
 
@@ -27,12 +24,10 @@ class ModalView extends Component {
     this.setState({modalIsOpen: false});
   }
 
-  // this.props.resolverContract
-
   render() {
     return (
       <div>
-        <button onClick={this.openModal}>View Data</button>
+        <Button variant="outlined" onClick={this.openModal}>View Data</Button>
         <Modal
           isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}
@@ -40,7 +35,7 @@ class ModalView extends Component {
         >
           <div>
             {this.props.children}
-            <button onClick={this.closeModal}>close</button>
+            <Button variant="outlined" onClick={this.closeModal}>Close</Button>
           </div>
         </Modal>
       </div>

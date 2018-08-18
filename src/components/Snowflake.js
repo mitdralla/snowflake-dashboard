@@ -1,60 +1,121 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import { TextField, Typography, Button } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
-import { getContract, linkify } from '../common/utilities'
+import SnowflakeAddresses from './SnowflakeAddresses'
+import SnowflakeTokens from './SnowflakeTokens'
+import SnowflakeResolvers from './SnowflakeResolvers'
+
+import { getContract } from '../common/utilities'
 
 class Snowflake extends Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      snowflakeDetails: {
+        owner: undefined,
+        ownedAddresses: [],
+        resolvers: [],
+        balance: undefined
+      },
+      resolverDetails: null
+    }
+
+    this.getResolverDetails = this.getResolverDetails.bind(this)
+    this.getSnowflakeDetails = this.getSnowflakeDetails.bind(this)
+
     this.getContract = getContract.bind(this)
-    this.linkify = linkify.bind(this)
+    this.hydroContract = this.getContract('token')
+    this.snowflakeContract = this.getContract('snowflake')
+    this.resolverContract = resolver => this.getContract(resolver, true)
+
+    this.getSnowflakeDetails(this.props.hydroId)
   }
 
-  // claimSnowflake = event => {
-  //   this.setState({message: 'Preparing Transaction'})
-  //
-  //   let method = this.getContract('clientRaindrop').methods.signUpUser(this.state.hydroId)
-  //   this.props.w3w.sendTransaction(method, {
-  //     error: (error, message) => {
-  //       console.error(error.message)
-  //       this.setState({message: 'Transaction Error'})
-  //     },
-  //     transactionHash: (transactionHash) => {
-  //       this.setState({message: this.linkify('transaction', transactionHash, 'Pending', 'body1')})
-  //     },
-  //     confirmation: (confirmationNumber, receipt) => {
-  //       if (confirmationNumber === 0) {
-  //         this.setState({message: this.linkify('transaction', receipt.transactionHash, 'Success!', 'body1')})
-  //         this.props.getHydroId()
-  //       }
-  //     }
-  //   })
-  // };
+  getSnowflakeDetails (hydroId) {
+    this.snowflakeContract.methods.getDetails(hydroId).call()
+      .then(details => {
+        this.setState(oldState => {
+          const extractedDetails = {
+            owner: details.owner,
+            ownedAddresses: details.ownedAddresses,
+            resolvers: details.resolvers
+          }
+          return {snowflakeDetails: {...oldState.snowflakeDetails, ...extractedDetails}}
+        })
+
+        let resolverDetails = details.resolvers.map(resolver => {
+          return this.getResolverDetails(resolver)
+        })
+
+        Promise.all(resolverDetails)
+          .then(results => {
+            const extractedDetails = {}
+            for (let i = 0; i < details.resolvers.length; i++) {
+              extractedDetails[details.resolvers[i]] = results[i]
+            }
+            this.setState({resolverDetails: extractedDetails})
+          })
+      })
+
+      this.snowflakeContract.methods.snowflakeBalance(hydroId).call()
+        .then(balance => {
+          var standardized = this.props.w3w.toDecimal(balance, 18)
+          standardized = Number(standardized).toLocaleString(undefined, { maximumFractionDigits: 3 })
+          this.setState(oldState => {return {snowflakeDetails: {...oldState.snowflakeDetails, balance: standardized}}})
+        })
+  }
+
+  getResolverDetails (resolver) {
+    const resolverContract = this.resolverContract(resolver)
+
+    const name = resolverContract.methods.snowflakeName().call()
+      .catch(() => '')
+    const description = resolverContract.methods.snowflakeDescription().call()
+      .catch(() => '')
+    const allowance = this.snowflakeContract.methods.getResolverAllowance(this.props.hydroId, resolver).call()
+      .then(allowance => {
+        return this.props.w3w.toDecimal(allowance, 18)
+      })
+
+    // this should never throw
+    return Promise.all([name, description, allowance])
+      .then(([name, description, allowance]) => {
+        return {
+          name: name,
+          description: description,
+          allowance: allowance
+        }
+      })
+  }
 
   render() {
-    // <form noValidate autoComplete="off" align="center">
-    //   <TextField
-    //     id="required"
-    //     label="Hydro ID"
-    //     helperText="This will be your public identifier."
-    //     margin="normal"
-    //     value={this.state.hydroId}
-    //     onChange={this.handleChange}
-    //   />
-    //   <Button variant="contained" color="primary" onClick={this.claimHydroId}>
-    //     Claim Hydro ID
-    //   </Button>
-    //   <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-    //     {this.state.message}
-    //   </Typography>
-    // </form>
     return (
-      <div>
+      <div key={this.state.resolverDetails}>
         <Typography variant='display1' gutterBottom align="center" color="textPrimary">
           Snowflake Detected!
         </Typography>
+        <Typography variant='body1' gutterBottom align="center" color="textPrimary">
+          Owner: {this.state.snowflakeDetails.owner}
+        </Typography>
+        <Typography variant='body1' gutterBottom align="center" color="textPrimary">
+          Balance: {this.state.snowflakeDetails.balance}
+        </Typography>
+        <SnowflakeAddresses
+          ownedAddresses={this.state.snowflakeDetails.ownedAddresses}
+          owner={this.state.snowflakeDetails.owner}
+          hydroId={this.props.hydroId}
+          addClaim={this.props.addClaim}
+        />
+        <SnowflakeTokens
+          hydroId={this.props.hydroId}
+        />
+        <SnowflakeResolvers
+          resolvers={this.state.snowflakeDetails.resolvers}
+          resolverDetails={this.state.resolverDetails}
+          hydroId={this.props.hydroId}
+        />
       </div>
     )
   }

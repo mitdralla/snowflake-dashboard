@@ -4,22 +4,25 @@ import { Typography, Button } from '@material-ui/core';
 
 import { getContract, linkify } from '../common/utilities'
 
-class NoSnowflake extends Component {
+class FinalizeClaim extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      message: ''
+      message: '',
     }
 
     this.getContract = getContract.bind(this)
     this.linkify = linkify.bind(this)
   }
 
-  claimSnowflake = event => {
+  finalizeAddressClaim = event => {
     this.setState({message: 'Preparing Transaction'})
 
-    let method = this.getContract('snowflake').methods.mintIdentityToken()
+    let method = this.getContract('snowflake').methods.finalizeClaim(
+      this.props.claim.hashedSecret, this.props.claim.hydroId
+    )
+
     this.props.w3w.sendTransaction(method, {
       error: (error, message) => {
         console.error(error.message)
@@ -38,25 +41,16 @@ class NoSnowflake extends Component {
 
   render() {
     return (
-      <div>
-        <Typography variant='display1' gutterBottom align="center" color="textPrimary">
-          No Snowflake Detected
-        </Typography>
+      <form noValidate autoComplete="off" align="center">
+        <Button variant="contained" align="center" color="primary" onClick={this.finalizeAddressClaim}>
+          Finalize Claim for {this.props.claim.hydroId}
+        </Button>
         <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-          You have a HydroID, but have not minted a Snowflake identity yet. Please do so below.
+          {this.state.message}
         </Typography>
-
-        <form noValidate autoComplete="off" align="center">
-          <Button variant="contained" color="primary" onClick={this.claimSnowflake}>
-            Claim Snowflake
-          </Button>
-          <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-            {this.state.message}
-          </Typography>
-        </form>
-      </div>
+      </form>
     )
   }
 }
 
-export default withWeb3(NoSnowflake)
+export default withWeb3(FinalizeClaim)
