@@ -33,7 +33,8 @@ class FinalizeClaim extends Component {
       },
       confirmation: (confirmationNumber, receipt) => {
         if (confirmationNumber === 0) {
-          this.props.getHydroId()
+          this.props.removeClaim(this.props.claim.address)
+          this.props.getAccountDetails()
         }
       }
     })
@@ -43,7 +44,7 @@ class FinalizeClaim extends Component {
     return (
       <form noValidate autoComplete="off" align="center">
         <Button variant="contained" align="center" color="primary" onClick={this.finalizeAddressClaim}>
-          Finalize Claim for {this.props.claim.hydroId}
+          Finalize Claim for '{this.props.claim.hydroId}'
         </Button>
         <Typography variant='body1' gutterBottom align="center" color="textPrimary">
           {this.state.message}

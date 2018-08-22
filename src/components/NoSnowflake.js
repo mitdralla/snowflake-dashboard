@@ -30,7 +30,7 @@ class NoSnowflake extends Component {
       },
       confirmation: (confirmationNumber, receipt) => {
         if (confirmationNumber === 0) {
-          this.props.getHydroId()
+          this.props.getAccountDetails()
         }
       }
     })

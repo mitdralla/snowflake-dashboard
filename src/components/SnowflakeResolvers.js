@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import { Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { Table, TableHead, TableBody, TableRow, TableCell, IconButton, Typography } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import ResolverComponents from './resolvers/index'
 import ModalLink from './resolvers/ModalLink'
@@ -11,11 +12,16 @@ class SnowflakeResolvers extends Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      removeMessages: {}
+    }
+
     this.linkify = linkify.bind(this)
     this.getContract = getContract.bind(this)
+  }
 
+  getRows() {
     const rows = []
-    const customResolvers = {}
     this.props.resolvers.forEach((resolver, index) => {
       rows[index] = {
         id: index,
@@ -24,22 +30,50 @@ class SnowflakeResolvers extends Component {
         description: this.props.resolverDetails[resolver].description,
         allowance: this.props.resolverDetails[resolver].allowance,
       }
+    })
+    return rows
+  }
 
-      const ResolverComponent = ResolverComponents[resolver]
-      if (ResolverComponent !== undefined) {
-        const resolverContract = this.getContract(resolver, true)
-        customResolvers[resolver] = (
-          <ModalLink>
-            <ResolverComponent hydroId={this.props.hydroId} resolverContract={resolverContract} />
-          </ModalLink>
-        )
-      }
+  getCustomResolver(resolver) {
+    let customResolver = undefined
+    const ResolverComponent = ResolverComponents[resolver]
+    if (ResolverComponent !== undefined) {
+      const resolverContract = this.getContract(resolver, true)
+      customResolver = (
+        <ModalLink>
+          <ResolverComponent hydroId={this.props.hydroId} resolverContract={resolverContract} />
+        </ModalLink>
+      )
+    }
+
+    return customResolver
+  }
+
+  removeResolver(resolver) {
+    this.setState(oldState => {
+      return { removeMessages: {...oldState.removeMessages, [resolver]: 'Preparing Transaction'} }
     })
 
-    this.state = {
-      rows: rows,
-      customResolvers: customResolvers
-    }
+    this.props.w3w.sendTransaction(this.getContract('snowflake').methods.removeResolvers([resolver], false), {
+      error: (error, message) => {
+        console.error(error.message)
+        this.setState(oldState => {
+          return { removeMessages: {...oldState.removeMessages, [resolver]: 'Transaction Error'} }
+        })
+      },
+      transactionHash: (transactionHash) => {
+        this.setState(oldState => {
+          return { removeMessages:
+            {...oldState.removeMessages, [resolver]: this.linkify('transaction', transactionHash, 'Pending', 'body1')}
+          }
+        })
+      },
+      confirmation: (confirmationNumber, receipt) => {
+        if (confirmationNumber === 0) {
+          this.props.getAccountDetails(true)
+        }
+      }
+    })
   }
 
   render() {
@@ -52,17 +86,26 @@ class SnowflakeResolvers extends Component {
             <TableCell>Description</TableCell>
             <TableCell>Allowance</TableCell>
             <TableCell>Custom Data</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {this.state.rows.map(row => {
+          {this.getRows().map(row => {
             return (
               <TableRow key={row.id}>
                 <TableCell>{this.linkify('address', row.resolver, undefined, 'body1')}</TableCell>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.description}</TableCell>
                 <TableCell numeric>{row.allowance}</TableCell>
-                <TableCell>{this.state.customResolvers[row.resolver]}</TableCell>
+                <TableCell>{this.getCustomResolver(row.resolver)}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => this.removeResolver(row.resolver)}>
+                    <DeleteIcon />
+                  </IconButton>
+                  <Typography variant='body1' gutterBottom align="center" color="textPrimary">
+                    {this.state.removeMessages[row.resolver]}
+                  </Typography>
+                </TableCell>
               </TableRow>
             )
           })}

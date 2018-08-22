@@ -1,31 +1,14 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
 import Typography from '@material-ui/core/Typography';
-import { getContract, linkify } from '../common/utilities'
+import { linkify, getContract } from '../common/utilities'
 
 class Header extends Component {
   constructor(props) {
-    super(props);
-
-    this.state = {
-      etherBalance: undefined,
-      hydroBalance: undefined
-    }
+    super(props)
 
     this.linkify = linkify.bind(this)
     this.getContract = getContract.bind(this)
-
-    this.props.w3w.getERC20Balance(this.getContract('token')._address)
-      .then(balance => {
-        this.setState({hydroBalance: Number(balance).toLocaleString(undefined, { maximumFractionDigits: 3 })})
-      })
-
-    this.props.w3w.getBalance()
-      .then(balance => {
-        this.setState({etherBalance: Number(balance).toLocaleString(undefined, { maximumFractionDigits: 3 })})
-      })
-
-    this.props.getHydroId()
   }
 
   render() {
@@ -44,10 +27,10 @@ class Header extends Component {
           {this.props.hydroId}
         </Typography>
         <Typography variant="subheading" gutterBottom align="center" color="textPrimary">
-          Ether: {this.state.etherBalance}
+          Ether: {this.props.etherBalance}
         </Typography>
         <Typography variant="subheading" gutterBottom align="center" color="textPrimary">
-          Hydro: {this.state.hydroBalance}
+          Hydro: {this.props.hydroBalance}
         </Typography>
       </div>
     )

@@ -21,7 +21,7 @@ class NoHydroId extends Component {
     this.setState({hydroId: event.target.value});
   };
 
-  claimHydroId = event => {
+  claimHydroId = () => {
     this.setState({message: 'Preparing Transaction'})
 
     let method = this.getContract('clientRaindrop').methods.signUpUser(this.state.hydroId)
@@ -35,11 +35,11 @@ class NoHydroId extends Component {
       },
       confirmation: (confirmationNumber, receipt) => {
         if (confirmationNumber === 0) {
-          this.props.getHydroId()
+          this.props.getAccountDetails()
         }
       }
     })
-  };
+  }
 
   render() {
     return (
