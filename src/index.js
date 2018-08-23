@@ -5,8 +5,16 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import App from './components/App'
 
 const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#0971f5",
+    },
+    secondary: {
+      main: "#2C90B8",
+    }
+  },
   typography: {
-    fontWeightLight: 100,
+    fontWeightLight: 200,
     fontWeightRegular: 200,
     fontWeightMedium: 300
   },

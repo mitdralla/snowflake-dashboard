@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
+import { withStyles } from '@material-ui/core/styles';
 
 import { getContract } from '../common/utilities'
 import Header from './Header'
@@ -8,6 +9,16 @@ import NoHydroId from './NoHydroId'
 import NoSnowflake from './NoSnowflake'
 import Snowflake from './Snowflake'
 
+const styles = theme => ({
+  width: {
+    [theme.breakpoints.down('md')]: {
+      width: '90%',
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '75%',
+    },
+  },
+});
 
 class App extends Component {
   constructor(props) {
@@ -160,7 +171,7 @@ class App extends Component {
     }
 
     return (
-      <div>
+      <div className={this.props.classes.width} style={{margin: "0 auto"}}>
         <Header
           hydroId={this.state.hydroId}
           hydroBalance={this.state.hydroBalance}
@@ -174,4 +185,4 @@ class App extends Component {
   }
 }
 
-export default withWeb3(App)
+export default withStyles(styles)(withWeb3(App))
