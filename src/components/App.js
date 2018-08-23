@@ -178,6 +178,8 @@ class App extends Component {
           etherBalance={this.state.etherBalance}
         />
         <hr/>
+        <br/>
+        <br/>
         {Claim(this.state.claims)}
         {Body(this.state.hydroId, this.state.raindropOnly)}
       </div>

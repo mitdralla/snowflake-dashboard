@@ -15,7 +15,7 @@
     "react-dom": "^16.4.2",
     "react-modal": "^3.5.1",
     "react-scripts": "1.1.4",
-    "web3-webpacked-react": "^1.0.6"
+    "web3-webpacked-react": "^1.0.7"
   },
   "scripts": {
     "predeploy": "npm run build",

@@ -5,9 +5,6 @@ import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import { withStyles } from '@material-ui/core/styles';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Tooltip from '@material-ui/core/Tooltip';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { linkify, getContract } from '../common/utilities'
 
@@ -20,7 +17,7 @@ const styles = theme => ({
   chip: {
     margin: theme.spacing.unit,
   }
-});
+})
 
 class Header extends Component {
   constructor(props) {
@@ -57,31 +54,6 @@ class Header extends Component {
             clickable
             className={classes.chip}
           />
-
-          {this.props.hydroId === null || this.props.hydroId === undefined ? '' :
-            <Tooltip
-              title={this.state.copyMessage}
-              placement="top"
-              onOpen={() => { if (!this.state.copyOpen) this.setState({copyOpen: true, copyMessage: 'Copy'})}}
-              onClose={() => this.setState({copyOpen: false})}
-              open={this.state.copyOpen}
-            >
-              <CopyToClipboard
-                text={this.props.hydroId}
-                onCopy={() => {
-                  this.setState({copyMessage: 'Copied!'})
-                  setTimeout(() => this.setState({copyOpen: false}), 750)
-                }}
-              >
-                <Chip
-                  avatar={<Avatar><AccountCircle /></Avatar>}
-                  label={this.props.hydroId}
-                  className={classes.chip}
-                  clickable
-                />
-              </CopyToClipboard>
-            </Tooltip>
-          }
 
           {this.props.etherBalance === undefined ? '' :
             <Chip
