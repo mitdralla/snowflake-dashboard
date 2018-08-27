@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
 import { Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
-import { Button, TextField, Typography, IconButton } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+
+import TransactionForm from './TransactionForm'
 
 import { getContract, linkify } from '../common/utilities'
 
@@ -11,14 +13,19 @@ class SnowflakeAddresses extends Component {
     super(props)
 
     this.state = {
-      address: '',
-      claimMessage: '',
-      unclaimMessages: {}
+      addressToClaim: ''
     }
 
-    this.linkify = linkify.bind(this)
+    // get random value
+    const randomValues = new Uint32Array(1)
+    window.crypto.getRandomValues(randomValues)
+    this.hashedSecret = this.props.w3w.web3js.utils.sha3(randomValues[0].toString())
+    this.details = {
+      hashedSecret: this.hashedSecret
+    }
+
     this.getContract = getContract.bind(this)
-    this.initiateAddressClaim = this.initiateAddressClaim.bind(this)
+    this.linkify = linkify.bind(this)
   }
 
   getRows() {
@@ -27,123 +34,73 @@ class SnowflakeAddresses extends Component {
     })
   }
 
-  initiateAddressClaim(hydroId) {
-    this.setState({claimMessage: 'Preparing Transaction.'})
-
-    // get a secret value
-    const randomValues = new Uint32Array(1)
-    window.crypto.getRandomValues(randomValues)
-
-    let hashedSecret = this.props.w3w.web3js.utils.sha3(randomValues[0].toString())
-
-    let address = this.state.address.toLowerCase()
-
-    let claim = this.props.w3w.web3js.utils.soliditySha3(address, hashedSecret, this.props.hydroId)
-
-    let details = {
-      hashedSecret: hashedSecret,
+  updateClaim = (address) => {
+    this.claim = this.props.w3w.web3js.utils.soliditySha3(address.toLowerCase(), this.hashedSecret, this.props.hydroId)
+    this.details = {...this.details,
       hydroId: this.props.hydroId,
-      address: address
+      address: address.toLowerCase()
     }
-
-    this.props.w3w.sendTransaction(this.getContract('snowflake').methods.initiateClaim(claim), {
-      error: (error, message) => {
-        console.error(error.message)
-        this.setState({claimMessage: 'Transaction Error'})
-      },
-      transactionHash: (transactionHash) => {
-        this.props.addClaim(address, details)
-        this.setState({claimMessage: this.linkify('transaction', transactionHash, 'Pending', 'body1')})
-      },
-      confirmation: (confirmationNumber, receipt) => {
-        if (confirmationNumber === 0) {
-          this.setState({claimMessage: `Success! Please switch to ${address} finalize your claim.`})
-        }
-      }
-    })
   }
-
-  unclaim(address) {
-    this.setState(oldState => {
-      return { unclaimMessages: {...oldState.unclaimMessages, [address]: 'Preparing Transaction'} }
-    })
-
-    this.props.w3w.sendTransaction(this.getContract('snowflake').methods.unclaim([address]), {
-      error: (error, message) => {
-        console.error(error.message)
-        this.setState(oldState => {
-          return { unclaimMessages: {...oldState.unclaimMessages, [address]: 'Transaction Error'} }
-        })
-      },
-      transactionHash: (transactionHash) => {
-        this.setState(oldState => {
-          return { unclaimMessages:
-            {...oldState.unclaimMessages, [address]: this.linkify('transaction', transactionHash, 'Pending', 'body1')}
-          }
-        })
-      },
-      confirmation: (confirmationNumber, receipt) => {
-        if (confirmationNumber === 0) {
-          this.props.getAccountDetails(true)
-        }
-      }
-    })
-  }
-
-  handleChange = event => {
-    this.setState({address: event.target.value});
-  };
 
   render() {
     return (
-      <div>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Address</TableCell>
-              <TableCell>Owner</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.getRows().map(row => {
-              return (
-                <TableRow key={row.id}>
-                  <TableCell>{this.linkify('address', row.address, undefined, 'body1')}</TableCell>
-                  <TableCell>{row.owner ? 'True' : 'False'}</TableCell>
-                  <TableCell>
-                  {row.owner ?
-                    '' :
-                    <IconButton onClick={() => this.unclaim(row.address)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                  <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-                    {this.state.unclaimMessages[row.address]}
-                  </Typography>
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
+      <div style={{width: "100%"}}>
+        <div>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Address</TableCell>
+                <TableCell>Owner</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.getRows().map(row => {
+                return (
+                  <TableRow key={row.id}>
+                    <TableCell>{this.linkify('address', row.address, undefined, 'body1')}</TableCell>
+                    <TableCell>{row.owner ? 'True' : 'False'}</TableCell>
+                    <TableCell style={{textAlign: 'center'}}>
+                    {row.owner ?
+                      '' :
+                      <TransactionForm
+                        fields={[]}
+                        buttonInitial={<DeleteIcon />}
+                        method={this.getContract('snowflake').methods.unclaim}
+                        methodArgs={[{value: [row.address]}]}
+                        onConfirmation={() => this.props.getAccountDetails(true)}
+                      />
+                    }
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </div>
 
-        <form noValidate autoComplete="off" align="center">
+        <div>
           <TextField
-            id="required"
-            label="Address"
-            helperText="You must be able to transact from this address."
+            label='Address'
+            helperText='Must be able to transact from this address'
             margin="normal"
-            value={this.state.address}
-            onChange={this.handleChange}
+            value={this.state.addressToClaim}
+            onChange={(e) => {
+              this.setState({addressToClaim: e.target.value})
+              this.updateClaim(e.target.value)
+            }}
+            fullWidth
           />
-          <Button variant="contained" color="primary" onClick={this.initiateAddressClaim}>
-            Claim
-          </Button>
-          <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-            {this.state.claimMessage}
-          </Typography>
-        </form>
+          <TransactionForm
+            fields={[]}
+            buttonInitial='Initiate Claim'
+            method={this.getContract('snowflake').methods.initiateClaim}
+            methodArgs={[{value: this.claim}]}
+            onTransactionHash={() => {
+              this.props.addClaim(this.details.address, this.details)
+            }}
+          />
+        </div>
       </div>
     )
   }

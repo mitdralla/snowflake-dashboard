@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
+import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
@@ -7,6 +8,10 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { withStyles } from '@material-ui/core/styles';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import SnowflakeAddresses from './SnowflakeAddresses'
 import SnowflakeTokens from './SnowflakeTokens'
@@ -106,11 +111,10 @@ class Snowflake extends Component {
 
     return (
       <React.Fragment>
-
         <div className={classes.root}>
           <Tooltip
             title={this.state.copyMessage}
-            placement="top"
+            placement="left"
             onOpen={() => { if (!this.state.copyOpen) this.setState({copyOpen: true, copyMessage: 'Copy'})}}
             onClose={() => this.setState({copyOpen: false})}
             open={this.state.copyOpen}
@@ -119,11 +123,11 @@ class Snowflake extends Component {
               text={this.props.hydroId}
               onCopy={() => {
                 this.setState({copyMessage: 'Copied!'})
-                setTimeout(() => this.setState({copyOpen: false}), 750)
               }}
             >
               <Chip
                 avatar={<Avatar><AccountCircle /></Avatar>}
+                color='primary'
                 label={this.props.hydroId}
                 className={classes.chip}
                 clickable
@@ -146,24 +150,52 @@ class Snowflake extends Component {
           }
         </div>
 
-        <SnowflakeAddresses
-          getAccountDetails={this.props.getAccountDetails}
-          owner={this.state.owner}
-          ownedAddresses={this.state.ownedAddresses}
-          hydroId={this.props.hydroId}
-          addClaim={this.props.addClaim}
-        />
-        <SnowflakeTokens
-          hydroId={this.props.hydroId}
-          getAccountDetails={this.props.getAccountDetails}
-        />
-        <SnowflakeResolvers
-          resolvers={this.state.resolvers}
-          resolverDetails={this.state.resolverDetails}
-          hydroId={this.props.hydroId}
-          getAccountDetails={this.props.getAccountDetails}
-        />
-        <StoreModal addedResolvers={this.state.resolvers} getAccountDetails={this.props.getAccountDetails} />
+        <br/>
+        <br/>
+
+        <div>
+          <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>Address Management</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <SnowflakeAddresses
+                getAccountDetails={this.props.getAccountDetails}
+                owner={this.state.owner}
+                ownedAddresses={this.state.ownedAddresses}
+                hydroId={this.props.hydroId}
+                addClaim={this.props.addClaim}
+              />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+
+          <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>Token Management</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <SnowflakeTokens
+                hydroId={this.props.hydroId}
+                getAccountDetails={this.props.getAccountDetails}
+              />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+
+          <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>Resolver Management</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <SnowflakeResolvers
+                resolvers={this.state.resolvers}
+                resolverDetails={this.state.resolverDetails}
+                hydroId={this.props.hydroId}
+                getAccountDetails={this.props.getAccountDetails}
+              />
+              <StoreModal addedResolvers={this.state.resolvers} getAccountDetails={this.props.getAccountDetails} />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </div>
       </React.Fragment>
     )
   }

@@ -24,7 +24,7 @@ class NoHydroId extends Component {
         </Typography>
 
         <TransactionForm
-          fields={[{id: 'required', label: 'Hydro ID', helperText: "This is a public identifier."}]}
+          fields={[{label: 'Hydro ID', helperText: "This is a public identifier."}]}
           buttonInitial="Claim"
           method={this.getContract('clientRaindrop').methods.signUpUser}
           methodArgs={[{lookup: "Hydro ID"}]}

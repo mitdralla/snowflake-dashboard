@@ -156,7 +156,7 @@ class App extends Component {
         )
       } else if (this.state.raindropOnly) {
         return (
-          <NoSnowflake getAccountDetails={this.getAccountDetails} />
+          <NoSnowflake getAccountDetails={this.getAccountDetails} hydroId={this.state.hydroId} />
         )
       } else {
         return (
@@ -178,8 +178,6 @@ class App extends Component {
           etherBalance={this.state.etherBalance}
         />
         <hr/>
-        <br/>
-        <br/>
         {Claim(this.state.claims)}
         {Body(this.state.hydroId, this.state.raindropOnly)}
       </div>

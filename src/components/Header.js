@@ -36,6 +36,8 @@ class Header extends Component {
     const { classes } = this.props
     const networkName = this.props.w3w.getNetworkName()
     const snowflakeAddress = this.getContract('snowflake')._address
+    const hydroAddress = this.getContract('token')._address
+    const hydroHolderLink = `${this.props.w3w.etherscanFormat('token', hydroAddress)}?a=${this.props.w3w.account}`
 
     return (
       <React.Fragment>
@@ -46,8 +48,8 @@ class Header extends Component {
         <div className={classes.root}>
           <Chip
             avatar={<Avatar>0x</Avatar>}
-            label={this.props.w3w.account.slice(2)}
             color="primary"
+            label={this.props.w3w.account.slice(2)}
             component="a"
             href={this.props.w3w.etherscanFormat('address', this.props.w3w.account)}
             target="_blank"
@@ -79,6 +81,11 @@ class Header extends Component {
                 </Avatar>
               }
               label={this.props.hydroBalance}
+              color="primary"
+              component="a"
+              href={hydroHolderLink}
+              target="_blank"
+              clickable
               className={classes.chip}
             />
           }

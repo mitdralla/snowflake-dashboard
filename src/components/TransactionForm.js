@@ -105,6 +105,7 @@ class TransactionForm extends Component {
               target: "_blank"
             }
           })
+          if (this.props.onTransactionHash !== undefined) this.props.onTransactionHash()
         },
         confirmation: (confirmationNumber, receipt) => {
           if (confirmationNumber === 0) {
@@ -118,7 +119,7 @@ class TransactionForm extends Component {
                 target: "_blank"
               }
             })
-            this.props.onConfirmation()
+            if (this.props.onConfirmation !== undefined) this.props.onConfirmation()
           }
         }
       })
@@ -138,11 +139,10 @@ class TransactionForm extends Component {
     return (
       <form noValidate autoComplete="off">
         {
-          this.props.fields.map(field => {
+          this.props.fields.map((field, index) => {
             return (
               <TextField
-                key={field.label}
-                id={field.id}
+                key={index}
                 label={field.label}
                 helperText={field.helperText}
                 margin="normal"
