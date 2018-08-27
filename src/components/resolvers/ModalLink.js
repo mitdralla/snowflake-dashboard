@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+
 import Modal from 'react-modal';
+
+const customStyles = {
+  content : {
+    background: 'none',
+    border: 'none'
+  }
+};
 
 Modal.setAppElement('#root')
 
@@ -32,11 +41,14 @@ class ModalView extends Component {
           isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}
           contentLabel={this.props.resolver}
+          style={customStyles}
         >
-          <div>
-            {this.props.children}
-            <Button variant="outlined" onClick={this.closeModal}>Close</Button>
-          </div>
+          <Paper>
+            <div>
+              {this.props.children}
+              <Button variant="outlined" onClick={this.closeModal}>Close</Button>
+            </div>
+          </Paper>
         </Modal>
       </div>
     );
