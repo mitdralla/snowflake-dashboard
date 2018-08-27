@@ -3,10 +3,10 @@ import Typography from '@material-ui/core/Typography';
 
 import contracts from './contracts'
 
-export function getContract (contractName, resolver) {
+export function getContract (contractName, isResolver) {
   let contractData
 
-  if (resolver) {
+  if (isResolver) {
     const resolvers = contracts[this.props.w3w.getNetworkName()].resolvers
     if (Object.keys(resolvers).includes(contractName)) {
       contractData = resolvers[contractName]
@@ -19,6 +19,39 @@ export function getContract (contractName, resolver) {
     contractData = contracts[this.props.w3w.getNetworkName()][contractName]
   }
   return this.props.w3w.getContract(contractData.ABI, contractData.address)
+}
+
+export function getAllResolvers () {
+  const resolvers = contracts[this.props.w3w.getNetworkName()].resolvers
+
+  return Object.keys(resolvers)
+}
+
+export function getResolverData (resolverAddress) {
+  const getContractObj = getContract.bind(this)
+  const resolverContract = getContractObj(resolverAddress, true)
+
+  const name = resolverContract.methods.snowflakeName().call()
+    .catch(() => '')
+  const description = resolverContract.methods.snowflakeDescription().call()
+    .catch(() => '')
+
+  const allowance = getContractObj('snowflake', false).methods.getResolverAllowance(this.props.hydroId, resolverAddress).call()
+    .then(allowance => {
+      return this.props.w3w.toDecimal(allowance, 18)
+    })
+    .catch(() => '')
+
+  // this should never throw
+  return Promise.all([name, description, allowance])
+    .then(([name, description, allowance]) => {
+      return {
+        name:        name,
+        description: description,
+        allowance:   allowance,
+        address:     resolverAddress
+      }
+    })
 }
 
 export function linkify (type, data, display, variant) {

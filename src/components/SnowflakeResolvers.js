@@ -124,7 +124,7 @@ class SnowflakeResolvers extends Component {
           <TableFooter>
             <TableRow>
               <TableCell style={{textAlign: 'center'}} colSpan={6}>
-                <StoreModal addedResolvers={this.props.resolvers} getAccountDetails={this.props.getAccountDetails} />
+                <StoreModal hydroId={this.props.hydroId} addedResolvers={this.state.resolvers} getAccountDetails={this.props.getAccountDetails} />
               </TableCell>
             </TableRow>
           </TableFooter>
