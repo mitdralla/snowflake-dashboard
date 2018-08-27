@@ -192,7 +192,7 @@ class Snowflake extends Component {
                 hydroId={this.props.hydroId}
                 getAccountDetails={this.props.getAccountDetails}
               />
-              <StoreModal addedResolvers={this.state.resolvers} getAccountDetails={this.props.getAccountDetails} />
+              <StoreModal hydroId={this.props.hydroId} addedResolvers={this.state.resolvers} getAccountDetails={this.props.getAccountDetails} />
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </div>

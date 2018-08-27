@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import { Button, TextField, Typography } from '@material-ui/core';
+import { Button, TextField, Typography, GridList, GridListTile, GridListTileBar } from '@material-ui/core';
 import Modal from 'react-modal';
 import AddIcon from '@material-ui/icons/Add';
 
-import { getContract, linkify } from '../common/utilities'
+import { getContract, getAllResolvers, getResolverData, linkify } from '../common/utilities'
 
 Modal.setAppElement('#root')
 
@@ -19,12 +19,15 @@ class StoreModal extends Component {
       allowance: '',
       whitelistResolverAddress: '',
       whitelistResolverMessage: '',
+      resolvers: []
     };
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.getContract = getContract.bind(this)
     this.linkify = linkify.bind(this)
+    this.getAllResolvers = getAllResolvers.bind(this)
+    this.getResolverData = getResolverData.bind(this)
   }
 
   openModal() {
@@ -74,6 +77,21 @@ class StoreModal extends Component {
           this.props.getAccountDetails(true)
         }
       }
+    })
+  }
+
+  componentDidMount = () => {
+    this.loadResolvers()
+  }
+
+  loadResolvers = () => {
+    var resolverMap = this.getAllResolvers().map(resolver => {
+      return this.getResolverData(resolver)
+    })
+
+    Promise.all(resolverMap).then( result => {
+      // console.log(result)
+      this.setState({resolvers: result})
     })
   }
 
@@ -134,6 +152,18 @@ class StoreModal extends Component {
             </form>
             <Button variant="outlined" onClick={this.closeModal}>Close</Button>
           </React.Fragment>
+          <div>
+            <GridList cellHeight={180}>
+              {this.state.resolvers.map( resolver => (
+                <GridListTile key={resolver.address} onClick={() => {this.setState({resolverAddress: resolver.address})}}>
+                  <GridListTileBar
+                    title={resolver.name}
+                    subtitle={<span>{resolver.description}</span>}
+                  />
+                </GridListTile>
+              ))}
+            </GridList>
+          </div>
         </Modal>
       </React.Fragment>
     );
