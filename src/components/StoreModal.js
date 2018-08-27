@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
 import { Button, TextField, Typography } from '@material-ui/core';
-import Modal from 'react-modal';
+import Modal from './Modal';
 import AddIcon from '@material-ui/icons/Add';
 
 import { getContract, linkify } from '../common/utilities'
-
-Modal.setAppElement('#root')
 
 class StoreModal extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      modalIsOpen: false,
       message: '',
       resolverAddress: '',
       allowance: '',
@@ -21,18 +18,8 @@ class StoreModal extends Component {
       whitelistResolverMessage: '',
     };
 
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
     this.getContract = getContract.bind(this)
     this.linkify = linkify.bind(this)
-  }
-
-  openModal() {
-    this.setState({modalIsOpen: true});
-  }
-
-  closeModal() {
-    this.setState({modalIsOpen: false});
   }
 
   whitelistResolver = () => {
@@ -79,63 +66,60 @@ class StoreModal extends Component {
 
   render() {
     return (
-      <React.Fragment>
-        <Button variant="fab" color="primary" onClick={this.openModal}>
-          <AddIcon />
-        </Button>
-
+      <div>
         <Modal
-          isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}
-          contentLabel={this.props.resolver}
+          opener={(props) => {
+            return (
+              <Button variant="fab" color="primary" {...props}>
+                <AddIcon />
+              </Button>
+            )
+          }}
         >
-          <React.Fragment>
-            <form noValidate autoComplete="off" align="center">
-              <TextField
-                id="required"
-                label="Resolver Address"
-                helperText="The resolver smart contract address."
-                margin="normal"
-                value={this.state.whitelistResolverAddress}
-                onChange={e => {this.setState({whitelistResolverAddress: e.target.value})} }
-              />
-              <Button variant="contained" color="primary" onClick={this.whitelistResolver}>
-                Whitelist Resolver
-              </Button>
-              <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-                {this.state.whitelistResolverMessage}
-              </Typography>
-            </form>
+          <form noValidate autoComplete="off" align="center">
+            <TextField
+              id="required"
+              label="Resolver Address"
+              helperText="The resolver smart contract address."
+              margin="normal"
+              value={this.state.whitelistResolverAddress}
+              onChange={e => {this.setState({whitelistResolverAddress: e.target.value})} }
+            />
+            <Button variant="contained" color="primary" onClick={this.whitelistResolver}>
+              Whitelist Resolver
+            </Button>
+            <Typography variant='body1' gutterBottom align="center" color="textPrimary">
+              {this.state.whitelistResolverMessage}
+            </Typography>
+          </form>
 
-            <form noValidate autoComplete="off" align="center">
-              <TextField
-                id="required"
-                label="Resolver Address"
-                helperText="The resolver smart contract address."
-                margin="normal"
-                value={this.state.resolverAddress}
-                onChange={e => {this.setState({resolverAddress: e.target.value})} }
-              />
-              <TextField
-                id="required"
-                label="Allowance"
-                type="number"
-                helperText="The amount of Hydro this resolver may withdraw on your behalf."
-                margin="normal"
-                value={this.state.allowance}
-                onChange={e => {this.setState({allowance: e.target.value})} }
-              />
-              <Button variant="contained" color="primary" onClick={this.setResolver}>
-                Set Resolver
-              </Button>
-              <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-                {this.state.message}
-              </Typography>
-            </form>
-            <Button variant="outlined" onClick={this.closeModal}>Close</Button>
-          </React.Fragment>
+          <form noValidate autoComplete="off" align="center">
+            <TextField
+              id="required"
+              label="Resolver Address"
+              helperText="The resolver smart contract address."
+              margin="normal"
+              value={this.state.resolverAddress}
+              onChange={e => {this.setState({resolverAddress: e.target.value})} }
+            />
+            <TextField
+              id="required"
+              label="Allowance"
+              type="number"
+              helperText="The amount of Hydro this resolver may withdraw on your behalf."
+              margin="normal"
+              value={this.state.allowance}
+              onChange={e => {this.setState({allowance: e.target.value})} }
+            />
+            <Button variant="contained" color="primary" onClick={this.setResolver}>
+              Set Resolver
+            </Button>
+            <Typography variant='body1' gutterBottom align="center" color="textPrimary">
+              {this.state.message}
+            </Typography>
+          </form>
         </Modal>
-      </React.Fragment>
+      </div>
     );
   }
 }
