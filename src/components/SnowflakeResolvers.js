@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import { Table, TableHead, TableBody, TableRow, TableCell, IconButton, Typography } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Checkbox, Table, TableHead, TableBody, TableRow, TableCell, TableFooter } from '@material-ui/core';
 
 import ResolverComponents from './resolvers/index'
-import ModalLink from './resolvers/ModalLink'
+import ResolverModal from './resolvers/ResolverModal'
+import StoreModal from './StoreModal'
 
 import { getContract, linkify } from '../common/utilities'
 
@@ -12,17 +12,11 @@ class SnowflakeResolvers extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      removeMessages: {}
-    }
-
-    this.linkify = linkify.bind(this)
-    this.getContract = getContract.bind(this)
-  }
-
-  getRows() {
+    const isSelected = {}
     const rows = []
     this.props.resolvers.forEach((resolver, index) => {
+      isSelected[index] = false
+
       rows[index] = {
         id: index,
         resolver: resolver,
@@ -31,7 +25,14 @@ class SnowflakeResolvers extends Component {
         allowance: this.props.resolverDetails[resolver].allowance,
       }
     })
-    return rows
+
+    this.state = {
+      rows: rows,
+      isSelected: isSelected
+    }
+
+    this.linkify = linkify.bind(this)
+    this.getContract = getContract.bind(this)
   }
 
   getCustomResolver(resolver) {
@@ -40,9 +41,9 @@ class SnowflakeResolvers extends Component {
     if (ResolverComponent !== undefined) {
       const resolverContract = this.getContract(resolver, true)
       customResolver = (
-        <ModalLink>
+        <ResolverModal>
           <ResolverComponent hydroId={this.props.hydroId} resolverContract={resolverContract} />
-        </ModalLink>
+        </ResolverModal>
       )
     }
 
@@ -76,41 +77,59 @@ class SnowflakeResolvers extends Component {
     })
   }
 
+  handleClick = (e, id) => {
+    this.setState(oldState => {
+      return {isSelected: {...oldState.isSelected, [id]: !oldState.isSelected[id]}}
+    })
+  }
+
   render() {
     return (
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Resolver</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Description</TableCell>
-            <TableCell>Allowance</TableCell>
-            <TableCell>Custom Data</TableCell>
-            <TableCell></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {this.getRows().map(row => {
-            return (
-              <TableRow key={row.id}>
-                <TableCell>{this.linkify('address', row.resolver, undefined, 'body1')}</TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.description}</TableCell>
-                <TableCell numeric>{row.allowance}</TableCell>
-                <TableCell>{this.getCustomResolver(row.resolver)}</TableCell>
-                <TableCell>
-                  <IconButton onClick={() => this.removeResolver(row.resolver)}>
-                    <DeleteIcon />
-                  </IconButton>
-                  <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-                    {this.state.removeMessages[row.resolver]}
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
+      <div style={{overflowX: 'auto'}}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox">
+              </TableCell>
+              <TableCell>Resolver</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Allowance</TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.state.rows.map(row => {
+              return (
+                <TableRow
+                  hover
+                  onClick={e => this.handleClick(e, row.id)}
+                  role="checkbox"
+                  aria-checked={this.state.isSelected[row.id]}
+                  key={row.id}
+                  selected={this.state.isSelected[row.id]}
+                >
+                  <TableCell>
+                    <Checkbox checked={this.state.isSelected[row.id]} />
+                  </TableCell>
+                  <TableCell>{this.linkify('address', row.resolver, undefined, 'body1')}</TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.description}</TableCell>
+                  <TableCell numeric>{row.allowance}</TableCell>
+                  <TableCell>{this.getCustomResolver(row.resolver)}</TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell style={{textAlign: 'center'}} colSpan={6}>
+                <StoreModal hydroId={this.props.hydroId} addedResolvers={this.state.resolvers} getAccountDetails={this.props.getAccountDetails} />
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
     )
   }
 }

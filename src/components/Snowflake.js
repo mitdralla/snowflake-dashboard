@@ -16,7 +16,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SnowflakeAddresses from './SnowflakeAddresses'
 import SnowflakeTokens from './SnowflakeTokens'
 import SnowflakeResolvers from './SnowflakeResolvers'
-import StoreModal from './StoreModal'
 
 import { getContract } from '../common/utilities'
 
@@ -154,9 +153,24 @@ class Snowflake extends Component {
         <br/>
 
         <div>
-          <ExpansionPanel>
+          <ExpansionPanel defaultExpanded>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>Address Management</Typography>
+              <Typography variant="headline">Resolver Management</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <SnowflakeResolvers
+                key={this.state.resolvers}
+                resolvers={this.state.resolvers}
+                resolverDetails={this.state.resolverDetails}
+                hydroId={this.props.hydroId}
+                getAccountDetails={this.props.getAccountDetails}
+              />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+
+          <ExpansionPanel defaultExpanded>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="headline">Address Management</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SnowflakeAddresses
@@ -171,7 +185,7 @@ class Snowflake extends Component {
 
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>Token Management</Typography>
+              <Typography variant="headline">Token Management</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SnowflakeTokens
@@ -181,20 +195,6 @@ class Snowflake extends Component {
             </ExpansionPanelDetails>
           </ExpansionPanel>
 
-          <ExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>Resolver Management</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <SnowflakeResolvers
-                resolvers={this.state.resolvers}
-                resolverDetails={this.state.resolverDetails}
-                hydroId={this.props.hydroId}
-                getAccountDetails={this.props.getAccountDetails}
-              />
-              <StoreModal hydroId={this.props.hydroId} addedResolvers={this.state.resolvers} getAccountDetails={this.props.getAccountDetails} />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
         </div>
       </React.Fragment>
     )
