@@ -145,8 +145,12 @@ class SnowflakeResolvers extends Component {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell padding="none" className={this.props.classes.addResolver}>
-                <StoreModal addedResolvers={this.props.resolvers} getAccountDetails={this.props.getAccountDetails} />
+              <TableCell key={this.props.resolvers} padding="none" className={this.props.classes.addResolver}>
+                <StoreModal
+                  hydroId={this.props.hydroId}
+                  addedResolvers={this.props.resolvers}
+                  getAccountDetails={this.props.getAccountDetails}
+                />
               </TableCell>
             </TableRow>
           </TableFooter>
