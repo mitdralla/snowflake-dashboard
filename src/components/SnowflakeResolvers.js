@@ -84,6 +84,7 @@ class SnowflakeResolvers extends Component {
   }
 
   render() {
+
     return (
       <div style={{overflowX: 'auto'}}>
         <Table>
@@ -123,8 +124,8 @@ class SnowflakeResolvers extends Component {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell style={{textAlign: 'center'}} colSpan={6}>
-                <StoreModal hydroId={this.props.hydroId} addedResolvers={this.state.resolvers} getAccountDetails={this.props.getAccountDetails} />
+              <TableCell key={this.props.resolvers} style={{textAlign: 'center'}} colSpan={6}>
+                <StoreModal hydroId={this.props.hydroId} addedResolvers={this.props.resolvers} getAccountDetails={this.props.getAccountDetails} />
               </TableCell>
             </TableRow>
           </TableFooter>

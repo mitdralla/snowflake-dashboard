@@ -21,6 +21,11 @@ export function getContract (contractName, isResolver) {
   return this.props.w3w.getContract(contractData.ABI, contractData.address)
 }
 
+export function getResolverImage (contractName) {
+  const resolvers = contracts[this.props.w3w.getNetworkName()].resolvers
+  return resolvers[contractName].logo
+}
+
 export function getAllResolvers () {
   const resolvers = contracts[this.props.w3w.getNetworkName()].resolvers
 
@@ -30,6 +35,9 @@ export function getAllResolvers () {
 export function getResolverData (resolverAddress) {
   const getContractObj = getContract.bind(this)
   const resolverContract = getContractObj(resolverAddress, true)
+
+  const getLogo = getResolverImage.bind(this)
+  const logo = getLogo(resolverAddress)
 
   const name = resolverContract.methods.snowflakeName().call()
     .catch(() => '')
@@ -49,7 +57,8 @@ export function getResolverData (resolverAddress) {
         name:        name,
         description: description,
         allowance:   allowance,
-        address:     resolverAddress
+        address:     resolverAddress,
+        logo:        logo
       }
     })
 }
