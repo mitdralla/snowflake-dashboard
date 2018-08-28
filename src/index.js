@@ -8,6 +8,14 @@ import App from './components/App'
 
 
 const theme = createMuiTheme({
+  overrides: {
+    MuiDialog: {
+      paperFullScreen: {
+        width: '90%',
+        height: '90%'
+      }
+    }
+  },
   palette: {
     primary: {
       main: "#0971f5",

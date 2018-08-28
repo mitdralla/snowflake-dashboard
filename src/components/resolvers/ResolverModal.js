@@ -9,9 +9,11 @@ class ResolverModal extends Component {
     return (
       <div>
         <Modal
+          fullScreen
           opener={(props) => {
             return <IconButton {...props}> <OpenInNewIcon /> </IconButton>
           }}
+          title={this.props.resolverName}
         >
           {this.props.children}
         </Modal>

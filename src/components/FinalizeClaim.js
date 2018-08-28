@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
 
-import TransactionForm from './TransactionForm'
+import TransactionButton from './TransactionButton'
 import { getContract } from '../common/utilities'
 
 class FinalizeClaim extends Component {
@@ -18,11 +18,9 @@ class FinalizeClaim extends Component {
     )
 
     return (
-      <TransactionForm
-        fields={[]}
+      <TransactionButton
         buttonInitial={message}
         method={method}
-        methodArgs={[]}
         onConfirmation={() => {
           this.props.removeClaim(this.props.claim.address)
           this.props.getAccountDetails()

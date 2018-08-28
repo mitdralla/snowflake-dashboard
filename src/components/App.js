@@ -171,7 +171,7 @@ class App extends Component {
     }
 
     return (
-      <div className={this.props.classes.width} style={{margin: "0 auto"}}>
+      <div className={this.props.classes.width} style={{margin: "0 auto", marginBottom: 100}}>
         <Header
           hydroId={this.state.hydroId}
           hydroBalance={this.state.hydroBalance}

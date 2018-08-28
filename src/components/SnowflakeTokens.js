@@ -1,69 +1,68 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import { TextField, Typography, Button } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
-import { getContract, linkify } from '../common/utilities'
+import TransactionButton from './TransactionButton'
+import { getContract } from '../common/utilities'
 
 class SnowflakeTokens extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      amount: '',
-      message: ''
+      depositAmount: '',
+      withdrawAmount: ''
     }
 
-    this.linkify = linkify.bind(this)
     this.getContract = getContract.bind(this)
   }
 
-  handleChange = event => {
-    this.setState({amount: event.target.value});
-  };
-
-  depositHydro = event => {
-    this.setState({message: 'Preparing Transaction'})
-
-    const amount = this.props.w3w.fromDecimal(String(this.state.amount), 18)
-
-    const method = this.getContract('token').methods.approveAndCall(
-      this.getContract('snowflake')._address, amount, '0x00'
-    )
-    this.props.w3w.sendTransaction(method, {
-      error: (error, message) => {
-        console.error(error.message)
-        this.setState({message: 'Transaction Error'})
-      },
-      transactionHash: (transactionHash) => {
-        this.setState({message: this.linkify('transaction', transactionHash, 'Pending', 'body1')})
-      },
-      confirmation: (confirmationNumber, receipt) => {
-        if (confirmationNumber === 0) {
-          this.props.getAccountDetails(true)
-        }
-      }
-    })
-  };
-
   render() {
+    const depositAmount = this.props.w3w.fromDecimal(String(this.state.depositAmount), 18)
+    const withdrawAmount = this.props.w3w.fromDecimal(String(this.state.withdrawAmount), 18)
+
     return (
-      <div>
-        <form noValidate autoComplete="off" align="center">
+      <div style={{width: '100%'}}>
+        <form noValidate autoComplete="off">
           <TextField
-            id="required"
             label="Amount"
             type="number"
             helperText="Number of Hydro tokens to deposit."
             margin="normal"
-            value={this.state.amount}
-            onChange={this.handleChange}
+            value={this.state.depositAmount}
+            onChange={e => this.setState({depositAmount: e.target.value})}
+            fullWidth
           />
-        <Button variant="contained" color="primary" onClick={this.depositHydro}>
-            Deposit Hydro
-          </Button>
-          <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-            {this.state.message}
-          </Typography>
+          <TransactionButton
+            buttonInitial='Deposit Hydro'
+            method={this.getContract('token').methods.approveAndCall(
+              this.getContract('snowflake')._address, depositAmount, '0x00'
+            )}
+            onTransactionHash={() => {
+              this.props.getAccountDetails(true)
+            }}
+          />
+        </form>
+
+        <form noValidate autoComplete="off">
+          <TextField
+            label="Amount"
+            type="number"
+            helperText="Number of Hydro tokens to withdraw."
+            margin="normal"
+            value={this.state.withdrawAmount}
+            onChange={e => this.setState({withdrawAmount: e.target.value})}
+            fullWidth
+          />
+          <TransactionButton
+            buttonInitial='Withdraw Hydro'
+            method={this.getContract('snowflake').methods.withdrawSnowflakeBalanceTo(
+              this.props.w3w.account, withdrawAmount
+            )}
+            onTransactionHash={() => {
+              this.props.getAccountDetails(true)
+            }}
+          />
         </form>
       </div>
     )
