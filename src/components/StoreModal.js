@@ -192,7 +192,7 @@ class StoreModal extends Component {
                             this.setState({ open: true, resolverAddress: '' })}
                   }
                 >
-                  <img src={"/assets/resolvers/" + resolver.logo} alt={resolver.name}/>
+                  <img src={require("../../public/assets/resolvers/" + resolver.logo)} alt={resolver.name}/>
                   <GridListTileBar
                     title={resolver.name}
                     subtitle={<span>{resolver.description}</span>}
