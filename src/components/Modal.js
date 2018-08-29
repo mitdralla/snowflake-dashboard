@@ -1,52 +1,42 @@
 import React, { Component } from 'react';
-import { IconButton } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
-import CloseIcon from '@material-ui/icons/Close';
-
-import ReactModal from 'react-modal';
-
-const customStyles = {
-  content: {
-    background: 'none',
-    border:     'none',
-    padding:    '5px'
-  }
-}
-
-ReactModal.setAppElement('#root')
+import { Button, Dialog, DialogActions, DialogTitle, DialogContent } from '@material-ui/core';
 
 class Modal extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      modalIsOpen: false
+      open: false
     }
   }
 
   render() {
     return (
-      <React.Fragment>
-        {this.props.opener({onClick: () => this.setState({modalIsOpen: true})})}
+      <div>
+        {this.props.opener({onClick: () => this.setState({open: true})})}
 
-        <ReactModal
-          isOpen={this.state.modalIsOpen}
-          onRequestClose={() => this.setState({modalIsOpen: false})}
-          style={customStyles}
+        <Dialog
+          fullScreen={this.props.fullScreen}
+          open={this.state.open}
+          onClose={() => this.setState({open: false})}
         >
-          <Paper style={{height: "100%"}}>
-            <IconButton style={{float: "right", margin: '5px'}} onClick={() => this.setState({modalIsOpen: false})}>
-              <CloseIcon />
-            </IconButton>
+          <DialogTitle>
+            {this.props.title}
+          </DialogTitle>
 
-            <div>
-              {this.props.children}
-            </div>
-          </Paper>
-        </ReactModal>
-      </React.Fragment>
+          <DialogContent>
+            {this.props.children}
+          </DialogContent>
+
+          <DialogActions>
+            <Button onClick={() => this.setState({open: false})} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     )
   }
 }
 
-export default Modal;
+export default Modal

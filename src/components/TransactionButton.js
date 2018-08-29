@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import { TextField, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
 import { withTheme } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 import { linkify } from '../common/utilities'
 
@@ -40,18 +41,12 @@ const styles = theme => ({
   }
 })
 
-class TransactionForm extends Component {
+class TransactionButton extends Component {
   constructor(props) {
     super(props)
 
-    const initialValues = {}
-    this.props.fields.forEach(field => {
-      initialValues[field.label] = ''
-    })
-
     this.state = {
-      values: initialValues,
-      message: this.props.buttonInitial,
+      text: this.props.buttonInitial,
       buttonState: 'ready',
       buttonDisabled: false,
       linkProps: {}
@@ -63,7 +58,7 @@ class TransactionForm extends Component {
   sendTransaction = () => {
     if (this.state.buttonState === 'error') {
       this.setState({
-        message: this.props.buttonInitial,
+        text: this.props.buttonInitial,
         buttonState: 'ready',
         buttonDisabled: false,
         linkProps: {}
@@ -72,23 +67,20 @@ class TransactionForm extends Component {
     }
 
     if (this.state.buttonState === 'ready') {
+      const iconSize = this.props.theme.typography.button.fontSize
+
       this.setState({
-        message: <ProgressIcon size={this.props.theme.typography.button.fontSize} />,
-        buttonState:
-        'loading',
+        text: <ProgressIcon size={iconSize} />,
+        buttonState: 'loading',
         buttonDisabled: true,
         linkProps: {}
       })
 
-      const args = this.props.methodArgs.map(arg => {
-        return arg.lookup === undefined ? arg.value : this.state.values[arg.lookup]
-      })
-
-      this.props.w3w.sendTransaction(this.props.method(...args), {
+      this.props.w3w.sendTransaction(this.props.method, {
         error: (error, message) => {
           console.error(error.message)
           this.setState({
-            message: 'Transaction Error. Retry?',
+            text: `Transaction Error: '${message}'`,
             buttonState: 'error',
             buttonDisabled: false,
             linkProps: {}
@@ -96,7 +88,7 @@ class TransactionForm extends Component {
         },
         transactionHash: (transactionHash) => {
           this.setState({
-            message: <span>Awaiting Confirmation <ProgressIcon size={this.props.theme.typography.button.fontSize} /></span>,
+            text: <span>Awaiting Confirmation <ProgressIcon size={iconSize} /></span>,
             buttonState: 'loading',
             buttonDisabled: false,
             linkProps: {
@@ -105,12 +97,12 @@ class TransactionForm extends Component {
               target: "_blank"
             }
           })
-          if (this.props.onTransactionHash !== undefined) this.props.onTransactionHash()
+          this.props.onTransactionHash()
         },
         confirmation: (confirmationNumber, receipt) => {
           if (confirmationNumber === 0) {
             this.setState({
-              message: 'Success!',
+              text: this.props.buttonSuccess,
               buttonState: 'success',
               buttonDisabled: false,
               linkProps: {
@@ -119,53 +111,45 @@ class TransactionForm extends Component {
                 target: "_blank"
               }
             })
-            if (this.props.onConfirmation !== undefined) this.props.onConfirmation()
+            this.props.onConfirmation()
           }
         }
       })
     }
   }
 
-  handleChange = (e, label) => {
-    const value = e.target.value
-    this.setState(oldState => {
-      return { values: {...oldState.values, [label]: value} }
-    })
-  }
-
   render() {
-    const { classes } = this.props
-
     return (
-      <form noValidate autoComplete="off">
-        {
-          this.props.fields.map((field, index) => {
-            return (
-              <TextField
-                key={index}
-                label={field.label}
-                helperText={field.helperText}
-                margin="normal"
-                value={this.state.values[field.label]}
-                onChange={(e) => this.handleChange(e, field.label)}
-                fullWidth
-              />
-            )
-          })
-        }
-        <Button
-          variant="contained"
-          disabled={this.state.buttonDisabled}
-          onClick={this.sendTransaction}
-          color="primary"
-          {...this.state.linkProps}
-          className={classes[this.state.buttonState]}
-        >
-          {this.state.message}
-        </Button>
-      </form>
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={this.state.buttonDisabled}
+        onClick={this.sendTransaction}
+        className={this.props.classes[this.state.buttonState]}
+        {...this.state.linkProps}
+      >
+        {this.state.buttonState === 'ready' ? this.props.buttonInitial : this.state.text}
+      </Button>
     )
   }
 }
 
-export default withTheme()(withStyles(styles)(withWeb3(TransactionForm)))
+TransactionButton.propTypes = {
+  buttonInitial:     PropTypes.node.isRequired,
+  buttonSuccess:     PropTypes.string,
+  method:            PropTypes.object.isRequired,
+  onTransactionHash: PropTypes.func,
+  onConfirmation:    PropTypes.func,
+  classes:           PropTypes.object.isRequired,
+  theme:             PropTypes.object.isRequired,
+  w3w:               PropTypes.object.isRequired
+}
+
+TransactionButton.defaultProps = {
+  buttonSuccess:     'Success!',
+  onTransactionHash: () => {},
+  onConfirmation:    () => {}
+}
+
+
+export default withTheme()(withStyles(styles)(withWeb3(TransactionButton)))

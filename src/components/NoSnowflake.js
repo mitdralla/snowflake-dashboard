@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
 import { Typography } from '@material-ui/core';
 
-import TransactionForm from './TransactionForm'
+import TransactionButton from './TransactionButton'
 
 import { getContract } from '../common/utilities'
 
@@ -25,11 +25,9 @@ class NoSnowflake extends Component {
           Click below to claim your Snowflake!
         </Typography>
 
-        <TransactionForm
-          fields={[]}
+        <TransactionButton
           buttonInitial={message}
-          method={this.getContract('snowflake').methods.mintIdentityToken}
-          methodArgs={[]}
+          method={this.getContract('snowflake').methods.mintIdentityToken()}
           onConfirmation={() => this.props.getAccountDetails()}
         />
       </div>

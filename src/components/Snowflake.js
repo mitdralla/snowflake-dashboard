@@ -109,7 +109,7 @@ class Snowflake extends Component {
     const { classes } = this.props
 
     return (
-      <React.Fragment>
+      <div>
         <div className={classes.root}>
           <Tooltip
             title={this.state.copyMessage}
@@ -157,7 +157,7 @@ class Snowflake extends Component {
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography variant="headline">Resolver Management</Typography>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
+            <ExpansionPanelDetails style={{overflowX: 'auto'}}>
               <SnowflakeResolvers
                 key={this.state.resolvers}
                 resolvers={this.state.resolvers}
@@ -172,8 +172,9 @@ class Snowflake extends Component {
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography variant="headline">Address Management</Typography>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
+            <ExpansionPanelDetails style={{overflowX: 'auto'}}>
               <SnowflakeAddresses
+                key={this.state.ownedAddresses}
                 getAccountDetails={this.props.getAccountDetails}
                 owner={this.state.owner}
                 ownedAddresses={this.state.ownedAddresses}
@@ -196,7 +197,7 @@ class Snowflake extends Component {
           </ExpansionPanel>
 
         </div>
-      </React.Fragment>
+      </div>
     )
   }
 }

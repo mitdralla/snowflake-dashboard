@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import { Button, TextField, Typography, GridList, GridListTile, GridListTileBar } from '@material-ui/core';
+import { Button, TextField, GridList, GridListTile, GridListTileBar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Modal from './Modal';
 import AddIcon from '@material-ui/icons/Add';
@@ -9,6 +9,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
+import TransactionButton from './TransactionButton'
 import { getContract, getAllResolvers, getResolverData, linkify } from '../common/utilities'
 
 const styles = theme => ({
@@ -36,10 +37,9 @@ class StoreModal extends Component {
     super(props);
 
     this.state = {
-      message: '',
       resolverAddress: '',
-      allowance: '',
       whitelistResolverAddress: '',
+      allowance: '',
       whitelistResolverMessage: '',
       resolvers: [],
       open: false
@@ -49,52 +49,6 @@ class StoreModal extends Component {
     this.linkify = linkify.bind(this)
     this.getAllResolvers = getAllResolvers.bind(this)
     this.getResolverData = getResolverData.bind(this)
-  }
-
-  handleClose = (event, reason) => {
-    this.setState({ open: false });
-  }
-
-  whitelistResolver = () => {
-    this.setState({whitelistResolverMessage: 'Preparing Transaction'})
-
-    let method = this.getContract('snowflake').methods.whitelistResolver(this.state.whitelistResolverAddress)
-    this.props.w3w.sendTransaction(method, {
-      error: (error, message) => {
-        console.error(error.message)
-        this.setState({whitelistResolverMessage: 'Transaction Error'})
-      },
-      transactionHash: (transactionHash) => {
-        this.setState({whitelistResolverMessage: this.linkify('transaction', transactionHash, 'Pending', 'body1')})
-      },
-      confirmation: (confirmationNumber, receipt) => {
-        if (confirmationNumber === 0) {
-          this.setState({whitelistResolverMessage: 'Success!'})
-        }
-      }
-    })
-  }
-
-  setResolver = () => {
-    this.setState({message: 'Preparing Transaction'})
-
-    let method = this.getContract('snowflake').methods.addResolvers(
-      [this.state.resolverAddress], [this.props.w3w.fromDecimal(this.state.allowance, 18)]
-    )
-    this.props.w3w.sendTransaction(method, {
-      error: (error, message) => {
-        console.error(error.message)
-        this.setState({message: 'Transaction Error'})
-      },
-      transactionHash: (transactionHash) => {
-        this.setState({message: this.linkify('transaction', transactionHash, 'Pending', 'body1')})
-      },
-      confirmation: (confirmationNumber, receipt) => {
-        if (confirmationNumber === 0) {
-          this.props.getAccountDetails(true)
-        }
-      }
-    })
   }
 
   componentDidMount = () => {
@@ -127,63 +81,69 @@ class StoreModal extends Component {
   render() {
     const { classes } = this.props;
 
+    const addButton = props => {
+      return (
+        <Button variant="fab" color="primary" {...props}>
+          <AddIcon />
+        </Button>
+      )
+    }
+
     return (
       <div>
         <Modal
-          opener={(props) => {
-            return (
-              <Button variant="fab" color="primary" {...props}>
-                <AddIcon />
-              </Button>
-            )
-          }}
+          fullScreen
+          opener={addButton}
+          title='dApp Store'
         >
-          <form noValidate autoComplete="off" align="center">
+          <form noValidate autoComplete="off">
             <TextField
-              id="required"
               label="Resolver Address"
               helperText="The resolver smart contract address."
               margin="normal"
               value={this.state.whitelistResolverAddress}
               onChange={e => {this.setState({whitelistResolverAddress: e.target.value})} }
+              fullWidth
             />
-            <Button variant="contained" color="primary" onClick={this.whitelistResolver}>
-              Whitelist Resolver
-            </Button>
-            <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-              {this.state.whitelistResolverMessage}
-            </Typography>
+
+            <TransactionButton
+              buttonInitial='Whitelist Resolver'
+              method={this.getContract('snowflake').methods.whitelistResolver(this.state.whitelistResolverAddress)}
+            />
           </form>
 
-          <form noValidate autoComplete="off" align="center">
+          <form noValidate autoComplete="off">
             <TextField
-              id="required"
               label="Resolver Address"
               helperText="The resolver smart contract address."
               margin="normal"
               value={this.state.resolverAddress}
               onChange={e => {this.setState({resolverAddress: e.target.value})} }
+              fullWidth
             />
             <TextField
-              id="required"
               label="Allowance"
               type="number"
               helperText="The amount of Hydro this resolver may withdraw on your behalf."
               margin="normal"
               value={this.state.allowance}
               onChange={e => {this.setState({allowance: e.target.value})} }
+              fullWidth
             />
-            <Button variant="contained" color="primary" onClick={this.setResolver}>
-              Set Resolver
-            </Button>
-            <Typography variant='body1' gutterBottom align="center" color="textPrimary">
-              {this.state.message}
-            </Typography>
+
+            <TransactionButton
+              buttonInitial='Set Resolver'
+              method={this.getContract('snowflake').methods.addResolvers(
+                [this.state.resolverAddress], [this.props.w3w.fromDecimal(this.state.allowance, 18)]
+              )}
+              onConfirmation={() => this.props.getAccountDetails(true)}
+            />
           </form>
           <div className={classes.root}>
             <GridList className={classes.gridList} spacing={6} cellHeight={200} cols={3}>
               {this.state.resolvers.map( resolver => (
                 <GridListTile
+                  style={{cursor: 'pointer'}}
                   cols={1}
                   key={resolver.address}
                   onClick={
@@ -213,7 +173,7 @@ class StoreModal extends Component {
               }}
               open={this.state.open}
               autoHideDuration={5000}
-              onClose={this.handleClose}
+              onClose={() => this.setState({ open: false })}
               ContentProps={{
                 'aria-describedby': 'message-id',
               }}
@@ -224,7 +184,7 @@ class StoreModal extends Component {
                   aria-label="Close"
                   color="inherit"
                   className={classes.close}
-                  onClick={this.handleClose}
+                  onClick={() => this.setState({open: false})}
                 >
                   <CloseIcon />
                 </IconButton>,
@@ -234,7 +194,7 @@ class StoreModal extends Component {
 
         </Modal>
       </div>
-    );
+    )
   }
 }
 

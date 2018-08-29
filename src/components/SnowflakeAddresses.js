@@ -1,18 +1,41 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import { Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
-import { TextField } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Checkbox, Table, TableHead, TableBody, TableRow, TableCell, TableFooter } from '@material-ui/core';
+import { Toolbar, Button, IconButton, TextField } from '@material-ui/core';
+import DoneIcon from '@material-ui/icons/Done';
+import { withStyles } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
-import TransactionForm from './TransactionForm'
+import TransactionButton from './TransactionButton'
+import Modal from './Modal'
 
 import { getContract, linkify } from '../common/utilities'
+
+const styles = {
+  addAddress: {
+    textAlign: 'left'
+  }
+}
 
 class SnowflakeAddresses extends Component {
   constructor(props) {
     super(props)
 
+    const isSelected = {}
+    const rows = {}
+    this.props.ownedAddresses.forEach(address => {
+      if (this.props.owner !== address) isSelected[address] = false
+
+      rows[address] = {
+        id:      address,
+        address: address,
+        owner:   this.props.owner === address
+      }
+    })
+
     this.state = {
+      rows:           rows,
+      isSelected:     isSelected,
       addressToClaim: ''
     }
 
@@ -28,12 +51,6 @@ class SnowflakeAddresses extends Component {
     this.linkify = linkify.bind(this)
   }
 
-  getRows() {
-    return this.props.ownedAddresses.map((address, index) => {
-      return {id: index, address: address, owner: this.props.owner === address}
-    })
-  }
-
   updateClaim = (address) => {
     this.claim = this.props.w3w.web3js.utils.soliditySha3(address.toLowerCase(), this.hashedSecret, this.props.hydroId)
     this.details = {...this.details,
@@ -42,68 +59,124 @@ class SnowflakeAddresses extends Component {
     }
   }
 
-  render() {
-    return (
-      <div style={{width: "100%"}}>
-        <div>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Address</TableCell>
-                <TableCell>Owner</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.getRows().map(row => {
-                return (
-                  <TableRow key={row.id}>
-                    <TableCell>{this.linkify('address', row.address, undefined, 'body1')}</TableCell>
-                    <TableCell>{row.owner ? 'True' : 'False'}</TableCell>
-                    <TableCell style={{textAlign: 'center'}}>
-                    {row.owner ?
-                      '' :
-                      <TransactionForm
-                        fields={[]}
-                        buttonInitial={<DeleteIcon />}
-                        method={this.getContract('snowflake').methods.unclaim}
-                        methodArgs={[{value: [row.address]}]}
-                        onConfirmation={() => this.props.getAccountDetails(true)}
-                      />
-                    }
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
-        </div>
+  handleClick = (e, id) => {
+    this.setState(oldState => {
+      return {isSelected: {...oldState.isSelected, [id]: !oldState.isSelected[id]}}
+    })
+  }
 
-        <div>
-          <TextField
-            label='Address'
-            helperText='Must be able to transact from this address'
-            margin="normal"
-            value={this.state.addressToClaim}
-            onChange={(e) => {
-              this.setState({addressToClaim: e.target.value})
-              this.updateClaim(e.target.value)
-            }}
-            fullWidth
+  render() {
+    const anySelected = Object.values(this.state.isSelected).some(x => x)
+    const anyNotSelected = Object.values(this.state.isSelected).some(x => !x)
+    const allSelected = Object.values(this.state.isSelected).every(x => x)
+
+    const selectedAddresses = Object.keys(this.state.isSelected).filter(key => this.state.isSelected[key])
+
+    const rows = Object.values(this.state.rows).map(row => {
+      const extraProps = row.owner ? {} : {
+        role:           "checkbox",
+        hover:          true,
+        onClick:        e => this.handleClick(e, row.id),
+        'aria-checked': this.state.isSelected[row.id],
+        selected:       this.state.isSelected[row.id]
+      }
+
+      return (
+        <TableRow
+          key={row.id}
+          {...extraProps}
+        >
+          <TableCell padding="checkbox">
+            {row.owner ? '' : <Checkbox checked={this.state.isSelected[row.id]} />}
+          </TableCell>
+          <TableCell>{this.linkify('address', row.address, undefined, 'body1')}</TableCell>
+          <TableCell>{row.owner ? <IconButton disabled><DoneIcon /></IconButton> : undefined}</TableCell>
+        </TableRow>
+      )
+    })
+
+    const addButton = props => {
+      return (
+        <Button variant="fab" color="primary" {...props}>
+          <AddIcon />
+        </Button>
+      )
+    }
+
+    return (
+      <div style={{width: '100%'}}>
+        <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
+          <TransactionButton
+            buttonInitial={<AddIcon/>}
+            method={this.getContract('snowflake').methods.unclaim(selectedAddresses)}
+            onConfirmation={() => { this.props.getAccountDetails(true) }}
           />
-          <TransactionForm
-            fields={[]}
-            buttonInitial='Initiate Claim'
-            method={this.getContract('snowflake').methods.initiateClaim}
-            methodArgs={[{value: this.claim}]}
-            onTransactionHash={() => {
-              this.props.addClaim(this.details.address, this.details)
-            }}
-          />
-        </div>
+        </Toolbar>
+
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox">
+                {this.props.ownedAddresses.length > 1 ? (
+                  <Checkbox
+                    indeterminate={anySelected && anyNotSelected}
+                    checked={allSelected}
+                    onChange={() => {
+                      this.setState(oldState => {
+                        const newIsSelected = {}
+                        let targetValue = true
+                        if (allSelected) targetValue = false
+                        Object.keys(oldState.isSelected).forEach(x => { newIsSelected[x] = targetValue})
+                        return {isSelected: newIsSelected}
+                      })
+                    }}
+                  />
+                ) :
+                  ''
+                }
+              </TableCell>
+              <TableCell>Address</TableCell>
+              <TableCell>Owner</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell className={this.props.classes.addAddress}>
+                <Modal
+                  opener={addButton}
+                  title='Add an Address'
+                >
+                  <form noValidate autoComplete="off">
+                    <TextField
+                      label='Address'
+                      helperText='Must be able to transact from this address'
+                      margin="normal"
+                      value={this.state.addressToClaim}
+                      onChange={(e) => {
+                        this.setState({addressToClaim: e.target.value})
+                        this.updateClaim(e.target.value)
+                      }}
+                      fullWidth
+                    />
+                    <TransactionButton
+                      buttonInitial='Initiate Claim'
+                      method={this.getContract('snowflake').methods.initiateClaim(this.claim)}
+                      onTransactionHash={() => {
+                        this.props.addClaim(this.details.address, this.details)
+                      }}
+                    />
+                  </form>
+                </Modal>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
       </div>
     )
   }
 }
 
-export default withWeb3(SnowflakeAddresses)
+export default withStyles(styles)(withWeb3(SnowflakeAddresses))
