@@ -109,7 +109,7 @@ class Snowflake extends Component {
     const { classes } = this.props
 
     return (
-      <React.Fragment>
+      <div>
         <div className={classes.root}>
           <Tooltip
             title={this.state.copyMessage}
@@ -197,7 +197,7 @@ class Snowflake extends Component {
           </ExpansionPanel>
 
         </div>
-      </React.Fragment>
+      </div>
     )
   }
 }

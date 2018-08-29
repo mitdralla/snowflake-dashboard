@@ -14,7 +14,7 @@ class ResolverView extends Component {
     }
   }
 
-  getCurrentStatus() {
+  getCurrentStatus = () => {
     this.props.resolverContract.methods.getStatus(this.props.hydroId).call()
       .then(status => {
         this.setState({currentStatus: status})
@@ -45,7 +45,7 @@ class ResolverView extends Component {
           <TransactionButton
             buttonInitial='Set New Status'
             method={this.props.resolverContract.methods.setStatus(this.state.newStatus)}
-            onTransactionHash={() => {
+            onConfirmation={() => {
               this.getCurrentStatus()
             }}
           />

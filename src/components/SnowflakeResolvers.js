@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import { Button, Toolbar, Checkbox, Table, TableHead, TableBody, TableRow, TableCell, TableFooter } from '@material-ui/core';
+import { Toolbar, Checkbox, Table, TableHead, TableBody, TableRow, TableCell, TableFooter } from '@material-ui/core';
 import { withStyles } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SwapVertIcon from '@material-ui/icons/SwapVert';
 
 import TransactionButton from './TransactionButton'
 import ResolverComponents from './resolvers/index'
@@ -12,13 +15,7 @@ import { getContract, linkify } from '../common/utilities'
 
 const styles = {
   addResolver: {
-    position: 'absolute',
-    padding: 0,
-    left: 0,
-    right: 0,
-    width: 56,
-    margin: '5px auto',
-    textAlign: 'center'
+    textAlign: 'left'
   }
 }
 
@@ -32,11 +29,12 @@ class SnowflakeResolvers extends Component {
       isSelected[resolver] = false
 
       rows[resolver] = {
-        id:          resolver,
-        resolver:    resolver,
-        name:        this.props.resolverDetails[resolver].name,
-        description: this.props.resolverDetails[resolver].description,
-        allowance:   this.props.resolverDetails[resolver].allowance,
+        id:           resolver,
+        resolver:     resolver,
+        name:         this.props.resolverDetails[resolver].name,
+        description:  this.props.resolverDetails[resolver].description,
+        allowance:    this.props.resolverDetails[resolver].allowance,
+        newAllowance: this.props.resolverDetails[resolver].allowance
       }
     })
 
@@ -65,6 +63,10 @@ class SnowflakeResolvers extends Component {
   }
 
   handleClick = (e, id) => {
+    if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+      return
+    }
+
     this.setState(oldState => {
       return {isSelected: {...oldState.isSelected, [id]: !oldState.isSelected[id]}}
     })
@@ -77,18 +79,32 @@ class SnowflakeResolvers extends Component {
 
     const selectedResolvers = Object.keys(this.state.isSelected).filter(key => this.state.isSelected[key])
 
+    const allowanceChanged = selectedResolvers.map(resolver => {
+      return this.state.rows[resolver].allowance !== this.state.rows[resolver].newAllowance
+    }).some(x => x)
+
     return (
       <div style={{width: '100%'}}>
-        <Toolbar style={{width: '100%'}}>
-          {anySelected ? (
-            <TransactionButton
-              buttonInitial='Remove'
-              method={this.getContract('snowflake').methods.removeResolvers(selectedResolvers, false)}
-              onConfirmation={() => { this.props.getAccountDetails(true) }}
-            />
-            ) :
-            <Button disabled>''</Button>
-          }
+        <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
+          <TransactionButton
+            buttonInitial={allowanceChanged ?
+              <React.Fragment>Update<SwapVertIcon/></React.Fragment>
+              :
+              <React.Fragment>Remove<DeleteIcon/></React.Fragment>
+            }
+            method={allowanceChanged ?
+              this.getContract('snowflake').methods.changeResolverAllowances(
+                selectedResolvers,
+                selectedResolvers.map(resolver => {
+                  const amount = this.state.rows[resolver].newAllowance
+                  return this.props.w3w.fromDecimal(String(amount), 18)
+                })
+              )
+              :
+              this.getContract('snowflake').methods.removeResolvers(selectedResolvers, false)
+            }
+            onConfirmation={() => { this.props.getAccountDetails(true) }}
+          />
         </Toolbar>
 
         <Table>
@@ -137,7 +153,26 @@ class SnowflakeResolvers extends Component {
                   <TableCell>{this.linkify('address', row.resolver, undefined, 'body1')}</TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.description}</TableCell>
-                  <TableCell numeric>{row.allowance}</TableCell>
+                  <TableCell >
+                    {this.state.isSelected[row.id] ?
+                      <TextField
+                        id={row.id}
+                        value={row.newAllowance}
+                        onChange={e => {
+                          const value = e.target.value
+                          this.setState(oldState => {
+                            const newRows = oldState.rows
+                            newRows[row.id].newAllowance = value
+                            return {rows: newRows}
+                          })
+                        }}
+                        type="number"
+                        margin="normal"
+                      />
+                      :
+                      row.allowance
+                    }
+                  </TableCell>
                   <TableCell padding="checkbox">{this.getCustomResolver(row.resolver)}</TableCell>
                 </TableRow>
               )
@@ -145,7 +180,7 @@ class SnowflakeResolvers extends Component {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell key={this.props.resolvers} padding="none" className={this.props.classes.addResolver}>
+              <TableCell key={this.props.resolvers} className={this.props.classes.addResolver}>
                 <StoreModal
                   hydroId={this.props.hydroId}
                   addedResolvers={this.props.resolvers}

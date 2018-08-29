@@ -13,13 +13,7 @@ import { getContract, linkify } from '../common/utilities'
 
 const styles = {
   addAddress: {
-    position: 'absolute',
-    padding: 0,
-    left: 0,
-    right: 0,
-    width: 56,
-    margin: '5px auto',
-    textAlign: 'center'
+    textAlign: 'left'
   }
 }
 
@@ -111,16 +105,12 @@ class SnowflakeAddresses extends Component {
 
     return (
       <div style={{width: '100%'}}>
-        <Toolbar style={{width: '100%'}}>
-          {anySelected ? (
-            <TransactionButton
-              buttonInitial='Remove'
-              method={this.getContract('snowflake').methods.unclaim(selectedAddresses)}
-              onConfirmation={() => { this.props.getAccountDetails(true) }}
-            />
-            ) :
-            <Button disabled>''</Button>
-          }
+        <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
+          <TransactionButton
+            buttonInitial={<AddIcon/>}
+            method={this.getContract('snowflake').methods.unclaim(selectedAddresses)}
+            onConfirmation={() => { this.props.getAccountDetails(true) }}
+          />
         </Toolbar>
 
         <Table>
@@ -154,7 +144,7 @@ class SnowflakeAddresses extends Component {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell padding="none" className={this.props.classes.addAddress}>
+              <TableCell className={this.props.classes.addAddress}>
                 <Modal
                   opener={addButton}
                   title='Add an Address'

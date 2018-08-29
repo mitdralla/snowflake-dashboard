@@ -80,7 +80,7 @@ class TransactionButton extends Component {
         error: (error, message) => {
           console.error(error.message)
           this.setState({
-            text: `Transaction Error: '${message}' Retry?`,
+            text: `Transaction Error: '${message}'`,
             buttonState: 'error',
             buttonDisabled: false,
             linkProps: {}
@@ -128,14 +128,14 @@ class TransactionButton extends Component {
         className={this.props.classes[this.state.buttonState]}
         {...this.state.linkProps}
       >
-        {this.state.text}
+        {this.state.buttonState === 'ready' ? this.props.buttonInitial : this.state.text}
       </Button>
     )
   }
 }
 
 TransactionButton.propTypes = {
-  buttonInitial:     PropTypes.string.isRequired,
+  buttonInitial:     PropTypes.node.isRequired,
   buttonSuccess:     PropTypes.string,
   method:            PropTypes.object.isRequired,
   onTransactionHash: PropTypes.func,
