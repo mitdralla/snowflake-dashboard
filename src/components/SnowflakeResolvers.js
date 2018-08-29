@@ -63,12 +63,18 @@ class SnowflakeResolvers extends Component {
   }
 
   handleClick = (e, id) => {
-    if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+    if ((e.target.tagName === 'INPUT' && e.target.type === 'number') || e.target.tagName === 'A') {
       return
     }
 
     this.setState(oldState => {
-      return {isSelected: {...oldState.isSelected, [id]: !oldState.isSelected[id]}}
+      // reset new allowances
+      const newRows = oldState.rows
+      Object.keys(newRows).forEach(key => {
+        newRows[key].newAllowance = newRows[key].allowance
+      })
+      return {isSelected: {...oldState.isSelected, [id]: !oldState.isSelected[id]}, rows: newRows}
+
     })
   }
 
