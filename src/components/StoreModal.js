@@ -149,7 +149,7 @@ class StoreModal extends Component {
                   onClick={
                     () => {resolver.added === 0 ?
                             this.setState({resolverAddress: resolver.address}) :
-                            this.setState({ open: true, resolverAddress: '' })}
+                            this.setState({open: true, resolverAddress: ''})}
                   }
                 >
                   <img src={require("../../public/assets/resolvers/" + resolver.logo)} alt={resolver.name}/>
@@ -157,7 +157,7 @@ class StoreModal extends Component {
                     title={resolver.name}
                     subtitle={<span>{resolver.description}</span>}
                     actionIcon={
-                        <DoneIcon style={resolver.added === 1 ? {} : { display: 'none' }} className={classes.icon}/>
+                      <DoneIcon style={resolver.added === 1 ? {} : { display: 'none' }} className={classes.icon}/>
                     }
                   />
                 </GridListTile>
