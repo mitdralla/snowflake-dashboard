@@ -63,9 +63,7 @@ class SnowflakeResolvers extends Component {
   }
 
   handleClick = (e, id) => {
-    if ((e.target.tagName === 'INPUT' && e.target.type === 'number') || e.target.tagName === 'A') {
-      return
-    }
+    console.log(e.target.tagName)
 
     this.setState(oldState => {
       // reset new allowances
@@ -147,14 +145,13 @@ class SnowflakeResolvers extends Component {
               return (
                 <TableRow
                   hover
-                  onClick={e => this.handleClick(e, row.id)}
                   role="checkbox"
                   aria-checked={this.state.isSelected[row.id]}
                   key={row.id}
                   selected={this.state.isSelected[row.id]}
                 >
                   <TableCell padding="checkbox">
-                    <Checkbox checked={this.state.isSelected[row.id]} />
+                    <Checkbox checked={this.state.isSelected[row.id]} onClick={e => this.handleClick(e, row.id)} />
                   </TableCell>
                   <TableCell>{this.linkify('address', row.resolver, undefined, 'body1')}</TableCell>
                   <TableCell>{row.name}</TableCell>
@@ -162,6 +159,7 @@ class SnowflakeResolvers extends Component {
                   <TableCell >
                     {this.state.isSelected[row.id] ?
                       <TextField
+                        style={{margin: 0, width: 80}}
                         id={row.id}
                         value={row.newAllowance}
                         onChange={e => {
