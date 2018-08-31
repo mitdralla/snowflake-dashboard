@@ -7,7 +7,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 
 import TransactionButton from './TransactionButton'
-import ResolverComponents from './resolvers/index'
 import ResolverModal from './resolvers/ResolverModal'
 import StoreModal from './StoreModal'
 
@@ -23,9 +22,26 @@ class SnowflakeResolvers extends Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      rows: {},
+      resolverComponents: {},
+      isSelected: {}
+    }
+
+    this.linkify = linkify.bind(this)
+    this.getContract = getContract.bind(this)
+  }
+
+  componentDidMount() {
+    this.getRows()
+  }
+
+  getRows = () => {
     const isSelected = {}
     const rows = {}
-    this.props.resolvers.forEach(resolver => {
+    const resolverComponents = {}
+
+    const updates = this.props.resolvers.map(async resolver => {
       isSelected[resolver] = false
 
       rows[resolver] = {
@@ -36,35 +52,37 @@ class SnowflakeResolvers extends Component {
         allowance:    this.props.resolverDetails[resolver].allowance,
         newAllowance: this.props.resolverDetails[resolver].allowance
       }
+
+      const ResolverComponent = await import(`./resolvers/components/${resolver}.js`)
+        .then(component => component.default)
+        .catch(() => undefined)
+
+      if (ResolverComponent !== undefined) {
+        resolverComponents[resolver] = (
+          <ResolverModal resolverName={rows[resolver].name}>
+            <ResolverComponent
+              hydroId={this.props.hydroId}
+              resolverContract={this.getContract(resolver, true)}
+              snowflakeContract={this.getContract('snowflake')}
+            />
+          </ResolverModal>
+        )
+      } else {
+        resolverComponents[resolver] = ''
+      }
     })
 
-    this.state = {
-      rows: rows,
-      isSelected: isSelected
-    }
-
-    this.linkify = linkify.bind(this)
-    this.getContract = getContract.bind(this)
-  }
-
-  getCustomResolver(resolver) {
-    let customResolver = undefined
-    const ResolverComponent = ResolverComponents[resolver]
-    if (ResolverComponent !== undefined) {
-      const resolverContract = this.getContract(resolver, true)
-      customResolver = (
-        <ResolverModal resolverName={this.state.rows[resolver].name}>
-          <ResolverComponent hydroId={this.props.hydroId} resolverContract={resolverContract} />
-        </ResolverModal>
-      )
-    }
-
-    return customResolver
+    Promise.all(updates)
+      .then(() => {
+        this.setState({
+          rows: rows,
+          isSelected: isSelected,
+          resolverComponents
+        })
+      })
   }
 
   handleClick = (e, id) => {
-    console.log(e.target.tagName)
-
     this.setState(oldState => {
       // reset new allowances
       const newRows = oldState.rows
@@ -92,7 +110,7 @@ class SnowflakeResolvers extends Component {
         <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
           <TransactionButton
             buttonInitial={allowanceChanged ?
-              <React.Fragment>Update<SwapVertIcon/></React.Fragment>
+              <React.Fragment>Update Allowances<SwapVertIcon/></React.Fragment>
               :
               <React.Fragment>Remove<DeleteIcon/></React.Fragment>
             }
@@ -177,7 +195,7 @@ class SnowflakeResolvers extends Component {
                       row.allowance
                     }
                   </TableCell>
-                  <TableCell padding="checkbox">{this.getCustomResolver(row.resolver)}</TableCell>
+                  <TableCell padding="checkbox">{this.state.resolverComponents[row.resolver]}</TableCell>
                 </TableRow>
               )
             })}

@@ -21,9 +21,11 @@ export function getContract (contractName, isResolver) {
   return this.props.w3w.getContract(contractData.ABI, contractData.address)
 }
 
-export function getResolverImage (contractName) {
-  const resolvers = contracts[this.props.w3w.getNetworkName()].resolvers
-  return resolvers[contractName].logo
+export function getResolverImage (resolver) {
+  return import(`../components/resolvers/logos/${resolver}.png`)
+    .catch(() => {
+      return import('../components/resolvers/logos/default.png')
+    })
 }
 
 export function getAllResolvers () {
@@ -33,26 +35,26 @@ export function getAllResolvers () {
 }
 
 export function getResolverData (resolverAddress) {
-  const getContractObj = getContract.bind(this)
-  const resolverContract = getContractObj(resolverAddress, true)
-
+  const getContractObject = getContract.bind(this)
   const getLogo = getResolverImage.bind(this)
-  const logo = getLogo(resolverAddress)
 
+  const resolverContract = getContractObject(resolverAddress, true)
+
+  const logo = getLogo(resolverAddress)
+    .catch(() => '')
   const name = resolverContract.methods.snowflakeName().call()
     .catch(() => '')
   const description = resolverContract.methods.snowflakeDescription().call()
     .catch(() => '')
-
-  const allowance = getContractObj('snowflake', false).methods.getResolverAllowance(this.props.hydroId, resolverAddress).call()
+  const allowance = getContractObject('snowflake').methods.getResolverAllowance(this.props.hydroId, resolverAddress).call()
     .then(allowance => {
       return this.props.w3w.toDecimal(allowance, 18)
     })
     .catch(() => '')
 
   // this should never throw
-  return Promise.all([name, description, allowance])
-    .then(([name, description, allowance]) => {
+  return Promise.all([logo, name, description, allowance])
+    .then(([logo, name, description, allowance]) => {
       return {
         name:        name,
         description: description,

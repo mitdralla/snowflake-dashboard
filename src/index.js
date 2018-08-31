@@ -38,9 +38,11 @@ const theme = createMuiTheme({
 
 theme.palette.success.contrastText = theme.palette.getContrastText(green[700])
 
+const UnsupportedNetwork = <div><h1>Unsupported Network</h1><p>Please switch to Rinkeby</p></div>
+
 const Page = (
   <MuiThemeProvider theme={theme}>
-    <Web3Provider supportedNetworks={[4]}>
+    <Web3Provider supportedNetworks={[4]} screens={{unsupportedNetwork: UnsupportedNetwork}}>
       <NetworkUpdater>
         <App />
       </NetworkUpdater>

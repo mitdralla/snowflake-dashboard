@@ -17,7 +17,7 @@ import SnowflakeAddresses from './SnowflakeAddresses'
 import SnowflakeTokens from './SnowflakeTokens'
 import SnowflakeResolvers from './SnowflakeResolvers'
 
-import { getContract } from '../common/utilities'
+import { getContract, getResolverData } from '../common/utilities'
 
 const styles = theme => ({
   root: {
@@ -44,7 +44,7 @@ class Snowflake extends Component {
       resolverDetails:  null
     }
 
-    this.getResolverDetails = this.getResolverDetails.bind(this)
+    this.getResolverData = getResolverData.bind(this)
     this.getSnowflakeDetails = this.getSnowflakeDetails.bind(this)
 
     this.getContract = getContract.bind(this)
@@ -60,48 +60,27 @@ class Snowflake extends Component {
   getSnowflakeDetails () {
     this.snowflakeContract.methods.getDetails(this.props.hydroId).call()
       .then(details => {
-        let resolverDetails = details.resolvers.map(resolver => {
-          return this.getResolverDetails(resolver)
+        let _resolverDetails = details.resolvers.map(resolver => {
+          return this.getResolverData(resolver)
         })
 
-        Promise.all(resolverDetails)
+        Promise.all(_resolverDetails)
           .then(results => {
             const extractedDetails = {}
             for (let i = 0; i < details.resolvers.length; i++) {
               extractedDetails[details.resolvers[i]] = results[i]
             }
 
-            this.setState({resolverDetails: extractedDetails, ...{
+            const newState = {
+              resolverDetails:  extractedDetails,
               owner:            details.owner,
               ownedAddresses:   details.ownedAddresses,
               resolvers:        details.resolvers,
               snowflakeBalance: this.props.w3w.toDecimal(details.balance, 18)
-            }})
+            }
+
+            this.setState(newState)
           })
-      })
-  }
-
-  getResolverDetails (resolver) {
-    const resolverContract = this.resolverContract(resolver)
-
-    const name = resolverContract.methods.snowflakeName().call()
-      .catch(() => '')
-    const description = resolverContract.methods.snowflakeDescription().call()
-      .catch(() => '')
-    const allowance = this.snowflakeContract.methods.getResolverAllowance(this.props.hydroId, resolver).call()
-      .then(allowance => {
-        return this.props.w3w.toDecimal(allowance, 18)
-      })
-      .catch(() => '')
-
-    // this should never throw
-    return Promise.all([name, description, allowance])
-      .then(([name, description, allowance]) => {
-        return {
-          name:        name,
-          description: description,
-          allowance:   allowance
-        }
       })
   }
 
@@ -149,7 +128,6 @@ class Snowflake extends Component {
           }
         </div>
 
-        <br/>
         <br/>
 
         <div>
