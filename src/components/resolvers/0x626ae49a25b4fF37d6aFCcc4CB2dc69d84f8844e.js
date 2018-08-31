@@ -438,26 +438,29 @@ class HydroKYCView extends Component {
                   Load HydroID Info
                 </Button>
               </form>
+
+              <div style={{width: '100%'}} hidden={lookupRows.length === 0}>
+                <Typography variant='display1' gutterBottom align="center" color="textPrimary">
+                  {this.state.currentHydroId} Passed Standards
+                </Typography>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Standard</TableCell>
+                      <TableCell numeric>Attestations</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                      {lookupRows}
+                  </TableBody>
+                </Table>
+              </div>
+
             </div>
           </ExpansionPanelDetails>
         </ExpansionPanel>
 
-        <div style={{width: '100%'}} hidden={lookupRows.length === 0}>
-          <Typography variant='display1' gutterBottom align="center" color="textPrimary">
-            {this.state.currentHydroId} Passed Standards
-          </Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Standard</TableCell>
-                <TableCell numeric>Attestations</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-                {lookupRows}
-            </TableBody>
-          </Table>
-        </div>
+
 
       </div>
     );
