@@ -10,12 +10,17 @@ import TableRow from '@material-ui/core/TableRow';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import VerifiedUser from '@material-ui/icons/VerifiedUser';
+
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import TransactionButton from '../TransactionButton'
 
 import { withWeb3 } from 'web3-webpacked-react';
 
@@ -265,170 +270,179 @@ class HydroKYCView extends Component {
     return (
       <div>
 
-        <Typography variant='display3' gutterBottom align="center" color="textPrimary">
-          Hydro KYC
-        </Typography>
+        <ExpansionPanel hidden={!this.props.hydroId}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Your Passed Standards</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <div style={{width: '100%'}}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Standard</TableCell>
+                    <TableCell numeric>Attestations</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows}
+                </TableBody>
+              </Table>
+            </div>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
-        <div hidden={!this.props.hydroId}>
-          <Typography variant='display1' gutterBottom align="center" color="textPrimary">
-            Your Passed Standards
-          </Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Standard</TableCell>
-                <TableCell numeric>Attestations</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-                {rows}
-            </TableBody>
-          </Table>
-        </div>
-
-        <Grid container spacing={16}>
-          <Grid item xs={3}>
-            <div>
-              <Typography variant='display1' gutterBottom align="center" color="textPrimary">
-                Add A Standard
-              </Typography>
-              <form noValidate autoComplete="off" align="center">
-                <FormControl>
-                  <TextField
-                    onChange={this.handleChangeStandard}
-                    label="New Standard"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <VerifiedUser />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <Button variant="contained" color="primary" onClick={this.handleSubmitStandard}>
-                    Submit
-                  </Button>
-                  <div>
-                    {this.state.messageStandard}
-                  </div>
-                </FormControl>
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Add A Standard</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <div style={{width: '100%'}}>
+              <form noValidate autoComplete="off">
+                <TextField
+                  margin="normal"
+                  onChange={this.handleChangeStandard}
+                  label="Standard"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <VerifiedUser />
+                      </InputAdornment>
+                    )
+                  }}
+                  fullWidth
+                />
+                <TransactionButton
+                  buttonInitial='Add A Standard'
+                  method={this.props.resolverContract.methods.addKYCStandard(this.state.newStandard)}
+                  onConfirmation={() => {
+                    this.getAllStandards()
+                  }}
+                />
               </form>
             </div>
-          </Grid>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
-          <Grid item xs={3}>
-            <div>
-              <Typography variant='display1' gutterBottom align="center" color="textPrimary">
-                Attest To A Standard
-              </Typography>
-              <form noValidate autoComplete="off" align="center">
-                <FormControl>
-                  <InputLabel htmlFor="standard-simple">Standard</InputLabel>
-                  <Select
-                    value={this.state.attestedStandard}
-                    onChange={this.handleChangeAttest}
-                    inputProps={{
-                      name: 'standard',
-                      id: 'standard-simple',
-                    }}
-                  >
-                    {options}
-                  </Select>
-                  <TextField
-                    value={this.state.attestedHydroId}
-                    onChange={this.handleChangeHydroId}
-                    label="HydroID"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountCircle />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <Button variant="contained" color="primary" onClick={this.handleSubmitAttest}>
-                    Submit
-                  </Button>
-                  <div>
-                    {this.state.messageAttest}
-                  </div>
-                </FormControl>
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Attest To A Standard</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <div style={{width: '100%'}}>
+              <form noValidate autoComplete="off">
+                <InputLabel htmlFor="standard-simple">Standard</InputLabel>
+                <Select
+                  value={this.state.attestedStandard}
+                  onChange={this.handleChangeAttest}
+                  inputProps={{
+                    name: 'standard',
+                    id: 'standard-simple',
+                  }}
+                  fullWidth
+                >
+                  {options}
+                </Select>
+                <TextField
+                  margin="normal"
+                  value={this.state.attestedHydroId}
+                  onChange={this.handleChangeHydroId}
+                  label="HydroID"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountCircle />
+                      </InputAdornment>
+                    )
+                  }}
+                  fullWidth
+                />
+                <TransactionButton
+                  buttonInitial='Attest To A Standard'
+                  method={this.props.resolverContract.methods.attestToUsersKYC(this.state.attestedStandard, this.state.attestedHydroId)}
+                  onConfirmation={() => {
+                    this.getPassedStandards()
+                  }}
+                />
               </form>
             </div>
-          </Grid>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
-          <Grid item xs={3}>
-            <div>
-              <Typography variant='display1' gutterBottom align="center" color="textPrimary">
-                Remove Attestation
-              </Typography>
-              <form noValidate autoComplete="off" align="center">
-                <FormControl>
-                  <InputLabel htmlFor="standard-remove-simple">Standard</InputLabel>
-                  <Select
-                    value={this.state.removeAttestedStandard}
-                    onChange={this.handleChangeRemoveAttest}
-                    inputProps={{
-                      name: 'standard-remove',
-                      id: 'standard-remove-simple',
-                    }}
-                  >
-                    {options}
-                  </Select>
-                  <TextField
-                    value={this.state.removeAttestHydroId}
-                    onChange={this.handleChangeRemoveHydroId}
-                    label="HydroID"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountCircle />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <Button variant="contained" color="primary" onClick={this.handleSubmitRemoveAttest}>
-                    Submit
-                  </Button>
-                  <div>
-                    {this.state.messageRemoveAttest}
-                  </div>
-                  </FormControl>
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Remove Attestation To A Standard</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <div style={{width: '100%'}}>
+              <form noValidate autoComplete="off">
+                <InputLabel htmlFor="standard-remove-simple">Standard</InputLabel>
+                <Select
+                  value={this.state.removeAttestedStandard}
+                  onChange={this.handleChangeRemoveAttest}
+                  inputProps={{
+                    name: 'standard-remove',
+                    id: 'standard-remove-simple',
+                  }}
+                  fullWidth
+                >
+                  {options}
+                </Select>
+                <TextField
+                  margin="normal"
+                  value={this.state.removeAttestHydroId}
+                  onChange={this.handleChangeRemoveHydroId}
+                  label="HydroID"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountCircle />
+                      </InputAdornment>
+                    )
+                  }}
+                  fullWidth
+                />
+                <TransactionButton
+                  buttonInitial='Remove Attestation'
+                  method={this.props.resolverContract.methods.removeUserKYC(this.state.removeAttestedStandard, this.state.removeAttestHydroId)}
+                  onConfirmation={() => {
+                    this.getPassedStandards()
+                  }}
+                />
               </form>
             </div>
-          </Grid>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
-          <Grid item xs={3}>
-
-            <div>
-              <Typography variant='display1' gutterBottom align="center" color="textPrimary">
-                Load HydroID Info
-              </Typography>
-              <form noValidate autoComplete="off" align="center">
-                <FormControl>
-                  <TextField
-                    value={this.state.lookupHydroId}
-                    onChange={this.handleChangeHydroIdLookup}
-                    label="HydroID"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountCircle />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <Button variant="contained" color="primary" onClick={this.handleSubmitLoad}>
-                    Submit
-                  </Button>
-                </FormControl>
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Load HydroID Info</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <div style={{width: '100%'}}>
+              <form noValidate autoComplete="off">
+                <TextField
+                  margin="normal"
+                  value={this.state.lookupHydroId}
+                  onChange={this.handleChangeHydroIdLookup}
+                  label="HydroID"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountCircle />
+                      </InputAdornment>
+                    )
+                  }}
+                  fullWidth
+                />
+                <Button variant="contained" color="primary" onClick={this.handleSubmitLoad}>
+                  Load HydroID Info
+                </Button>
               </form>
             </div>
-          </Grid>
-        </Grid>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
-
-        <div hidden={lookupRows.length === 0}>
+        <div style={{width: '100%'}} hidden={lookupRows.length === 0}>
           <Typography variant='display1' gutterBottom align="center" color="textPrimary">
             {this.state.currentHydroId} Passed Standards
           </Typography>
@@ -456,7 +470,7 @@ const CustomRow = (props) => {
       <TableCell>
         { props.data.standard }
       </TableCell>
-      <TableCell>
+      <TableCell numeric>
         { props.data.attestations }
       </TableCell>
     </TableRow>
