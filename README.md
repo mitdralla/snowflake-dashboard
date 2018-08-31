@@ -5,11 +5,10 @@ This is a demo frontend for the [Snowflake identity protocol](https://github.com
 Visit the [live dashboard](https://noahhydro.github.io/snowflake-dashboard/).
 
 ## Adding Resolver Modals
-1. Add the `address` and `ABI` of your resolver smart contract in [src/common/contracts.js](./src/common/contracts.js).
-2. Create a React component that displays your resolver's data and place it in [src/components/resolvers](./src/components/resolvers).
-3. Modify [src/components/resolvers/index.js](./src/components/resolvers/index.js) to include your component.
+1. Add the checksummed `address`, `ABI`, and optional `requiredAllowance` of your resolver smart contract in [src/common/contracts.js](./src/common/contracts.js).
+2. Create a React component that displays your resolver's data and place it in [src/components/resolvers/components](./src/components/resolvers/components), ensuring that its name is the checksum of the resolver address.
+3. Optionally, add a 256x256 png logo four your resolver in [src/components/resolvers/logos](./src/components/resolvers/logos), with the name as the checksum of your resolver address.
 
-Note that for a user to add a resolver, you must first whitelist it from an address with a snowflake.
+**ALL instances of your resolver address must be checksummed.**
 
-## Known Resolvers
-1. Status: [`0x5051893c1ADdCa3176BA12606F9B006b5214bf51`](https://rinkeby.etherscan.io/address/0x5051893c1ADdCa3176BA12606F9B006b5214bf51). Note that you must set the allowance as 1 for this resolver.
+Note that for any user to be able to add your resolver, you must first whitelist it from an address with a snowflake (this functionality is available from the add a resolver modal available on the dashboard to accounts with a Snowflake).
