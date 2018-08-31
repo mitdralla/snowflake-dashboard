@@ -38,6 +38,9 @@ export function getResolverData (resolverAddress) {
   const getContractObject = getContract.bind(this)
   const getLogo = getResolverImage.bind(this)
 
+  const resolvers = contracts[this.props.w3w.getNetworkName()].resolvers
+  const requiredAllowance = resolvers[resolverAddress].requiredAllowance === undefined ? "0" : resolvers[resolverAddress].requiredAllowance
+
   const resolverContract = getContractObject(resolverAddress, true)
 
   const logo = getLogo(resolverAddress)
@@ -56,11 +59,12 @@ export function getResolverData (resolverAddress) {
   return Promise.all([logo, name, description, allowance])
     .then(([logo, name, description, allowance]) => {
       return {
-        name:        name,
-        description: description,
-        allowance:   allowance,
-        address:     resolverAddress,
-        logo:        logo
+        name:              name,
+        description:       description,
+        allowance:         allowance,
+        requiredAllowance: requiredAllowance,
+        address:           resolverAddress,
+        logo:              logo
       }
     })
 }

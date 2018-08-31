@@ -148,8 +148,8 @@ class StoreModal extends Component {
                   key={resolver.address}
                   onClick={
                     () => {resolver.added === 0 ?
-                            this.setState({resolverAddress: resolver.address}) :
-                            this.setState({open: true, resolverAddress: ''})}
+                            this.setState({resolverAddress: resolver.address, allowance: resolver.requiredAllowance}) :
+                            this.setState({open: true, resolverAddress: '', allowance: ''})}
                   }
                 >
                   <img src={resolver.logo} alt={resolver.name}/>
