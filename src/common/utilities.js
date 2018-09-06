@@ -39,7 +39,7 @@ export function getResolverData (resolverAddress) {
   const getLogo = getResolverImage.bind(this)
 
   const resolvers = contracts[this.props.w3w.getNetworkName()].resolvers
-  const requiredAllowance = resolvers[resolverAddress].requiredAllowance === undefined ? "0" : resolvers[resolverAddress].requiredAllowance
+  const requiredAllowance = resolvers[resolverAddress] === undefined || resolvers[resolverAddress].requiredAllowance === undefined ? "0" : resolvers[resolverAddress].requiredAllowance
 
   const resolverContract = getContractObject(resolverAddress, true)
 
