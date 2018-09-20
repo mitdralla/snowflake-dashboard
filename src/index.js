@@ -38,11 +38,12 @@ const theme = createMuiTheme({
 
 theme.palette.success.contrastText = theme.palette.getContrastText(green[700])
 
-const UnsupportedNetwork = <div><h1>Unsupported Network</h1><p>Please switch to Rinkeby</p></div>
+const UnsupportedNetwork = <div><h1>Unsupported Network</h1><p>Please connect your MetaMask or Ethereum Wallet to the Rinkeby Test Network</p></div>
+const UnlockNeeded = <div><h1>Account Unlock Required</h1><p>Please connect your MetaMask or Ethereum Wallet to the Rinkeby Test Network</p></div>
 
 const Page = (
   <MuiThemeProvider theme={theme}>
-    <Web3Provider supportedNetworks={[4]} screens={{unsupportedNetwork: UnsupportedNetwork}}>
+    <Web3Provider supportedNetworks={[4]} screens={{unsupportedNetwork: UnsupportedNetwork, unlockNeeded: UnlockNeeded}}>
       <NetworkUpdater>
         <App />
       </NetworkUpdater>

@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
+import Typography from '@material-ui/core/Typography';
 
 import TransactionButton from './TransactionButton'
 import ResolverModal from './resolvers/ResolverModal'
@@ -107,6 +108,8 @@ class SnowflakeResolvers extends Component {
 
     return (
       <div style={{width: '100%'}}>
+        <Typography>Manage resolvers linked to your Snowflake Identity.</Typography>
+
         <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
           <TransactionButton
             buttonInitial={allowanceChanged ?
