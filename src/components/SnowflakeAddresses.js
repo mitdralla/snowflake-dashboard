@@ -5,6 +5,7 @@ import { Toolbar, Button, IconButton, TextField } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import { withStyles } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import Typography from '@material-ui/core/Typography';
 
 import TransactionButton from './TransactionButton'
 import Modal from './Modal'
@@ -105,6 +106,7 @@ class SnowflakeAddresses extends Component {
 
     return (
       <div style={{width: '100%'}}>
+        <Typography>Authorize another Ethereum wallet to access your Snowflake Identity.</Typography>
         <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
           <TransactionButton
             buttonInitial={<AddIcon/>}
@@ -112,7 +114,6 @@ class SnowflakeAddresses extends Component {
             onConfirmation={() => { this.props.getAccountDetails(true) }}
           />
         </Toolbar>
-
         <Table>
           <TableHead>
             <TableRow>
@@ -162,6 +163,9 @@ class SnowflakeAddresses extends Component {
                       fullWidth
                     />
                     <TransactionButton
+                      onConfirmation={() => {
+                        alert('Please access the Snowflake Dashboard from ' + this.details.address + ' to finalize this claim.')
+                      }}
                       buttonInitial='Initiate Claim'
                       method={this.getContract('snowflake').methods.initiateClaim(this.claim)}
                       onTransactionHash={() => {

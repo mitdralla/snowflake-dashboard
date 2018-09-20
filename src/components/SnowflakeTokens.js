@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
 import { TextField } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 import TransactionButton from './TransactionButton'
 import { getContract } from '../common/utilities'
@@ -23,6 +24,7 @@ class SnowflakeTokens extends Component {
 
     return (
       <div style={{width: '100%'}}>
+      <Typography>Deposit and withdraw HYDRO from your Snowflake Identity which you can use to pay for dApps as needed.</Typography>
         <form noValidate autoComplete="off">
           <TextField
             label="Amount"
