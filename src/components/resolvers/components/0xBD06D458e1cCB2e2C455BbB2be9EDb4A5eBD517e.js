@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import WyreVerification from './WyreVerification';
 import WyreVerification from 'wyre-react-library';
 import { withWeb3 } from 'web3-webpacked-react';
 
