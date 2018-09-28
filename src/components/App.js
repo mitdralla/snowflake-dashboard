@@ -63,11 +63,11 @@ class App extends Component {
     this.getAccountDetails()
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.state.hydroBalance === undefined) {
-  //     this.getAccountDetails()
-  //   }
-  // }
+  componentDidUpdate() {
+    if (this.state.hydroBalance === undefined) {
+      this.getAccountDetails()
+    }
+  }
 
   getAccountDetails(force) {
     if (force) {

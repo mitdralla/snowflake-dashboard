@@ -95,7 +95,7 @@ class StoreModal extends Component {
           fullScreen
           opener={addButton}
           title='dApp Store'
-        >
+          >
           <form noValidate autoComplete="off">
             <TextField
               label="Resolver Address"
@@ -104,12 +104,12 @@ class StoreModal extends Component {
               value={this.state.whitelistResolverAddress}
               onChange={e => {this.setState({whitelistResolverAddress: e.target.value})} }
               fullWidth
-            />
+              />
 
             <TransactionButton
               buttonInitial='Whitelist Resolver'
               method={this.getContract('snowflake').methods.whitelistResolver(this.state.whitelistResolverAddress)}
-            />
+              />
           </form>
 
           <form noValidate autoComplete="off">
@@ -120,7 +120,7 @@ class StoreModal extends Component {
               value={this.state.resolverAddress}
               onChange={e => {this.setState({resolverAddress: e.target.value})} }
               fullWidth
-            />
+              />
             <TextField
               label="Allowance"
               type="number"
@@ -129,7 +129,7 @@ class StoreModal extends Component {
               value={this.state.allowance}
               onChange={e => {this.setState({allowance: e.target.value})} }
               fullWidth
-            />
+              />
 
             <TransactionButton
               buttonInitial='Set Resolver'
@@ -137,65 +137,68 @@ class StoreModal extends Component {
                 [this.state.resolverAddress], [this.props.w3w.fromDecimal(this.state.allowance, 18)]
               )}
               onConfirmation={() => this.props.getAccountDetails(true)}
-            />
+              />
           </form>
           <div className={classes.root}>
             <GridList className={classes.gridList} spacing={6} cellHeight={200} cols={3}>
-              {this.state.resolvers.map( resolver => (
+              {this.state.resolvers.map(resolver => (
+                console.log(resolver.logo)
+                console.log(resolver.name)
+
                 <GridListTile
                   style={{cursor: 'pointer'}}
                   cols={1}
                   key={resolver.address}
                   onClick={
                     () => {resolver.added === 0 ?
-                            this.setState({resolverAddress: resolver.address, allowance: resolver.requiredAllowance}) :
-                            this.setState({open: true, resolverAddress: '', allowance: ''})}
-                  }
-                >
-                  <img src={resolver.logo} alt={resolver.name}/>
-                  <GridListTileBar
-                    title={resolver.name}
-                    subtitle={<span>{resolver.description}</span>}
-                    actionIcon={
-                      <DoneIcon style={resolver.added === 1 ? {} : { display: 'none' }} className={classes.icon}/>
+                      this.setState({resolverAddress: resolver.address, allowance: resolver.requiredAllowance}) :
+                      this.setState({open: true, resolverAddress: '', allowance: ''})}
                     }
-                  />
-                </GridListTile>
-              ))}
-            </GridList>
-          </div>
+                    >
+                    <img src={resolver.logo} alt={resolver.name}/>
+                    <GridListTileBar
+                      title={resolver.name}
+                      subtitle={<span>{resolver.description}</span>}
+                      actionIcon={
+                        <DoneIcon style={resolver.added === 1 ? {} : { display: 'none' }} className={classes.icon}/>
+                      }
+                      />
+                  </GridListTile>
+                ))}
+              </GridList>
+            </div>
 
-          <div>
-            <Snackbar
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              open={this.state.open}
-              autoHideDuration={5000}
-              onClose={() => this.setState({ open: false })}
-              ContentProps={{
-                'aria-describedby': 'message-id',
-              }}
-              message={<span id="message-id">This resolver is already added.</span>}
-              action={[
-                <IconButton
-                  key="close"
-                  aria-label="Close"
-                  color="inherit"
-                  className={classes.close}
-                  onClick={() => this.setState({open: false})}
-                >
-                  <CloseIcon />
-                </IconButton>,
-              ]}
-            />
-          </div>
+            <div>
+              <Snackbar
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                open={this.state.open}
+                autoHideDuration={5000}
+                onClose={() => this.setState({ open: false })}
+                ContentProps={{
+                  'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">This resolver is already added.</span>}
+                action={[
+                  <IconButton
+                    key="close"
+                    aria-label="Close"
+                    color="inherit"
+                    className={classes.close}
+                    onClick={() => this.setState({open: false})}
+                    >
+                    <CloseIcon />
+                  </IconButton>,
+                ]}
+                />
+            </div>
 
-        </Modal>
-      </div>
-    )
+          </Modal>
+        </div>
+      )
+    }
   }
-}
 
-export default withWeb3(withStyles(styles)(StoreModal));
+  export default withWeb3(withStyles(styles)(StoreModal));
