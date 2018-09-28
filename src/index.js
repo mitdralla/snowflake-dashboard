@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Web3Provider, { NetworkUpdater } from 'web3-webpacked-react';
+import './index.css'
+import Web3Provider from 'web3-webpacked-react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 
 import App from './components/App'
-
 
 const theme = createMuiTheme({
   overrides: {
@@ -38,15 +38,10 @@ const theme = createMuiTheme({
 
 theme.palette.success.contrastText = theme.palette.getContrastText(green[700])
 
-const UnsupportedNetwork = <div><h1>Unsupported Network</h1><p>Please connect your MetaMask or Ethereum Wallet to the Rinkeby Test Network</p></div>
-const UnlockNeeded = <div><h1>Account Unlock Required</h1><p>Please connect your MetaMask or Ethereum Wallet to the Rinkeby Test Network</p></div>
-
 const Page = (
   <MuiThemeProvider theme={theme}>
-    <Web3Provider supportedNetworks={[4]} screens={{unsupportedNetwork: UnsupportedNetwork, unlockNeeded: UnlockNeeded}}>
-      <NetworkUpdater>
-        <App />
-      </NetworkUpdater>
+    <Web3Provider supportedNetworks={[4]}>
+      <App />
     </Web3Provider>
   </MuiThemeProvider>
 )
