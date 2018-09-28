@@ -15,7 +15,7 @@ importScripts("/snowflake-dashboard/workbox-v3.6.2/workbox-sw.js");
 workbox.setConfig({modulePathPrefix: "/snowflake-dashboard/workbox-v3.6.2"});
 
 importScripts(
-  "/snowflake-dashboard/precache-manifest.9c501b747fa4e7f5686c95bd1169c9df.js"
+  "/snowflake-dashboard/precache-manifest.401a9af3648fc6ed1fc14db6d9bf1667.js"
 );
 
 workbox.clientsClaim();
