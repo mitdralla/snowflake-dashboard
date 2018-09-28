@@ -166,7 +166,7 @@ class HydroKYCView extends Component {
         this.setState({messageStandard: <p>{message}</p>})
       },
       transactionHash: (transactionHash) => {
-        this.setState({messageStandard: (<a href={this.props.w3w.etherscanFormat('transaction', transactionHash)} target="_blank">Pending</a>)})
+        this.setState({messageStandard: (<a href={this.props.w3w.etherscanFormat('transaction', transactionHash)} target="_blank" rel="noopener noreferrer">Pending</a>)})
       },
       confirmation: (confirmationNumber, receipt) => {
         if (confirmationNumber === 0) {
@@ -199,7 +199,7 @@ class HydroKYCView extends Component {
         this.setState({messageAttest: <p>{message}</p>})
       },
       transactionHash: (transactionHash) => {
-        this.setState({messageAttest: (<a href={this.props.w3w.etherscanFormat('transaction', transactionHash)} target="_blank">Pending</a>)})
+        this.setState({messageAttest: (<a href={this.props.w3w.etherscanFormat('transaction', transactionHash)} target="_blank" rel="noopener noreferrer">Pending</a>)})
       },
       confirmation: (confirmationNumber, receipt) => {
         if (confirmationNumber === 0) {
@@ -231,7 +231,7 @@ class HydroKYCView extends Component {
         this.setState({messageRemoveAttest: <p>{message}</p>})
       },
       transactionHash: (transactionHash) => {
-        this.setState({messageRemoveAttest: (<a href={this.props.w3w.etherscanFormat('transaction', transactionHash)} target="_blank">Pending</a>)})
+        this.setState({messageRemoveAttest: (<a href={this.props.w3w.etherscanFormat('transaction', transactionHash)} target="_blank" rel="noopener noreferrer">Pending</a>)})
       },
       confirmation: (confirmationNumber, receipt) => {
         if (confirmationNumber === 0) {

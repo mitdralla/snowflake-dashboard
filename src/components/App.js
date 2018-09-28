@@ -63,11 +63,11 @@ class App extends Component {
     this.getAccountDetails()
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.hydroBalance === undefined) {
-      this.getAccountDetails()
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.hydroBalance === undefined) {
+  //     this.getAccountDetails()
+  //   }
+  // }
 
   getAccountDetails(force) {
     if (force) {
@@ -146,7 +146,7 @@ class App extends Component {
     }
 
     // determine body elements
-    const Body = (hydroId, raindropOnly) => {
+    const Body = (hydroId) => {
       if (hydroId === undefined) {
         return ''
       }
