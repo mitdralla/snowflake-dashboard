@@ -142,9 +142,6 @@ class StoreModal extends Component {
           <div className={classes.root}>
             <GridList className={classes.gridList} spacing={6} cellHeight={200} cols={3}>
               {this.state.resolvers.map(resolver => (
-                console.log(resolver.logo)
-                console.log(resolver.name)
-
                 <GridListTile
                   style={{cursor: 'pointer'}}
                   cols={1}
@@ -155,7 +152,7 @@ class StoreModal extends Component {
                       this.setState({open: true, resolverAddress: '', allowance: ''})}
                     }
                     >
-                    <img src={resolver.logo} alt={resolver.name}/>
+                    <img src={resolver.logo.default} alt={resolver.name}/>
                     <GridListTileBar
                       title={resolver.name}
                       subtitle={<span>{resolver.description}</span>}
