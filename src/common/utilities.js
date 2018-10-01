@@ -34,7 +34,7 @@ export function getAllResolvers () {
   return Object.keys(resolvers)
 }
 
-export function getResolverData (resolverAddress) {
+export function getResolverData (resolverAddress, hydroId) {
   const getContractObject = getContract.bind(this)
   const getLogo = getResolverImage.bind(this)
 
@@ -49,7 +49,7 @@ export function getResolverData (resolverAddress) {
     .catch(() => '')
   const description = resolverContract.methods.snowflakeDescription().call()
     .catch(() => '')
-  const allowance = getContractObject('snowflake').methods.getResolverAllowance(this.props.hydroId, resolverAddress).call()
+  const allowance = getContractObject('snowflake').methods.getResolverAllowance(hydroId || this.props.hydroId, resolverAddress).call()
     .then(allowance => {
       return this.props.w3w.toDecimal(allowance, 18)
     })
@@ -64,7 +64,7 @@ export function getResolverData (resolverAddress) {
         allowance:         allowance,
         requiredAllowance: requiredAllowance,
         address:           resolverAddress,
-        logo:              logo
+        logo:              logo.default
       }
     })
 }

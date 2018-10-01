@@ -40,7 +40,7 @@ class NoHydroId extends Component {
         <TransactionButton
           buttonInitial="Claim"
           method={this.getContract('clientRaindrop').methods.signUpUser(this.state.hydroId)}
-          onConfirmation={() => this.props.getAccountDetails()}
+          onConfirmation={this.props.getAccountDetails}
         />
       </div>
     )

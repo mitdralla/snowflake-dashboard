@@ -1,13 +1,20 @@
-import React, { Component } from 'react';
-import { withWeb3 } from 'web3-webpacked-react';
+import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import { Tab, Tabs } from '@material-ui/core';
+import { Home as HomeIcon } from '@material-ui/icons';
+import { AttachMoney as MoneyIcon } from '@material-ui/icons';
+import { Store as StoreIcon } from '@material-ui/icons';
+import { AddLocation as AddLocationIcon } from '@material-ui/icons';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
-import { getContract } from '../common/utilities'
-import Header from './Header'
-import FinalizeClaim from './FinalizeClaim'
+import { getContract, getResolverData } from '../common/utilities'
+import AccountHeader from './AccountHeader'
+import SnowflakeHeader from './SnowflakeHeader'
 import NoHydroId from './NoHydroId'
 import NoSnowflake from './NoSnowflake'
 import Snowflake from './Snowflake'
+import DAppStore from './DAppStore'
+import GetHydro from './GetHydro'
 
 const styles = theme => ({
   width: {
@@ -25,67 +32,39 @@ class App extends Component {
     super(props);
 
     this.state = {
-      account:      undefined,
-      hydroBalance: undefined,
-      etherBalance: undefined,
-      hydroId:      undefined,
-      raindropOnly: undefined,
-      claims:       {}
+      hydroBalance:     undefined,
+      etherBalance:     undefined,
+      hydroId:          undefined,
+      raindropOnly:     undefined,
+      claims:           {},
+      snowflakeDetails: {}
     }
-
-    this.getHydroId = this.getHydroId.bind(this)
-    this.getEtherBalance = this.getEtherBalance.bind(this)
-    this.getHydroBalance = this.getHydroBalance.bind(this)
-    this.getAccountDetails = this.getAccountDetails.bind(this)
 
     this.getContract = getContract.bind(this)
-    this.addClaim = this.addClaim.bind(this)
-    this.removeClaim = this.removeClaim.bind(this)
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    // Store prevUserId in state so we can compare when props change.
-    // Clear out any previously-loaded user data (so we don't render stale stuff).
-    if (nextProps.w3w.account !== prevState.account) {
-      return {
-        account:      nextProps.w3w.account,
-        hydroBalance: undefined,
-        etherBalance: undefined,
-        hydroId:      undefined,
-        raindropOnly: undefined
-      }
-    }
-
-    return null
+    this.getResolverData = getResolverData.bind(this)
   }
 
   componentDidMount() {
     this.getAccountDetails()
   }
 
-  componentDidUpdate() {
-    if (this.state.hydroBalance === undefined) {
-      this.getAccountDetails()
-    }
-  }
-
-  getAccountDetails(force) {
-    if (force) {
-      this.setState({
-        hydroBalance: undefined, etherBalance: undefined, hydroId: undefined, raindropOnly: undefined
-      }, () => {
-        this.getHydroId()
-        this.getHydroBalance()
-        this.getEtherBalance()
-      })
-    } else {
+  getAccountDetails = reset => {
+    const refresh = () => {
       this.getHydroId()
       this.getHydroBalance()
       this.getEtherBalance()
     }
+
+    if (reset) {
+      this.setState({
+        hydroBalance: undefined, etherBalance: undefined, hydroId: undefined, raindropOnly: undefined
+      }, refresh)
+    } else {
+      refresh()
+    }
   }
 
-  getHydroId() {
+  getHydroId = () => {
     const raindropHydroId = this.getContract('clientRaindrop').methods.getUserByAddress(this.props.w3w.account).call()
       .catch(() => { return null })
 
@@ -95,7 +74,7 @@ class App extends Component {
     Promise.all([raindropHydroId, snowflakeHydroId])
       .then(([raindrop, snowflake]) => {
         if (snowflake !== null) {
-          this.setState({hydroId: snowflake, raindropOnly: false})
+          this.setState({hydroId: snowflake, raindropOnly: false}, this.getSnowflakeDetails)
         } else {
           if (raindrop !== null) {
             this.setState({hydroId: raindrop, raindropOnly: true})
@@ -106,21 +85,46 @@ class App extends Component {
       })
   }
 
-  getHydroBalance() {
+  getHydroBalance = () => {
     this.props.w3w.getERC20Balance(this.getContract('token')._address)
       .then(balance => {
         this.setState({hydroBalance: Number(balance).toLocaleString(undefined, { maximumFractionDigits: 3 })})
       })
   }
 
-  getEtherBalance() {
+  getEtherBalance = () => {
     this.props.w3w.getBalance()
       .then(balance => {
         this.setState({etherBalance: Number(balance).toLocaleString(undefined, { maximumFractionDigits: 3 })})
       })
   }
 
-  addClaim(address, claim) {
+  getSnowflakeDetails = () => {
+    this.getContract('snowflake').methods.getDetails(this.state.hydroId).call()
+      .then(snowflakeDetails => {
+        // once snowflake details are fetched, fetch details on each resolver
+        Promise.all(snowflakeDetails.resolvers.map(resolver => this.getResolverData(resolver, this.state.hydroId)))
+          .then(results => {
+            // put resolver details into an address-denominated object
+            const resolverDetails = {}
+            for (let i = 0; i < results.length; i++) {
+              resolverDetails[snowflakeDetails.resolvers[i]] = results[i]
+            }
+
+            const snowflakeDetailsWithResolverDetails = {
+              resolverDetails:  resolverDetails,
+              owner:            snowflakeDetails.owner,
+              ownedAddresses:   snowflakeDetails.ownedAddresses,
+              resolvers:        snowflakeDetails.resolvers,
+              snowflakeBalance: this.props.w3w.toDecimal(snowflakeDetails.balance, 18)
+            }
+
+            this.setState({snowflakeDetails: snowflakeDetailsWithResolverDetails})
+          })
+      })
+  }
+
+  addClaim = (address, claim) => {
     this.setState(oldState => {
       const newClaim = {}
       newClaim[address] = claim
@@ -128,7 +132,7 @@ class App extends Component {
     })
   }
 
-  removeClaim(address) {
+  removeClaim = (address) => {
     this.setState(oldState => {
       const newClaims = Object.assign({}, oldState)
       delete newClaims[address]
@@ -137,52 +141,74 @@ class App extends Component {
   }
 
   render() {
-    // determine claim elements
-    const Claim = (claims) => {
-      const claim = claims[this.props.w3w.account.toLowerCase()]
-      return claim !== undefined ?
-        <FinalizeClaim claim={claim} getAccountDetails={this.getAccountDetails} removeClaim={this.removeClaim} /> :
-        ''
-    }
-
-    // determine body elements
-    const Body = (hydroId) => {
-      if (hydroId === undefined) {
-        return ''
-      }
-      if (this.state.hydroId == null) {
-        return (
-          <NoHydroId getAccountDetails={this.getAccountDetails} />
-        )
-      } else if (this.state.raindropOnly) {
-        return (
-          <NoSnowflake getAccountDetails={this.getAccountDetails} hydroId={this.state.hydroId} />
-        )
-      } else {
-        return (
-          <Snowflake
-            key={this.state.hydroId}
-            hydroId={this.state.hydroId}
-            addClaim={this.addClaim}
-            getAccountDetails={this.getAccountDetails}
-          />
-        )
-      }
+    // determine what the body should consist of
+    let Body = null
+    let Store = null
+    if (this.state.hydroId === undefined)
+      Body = null
+    else if (this.state.hydroId == null)
+      Body = <NoHydroId getAccountDetails={this.getAccountDetails} />
+    else if (this.state.raindropOnly)
+      Body = <NoSnowflake getAccountDetails={this.getAccountDetails} hydroId={this.state.hydroId} />
+    else if (Object.keys(this.state.snowflakeDetails).length === 0)
+      Body = null
+    else {
+      Body = <Snowflake
+        hydroId={this.state.hydroId}
+        addClaim={this.addClaim}
+        getAccountDetails={this.getAccountDetails}
+        snowflakeDetails={this.state.snowflakeDetails}
+      />
+      Store = (
+        <DAppStore
+          hydroId={this.state.hydroId}
+          addedResolvers={this.state.snowflakeDetails.resolvers}
+          getAccountDetails={this.props.getAccountDetails}
+        />
+      )
     }
 
     return (
-      <div className={this.props.classes.width} style={{margin: "0 auto", marginBottom: 100}}>
-        <Header
-          hydroId={this.state.hydroId}
-          hydroBalance={this.state.hydroBalance}
-          etherBalance={this.state.etherBalance}
-        />
-        <hr/>
-        {Claim(this.state.claims)}
-        {Body(this.state.hydroId, this.state.raindropOnly)}
-      </div>
+      <Router>
+        <div className={this.props.classes.width} style={{margin: "0 auto", marginBottom: 100}}>
+          <AccountHeader
+            hydroBalance={this.state.hydroBalance}
+            etherBalance={this.state.etherBalance}
+          />
+
+          {!(this.state.hydroId && !this.state.raindropOnly) ? null : (
+            <Fragment>
+              <SnowflakeHeader
+                hydroId={this.state.hydroId}
+                snowflakeBalance={this.state.snowflakeDetails.snowflakeBalance}
+              />
+
+              <Tabs
+                value={false}
+                fullWidth
+                indicatorColor="secondary"
+                textColor="secondary"
+              >
+                <Tab component={Link} to="/" icon={<HomeIcon />} label="Home" />
+                <Tab component={Link} to="/dapp-store" icon={<StoreIcon />} label="Dapp Store" />
+                <Tab component={Link} to="/get-hydro" icon={<MoneyIcon />} label="Get Hydro" />
+                <Tab component={Link} to="/claim-address" icon={<AddLocationIcon />} label="Claim Address" />
+              </Tabs>
+              <hr/>
+            </Fragment>
+          )}
+
+          <Route exact path="/" render={() => Body} />
+          <Route path="/dapp-store" render={() => Store} />
+          <Route path="/get-hydro" render={() => <GetHydro />} />
+          <Route path="/claim-address" render={() => (
+              <h2>Coming Soon!</h2>
+            )}
+          />
+        </div>
+      </Router>
     )
   }
 }
 
-export default withStyles(styles)(withWeb3(App))
+export default withStyles(styles)(App)

@@ -111,7 +111,7 @@ class SnowflakeAddresses extends Component {
           <TransactionButton
             buttonInitial={<AddIcon/>}
             method={this.getContract('snowflake').methods.unclaim(selectedAddresses)}
-            onConfirmation={() => { this.props.getAccountDetails(true) }}
+            onConfirmation={this.props.getAccountDetails}
           />
         </Toolbar>
         <Table>

@@ -25,19 +25,6 @@ class SnowflakeTokens extends Component {
     return (
       <div style={{width: '100%'}}>
       <Typography>Deposit and withdraw HYDRO from your Snowflake Identity which you can use to pay for dApps as needed.</Typography>
-        {this.props.w3w.networkId === 4 ?
-          <form noValidate autoComplete="off">
-            <TransactionButton
-              buttonInitial='Get Free Test Hydro'
-              method={this.getContract('token').methods.getMoreTokens()}
-              onConfirmation={() => {
-                this.props.getAccountDetails(true)
-              }}
-            />
-          </form> :
-          undefined
-        }
-
         <form noValidate autoComplete="off">
           <TextField
             label="Amount"
@@ -53,9 +40,7 @@ class SnowflakeTokens extends Component {
             method={this.getContract('token').methods.approveAndCall(
               this.getContract('snowflake')._address, depositAmount, '0x00'
             )}
-            onConfirmation={() => {
-              this.props.getAccountDetails(true)
-            }}
+            onConfirmation={this.props.getAccountDetails}
           />
         </form>
 
@@ -74,9 +59,7 @@ class SnowflakeTokens extends Component {
             method={this.getContract('snowflake').methods.withdrawSnowflakeBalanceTo(
               this.props.w3w.account, withdrawAmount
             )}
-            onConfirmation={() => {
-              this.props.getAccountDetails(true)
-            }}
+            onConfirmation={this.props.getAccountDetails}
           />
         </form>
       </div>

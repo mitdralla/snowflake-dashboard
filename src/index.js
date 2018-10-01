@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css'
-import Web3Provider from 'web3-webpacked-react';
+import Web3Provider, { Web3Consumer } from 'web3-webpacked-react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 
+import './index.css'
 import App from './components/App'
 
 const theme = createMuiTheme({
@@ -30,9 +30,9 @@ const theme = createMuiTheme({
     }
   },
   typography: {
-    fontWeightLight: 200,
+    fontWeightLight:   200,
     fontWeightRegular: 200,
-    fontWeightMedium: 300
+    fontWeightMedium:  300
   },
 });
 
@@ -41,7 +41,9 @@ theme.palette.success.contrastText = theme.palette.getContrastText(green[700])
 const Page = (
   <MuiThemeProvider theme={theme}>
     <Web3Provider supportedNetworks={[4]}>
-      <App />
+      <Web3Consumer>
+        {context => <App w3w={context} />}
+      </Web3Consumer>
     </Web3Provider>
   </MuiThemeProvider>
 )

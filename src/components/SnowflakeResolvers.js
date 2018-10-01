@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
 import { Toolbar, Checkbox, Table, TableHead, TableBody, TableRow, TableCell, TableFooter } from '@material-ui/core';
+import { Link } from 'react-router-dom'
+import { Button } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -9,7 +12,6 @@ import Typography from '@material-ui/core/Typography';
 
 import TransactionButton from './TransactionButton'
 import ResolverModal from './resolvers/ResolverModal'
-import StoreModal from './StoreModal'
 
 import { getContract, linkify } from '../common/utilities'
 
@@ -128,7 +130,7 @@ class SnowflakeResolvers extends Component {
               :
               this.getContract('snowflake').methods.removeResolvers(selectedResolvers, false)
             }
-            onConfirmation={() => { this.props.getAccountDetails(true) }}
+            onConfirmation={this.props.getAccountDetails}
           />
         </Toolbar>
 
@@ -206,11 +208,9 @@ class SnowflakeResolvers extends Component {
           <TableFooter>
             <TableRow>
               <TableCell key={this.props.resolvers} className={this.props.classes.addResolver}>
-                <StoreModal
-                  hydroId={this.props.hydroId}
-                  addedResolvers={this.props.resolvers}
-                  getAccountDetails={this.props.getAccountDetails}
-                />
+                <Button component={Link} to="/dapp-store" variant="fab" color="primary">
+                  <AddIcon />
+                </Button>
               </TableCell>
             </TableRow>
           </TableFooter>

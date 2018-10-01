@@ -28,7 +28,7 @@ class NoSnowflake extends Component {
         <TransactionButton
           buttonInitial={message}
           method={this.getContract('snowflake').methods.mintIdentityToken()}
-          onConfirmation={() => this.props.getAccountDetails()}
+          onConfirmation={this.props.getAccountDetails}
         />
       </div>
     )

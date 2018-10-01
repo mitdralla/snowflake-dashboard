@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
@@ -19,14 +19,9 @@ const styles = theme => ({
   }
 })
 
-class Header extends Component {
+class AccountHeader extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      copyOpen: false,
-      copyMessage: ''
-    }
 
     this.linkify = linkify.bind(this)
     this.getContract = getContract.bind(this)
@@ -40,24 +35,25 @@ class Header extends Component {
     const hydroHolderLink = `${this.props.w3w.etherscanFormat('token', hydroAddress)}?a=${this.props.w3w.account}`
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Typography variant='display3' gutterBottom align="center" color="textPrimary">
           Snowflake Dashboard - {this.linkify('address', snowflakeAddress, networkName, 'display3')}
         </Typography>
 
-        <div className={classes.root}>
-          <Chip
-            avatar={<Avatar>0x</Avatar>}
-            color="primary"
-            label={this.props.w3w.account.slice(2)}
-            component="a"
-            href={this.props.w3w.etherscanFormat('address', this.props.w3w.account)}
-            target="_blank"
-            clickable
-            className={classes.chip}
-          />
+        {this.props.etherBalance === undefined || this.props.hydroBalance === undefined ? '' : (
+          <div className={classes.root}>
+            <Chip
+              avatar={<Avatar>0x</Avatar>}
+              color="primary"
+              label={this.props.w3w.account.slice(2)}
+              component="a"
+              href={this.props.w3w.etherscanFormat('address', this.props.w3w.account)}
+              target="_blank"
+              clickable
+              className={classes.chip}
+            />
 
-          {this.props.etherBalance === undefined ? '' :
+
             <Chip
               avatar={
                 <Avatar>
@@ -69,9 +65,7 @@ class Header extends Component {
               label={this.props.etherBalance}
               className={classes.chip}
             />
-          }
 
-          {this.props.hydroBalance === undefined ? '' :
             <Chip
               avatar={
                 <Avatar>
@@ -88,11 +82,12 @@ class Header extends Component {
               clickable
               className={classes.chip}
             />
-          }
-        </div>
-      </React.Fragment>
+          </div>
+        )}
+        <hr/>
+      </Fragment>
     )
   }
 }
 
-export default withStyles(styles)(withWeb3(Header))
+export default withStyles(styles)(withWeb3(AccountHeader))

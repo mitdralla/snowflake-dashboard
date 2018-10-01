@@ -11,6 +11,13 @@ class FinalizeClaim extends Component {
     this.getContract = getContract.bind(this)
   }
 
+  // determine claim elements
+  // const claim = this.state.claims[this.props.w3w.account.toLowerCase()]
+  // const Claim = claim === undefined ?
+  //   null :
+  //   <FinalizeClaim claim={claim} getAccountDetails={this.getAccountDetails} removeClaim={this.removeClaim} />
+
+
   render() {
     const message = `Finalize Claim for '${this.props.claim.hydroId}'`
     const method = this.getContract('snowflake').methods.finalizeClaim(
