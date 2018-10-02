@@ -5,7 +5,8 @@ import { Home as HomeIcon } from '@material-ui/icons';
 import { AttachMoney as MoneyIcon } from '@material-ui/icons';
 import { Store as StoreIcon } from '@material-ui/icons';
 import { AddLocation as AddLocationIcon } from '@material-ui/icons';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Redirect, Switch } from 'react-router-dom'
+import { withRouter } from 'react-router'
 
 import { getContract, getResolverData } from '../common/utilities'
 import AccountHeader from './AccountHeader'
@@ -15,6 +16,7 @@ import NoSnowflake from './NoSnowflake'
 import Snowflake from './Snowflake'
 import DAppStore from './DAppStore'
 import GetHydro from './GetHydro'
+import FinalizeClaim from './FinalizeClaim'
 
 const styles = theme => ({
   width: {
@@ -27,17 +29,30 @@ const styles = theme => ({
   },
 });
 
+const MyTabs = withRouter(({location, ...props}) => {
+  const { match, history, children, staticContext, ...passedProps } = props // eslint-disable-line no-unused-vars
+  return (
+    <Tabs
+      {...passedProps}
+      value={location.pathname}
+    >
+      {children}
+    </Tabs>
+  )
+})
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      hydroBalance:     undefined,
-      etherBalance:     undefined,
-      hydroId:          undefined,
-      raindropOnly:     undefined,
-      claims:           {},
-      snowflakeDetails: {}
+      hydroBalance:        undefined,
+      etherBalance:        undefined,
+      hydroId:             undefined,
+      raindropOnly:        undefined,
+      snowflakeDetails:    {},
+      snowflakeDataLoaded: undefined,
+      value:               false
     }
 
     this.getContract = getContract.bind(this)
@@ -119,25 +134,13 @@ class App extends Component {
               snowflakeBalance: this.props.w3w.toDecimal(snowflakeDetails.balance, 18)
             }
 
-            this.setState({snowflakeDetails: snowflakeDetailsWithResolverDetails})
+            this.setState({snowflakeDetails: snowflakeDetailsWithResolverDetails, snowflakeDataLoaded: true})
           })
       })
   }
 
-  addClaim = (address, claim) => {
-    this.setState(oldState => {
-      const newClaim = {}
-      newClaim[address] = claim
-      return { claims: {...oldState.claims, ...newClaim} }
-    })
-  }
-
-  removeClaim = (address) => {
-    this.setState(oldState => {
-      const newClaims = Object.assign({}, oldState)
-      delete newClaims[address]
-      return { claims: newClaims }
-    })
+  setRoute = (route) => {
+    this.setState({value: route})
   }
 
   render() {
@@ -155,7 +158,6 @@ class App extends Component {
     else {
       Body = <Snowflake
         hydroId={this.state.hydroId}
-        addClaim={this.addClaim}
         getAccountDetails={this.getAccountDetails}
         snowflakeDetails={this.state.snowflakeDetails}
       />
@@ -169,7 +171,7 @@ class App extends Component {
     }
 
     return (
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <div className={this.props.classes.width} style={{margin: "0 auto", marginBottom: 100}}>
           <AccountHeader
             hydroBalance={this.state.hydroBalance}
@@ -183,28 +185,72 @@ class App extends Component {
                 snowflakeBalance={this.state.snowflakeDetails.snowflakeBalance}
               />
 
-              <Tabs
-                value={false}
+              <MyTabs
                 fullWidth
-                indicatorColor="secondary"
-                textColor="secondary"
+                indicatorColor="primary"
+                textColor="primary"
               >
-                <Tab component={Link} to="/" icon={<HomeIcon />} label="Home" />
-                <Tab component={Link} to="/dapp-store" icon={<StoreIcon />} label="Dapp Store" />
-                <Tab component={Link} to="/get-hydro" icon={<MoneyIcon />} label="Get Hydro" />
-                <Tab component={Link} to="/claim-address" icon={<AddLocationIcon />} label="Claim Address" />
-              </Tabs>
-              <hr/>
+                <Tab
+                  component={Link}
+                  value='/'
+                  to="/"
+                  icon={<HomeIcon />}
+                  label="Home"
+                />
+                <Tab
+                  component={Link}
+                  value='/dapp-store'
+                  to="/dapp-store"
+                  icon={<StoreIcon />}
+                  label="Dapp Store"
+                />
+                <Tab
+                  component={Link}
+                  value='/get-hydro'
+                  to="/get-hydro"
+                  icon={<MoneyIcon />}
+                  label="Get Hydro"
+                />
+                <Tab
+                  component={Link}
+                  value='/claim-address'
+                  to="/claim-address"
+                  icon={<AddLocationIcon />}
+                  label="Claim Address"
+                />
+              </MyTabs>
             </Fragment>
           )}
 
-          <Route exact path="/" render={() => Body} />
-          <Route path="/dapp-store" render={() => Store} />
-          <Route path="/get-hydro" render={() => <GetHydro />} />
-          <Route path="/claim-address" render={() => (
-              <h2>Coming Soon!</h2>
-            )}
-          />
+          <Switch>
+            <Route exact path="/" render={() => Body} />
+
+            { this.state.hydroId === null || this.state.raindropOnly ? <Redirect from='/dapp-store' to='/path'/> : null }
+            <Route path="/dapp-store" render={() => Store} />
+
+            { this.state.hydroId === null || this.state.raindropOnly ? <Redirect from='/get-hydro' to='/path'/> : null }
+            <Route path="/get-hydro" render={() => <GetHydro />} />
+
+            <Route
+              path="/claim-address/:address?/:secret?/:hydroId?"
+              render={({ match }) => {
+                return (match.params.address || match.params.secret || match.params.hydroId) ?
+                  <Redirect
+                    to={{
+                      pathname: '/claim-address',
+                      state: {
+                        address: match.params.address,
+                        secret:  match.params.secret,
+                        hydroId: match.params.hydroId
+                      }
+                    }}
+                  /> :
+                  <FinalizeClaim hydroId={this.state.hydroId} />
+              }}
+            />
+
+            <Redirect to="/" />
+          </Switch>
         </div>
       </Router>
     )

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import { TextField, Typography } from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom'
 
 import { getContract } from '../common/utilities'
 
@@ -21,11 +22,21 @@ class NoHydroId extends Component {
     return (
       <div>
         <Typography variant='display1' gutterBottom color="textPrimary">
-          No Hydro ID Detected
+          Already Have a Snowflake?
         </Typography>
 
         <Typography variant='body2' gutterBottom color="textPrimary">
-          Your current address does not have a Hydro ID. You may claim one below.
+          Click below to link your current address to an existing Snowflake.
+        </Typography>
+
+        <Button variant="contained" color="primary" component={Link} to="/claim-address">Finalize Claim</Button>
+
+        <Typography variant='display1' gutterBottom color="textPrimary" style={{marginTop: 20}}>
+          Mint a New Snowflake
+        </Typography>
+
+        <Typography variant='body2' gutterBottom color="textPrimary">
+          Otherwise, choose a Hydro ID and mint a new Snowflake below.
         </Typography>
 
         <TextField
@@ -38,7 +49,7 @@ class NoHydroId extends Component {
           fullWidth
         />
         <TransactionButton
-          buttonInitial="Claim"
+          buttonInitial="Get Snowflake"
           method={this.getContract('clientRaindrop').methods.signUpUser(this.state.hydroId)}
           onConfirmation={this.props.getAccountDetails}
         />

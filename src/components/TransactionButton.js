@@ -76,9 +76,10 @@ class TransactionButton extends Component {
         linkProps: {}
       })
 
-      this.props.w3w.sendTransaction(this.props.method, {
+      const method = typeof this.props.method === 'function' ? this.props.method() : this.props.method
+      this.props.w3w.sendTransaction(method, {
         error: (error, message) => {
-          console.error(error.message)
+          console.error(error.message) // eslint-disable-line no-console
           this.setState({
             text: `Transaction Error: '${message}'`,
             buttonState: 'error',
@@ -137,7 +138,10 @@ class TransactionButton extends Component {
 TransactionButton.propTypes = {
   buttonInitial:     PropTypes.node.isRequired,
   buttonSuccess:     PropTypes.string,
-  method:            PropTypes.object.isRequired,
+  method:            PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.func
+  ]).isRequired,
   onTransactionHash: PropTypes.func,
   onConfirmation:    PropTypes.func,
   classes:           PropTypes.object.isRequired,

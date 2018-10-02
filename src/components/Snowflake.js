@@ -10,7 +10,7 @@ import SnowflakeResolvers from './SnowflakeResolvers'
 
 class Snowflake extends Component {
   render() {
-    const { hydroId, snowflakeDetails, getAccountDetails, addClaim } = this.props
+    const { hydroId, snowflakeDetails, getAccountDetails } = this.props
 
     return (
       <div>
@@ -38,7 +38,6 @@ class Snowflake extends Component {
               owner={snowflakeDetails.owner}
               ownedAddresses={snowflakeDetails.ownedAddresses}
               hydroId={hydroId}
-              addClaim={addClaim}
             />
           </ExpansionPanelDetails>
         </ExpansionPanel>

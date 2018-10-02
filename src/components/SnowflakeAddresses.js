@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
 import { Checkbox, Table, TableHead, TableBody, TableRow, TableCell, TableFooter } from '@material-ui/core';
-import { Toolbar, Button, IconButton, TextField } from '@material-ui/core';
+import { Toolbar, Button, IconButton } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
+import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
 
 import TransactionButton from './TransactionButton'
-import Modal from './Modal'
 
 import { getContract, linkify } from '../common/utilities'
 
@@ -38,14 +38,6 @@ class SnowflakeAddresses extends Component {
       rows:           rows,
       isSelected:     isSelected,
       addressToClaim: ''
-    }
-
-    // get random value
-    const randomValues = new Uint32Array(1)
-    window.crypto.getRandomValues(randomValues)
-    this.hashedSecret = this.props.w3w.web3js.utils.sha3(randomValues[0].toString())
-    this.details = {
-      hashedSecret: this.hashedSecret
     }
 
     this.getContract = getContract.bind(this)
@@ -96,14 +88,6 @@ class SnowflakeAddresses extends Component {
       )
     })
 
-    const addButton = props => {
-      return (
-        <Button variant="fab" color="primary" {...props}>
-          <AddIcon />
-        </Button>
-      )
-    }
-
     return (
       <div style={{width: '100%'}}>
         <Typography>Authorize another Ethereum wallet to access your Snowflake Identity.</Typography>
@@ -146,34 +130,9 @@ class SnowflakeAddresses extends Component {
           <TableFooter>
             <TableRow>
               <TableCell className={this.props.classes.addAddress}>
-                <Modal
-                  opener={addButton}
-                  title='Add an Address'
-                >
-                  <form noValidate autoComplete="off">
-                    <TextField
-                      label='Address'
-                      helperText='Must be able to transact from this address'
-                      margin="normal"
-                      value={this.state.addressToClaim}
-                      onChange={(e) => {
-                        this.setState({addressToClaim: e.target.value})
-                        this.updateClaim(e.target.value)
-                      }}
-                      fullWidth
-                    />
-                    <TransactionButton
-                      onConfirmation={() => {
-                        alert('Please access the Snowflake Dashboard from ' + this.details.address + ' to finalize this claim.')
-                      }}
-                      buttonInitial='Initiate Claim'
-                      method={this.getContract('snowflake').methods.initiateClaim(this.claim)}
-                      onTransactionHash={() => {
-                        this.props.addClaim(this.details.address, this.details)
-                      }}
-                    />
-                  </form>
-                </Modal>
+                <Button component={Link} to="/claim-address" variant="fab" color="primary">
+                  <AddIcon />
+                </Button>
               </TableCell>
             </TableRow>
           </TableFooter>
