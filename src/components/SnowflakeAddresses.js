@@ -36,20 +36,11 @@ class SnowflakeAddresses extends Component {
 
     this.state = {
       rows:           rows,
-      isSelected:     isSelected,
-      addressToClaim: ''
+      isSelected:     isSelected
     }
 
     this.getContract = getContract.bind(this)
     this.linkify = linkify.bind(this)
-  }
-
-  updateClaim = (address) => {
-    this.claim = this.props.w3w.web3js.utils.soliditySha3(address.toLowerCase(), this.hashedSecret, this.props.hydroId)
-    this.details = {...this.details,
-      hydroId: this.props.hydroId,
-      address: address.toLowerCase()
-    }
   }
 
   handleClick = (e, id) => {
