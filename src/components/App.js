@@ -154,7 +154,7 @@ class App extends Component {
     let Store = null
     if (this.state.hydroId === undefined)
       Body = null
-    else if (this.state.hydroId == null)
+    else if (this.state.hydroId == null && !this.state.raindropOnly)
       Body = <NoHydroId getAccountDetails={this.getAccountDetails} />
     else if (this.state.raindropOnly)
       Body = <NoSnowflake getAccountDetails={this.getAccountDetails} hydroId={this.state.raindropHydroId} />
