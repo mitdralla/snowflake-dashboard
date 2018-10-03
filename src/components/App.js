@@ -48,7 +48,8 @@ class App extends Component {
     this.state = {
       hydroBalance:        undefined,
       etherBalance:        undefined,
-      hydroId:             undefined,
+      raindropHydroId:     undefined,
+      hydroId:             undefined, // implicitly, the snowflake hydroID
       raindropOnly:        undefined,
       snowflakeDetails:    {},
       snowflakeDataLoaded: undefined,
@@ -72,7 +73,11 @@ class App extends Component {
 
     if (reset) {
       this.setState({
-        hydroBalance: undefined, etherBalance: undefined, hydroId: undefined, raindropOnly: undefined
+        hydroBalance:    undefined,
+        etherBalance:    undefined,
+        raindropHydroId: undefined,
+        hydroId:         undefined,
+        raindropOnly:    undefined
       }, refresh)
     } else {
       refresh()
@@ -89,12 +94,12 @@ class App extends Component {
     Promise.all([raindropHydroId, snowflakeHydroId])
       .then(([raindrop, snowflake]) => {
         if (snowflake !== null) {
-          this.setState({hydroId: snowflake, raindropOnly: false}, this.getSnowflakeDetails)
+          this.setState({raindropHydroId: raindrop, hydroId: snowflake, raindropOnly: false}, this.getSnowflakeDetails)
         } else {
           if (raindrop !== null) {
-            this.setState({hydroId: raindrop, raindropOnly: true})
+            this.setState({raindropHydroId: raindrop, hydroId: null, raindropOnly: true})
           } else {
-            this.setState({hydroId: null, raindropOnly: undefined})
+            this.setState({raindropHydroId: null, hydroId: null, raindropOnly: undefined})
           }
         }
       })
@@ -152,7 +157,7 @@ class App extends Component {
     else if (this.state.hydroId == null)
       Body = <NoHydroId getAccountDetails={this.getAccountDetails} />
     else if (this.state.raindropOnly)
-      Body = <NoSnowflake getAccountDetails={this.getAccountDetails} hydroId={this.state.hydroId} />
+      Body = <NoSnowflake getAccountDetails={this.getAccountDetails} hydroId={this.state.raindropHydroId} />
     else if (Object.keys(this.state.snowflakeDetails).length === 0)
       Body = null
     else {
@@ -245,7 +250,7 @@ class App extends Component {
                       }
                     }}
                   /> :
-                  <FinalizeClaim hydroId={this.state.hydroId} />
+                  <FinalizeClaim hydroId={this.state.hydroId} getAccountDetails={this.getAccountDetails} />
               }}
             />
 

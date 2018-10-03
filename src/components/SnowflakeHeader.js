@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
-import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { withStyles } from '@material-ui/core/styles';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+
+import Copyable from './Copyable'
 
 const styles = theme => ({
   root: {
@@ -36,28 +36,15 @@ class SnowflakeHeader extends Component {
       <div className={classes.root}>
         {snowflakeBalance === undefined ? '' : (
           <Fragment>
-            <Tooltip
-              title={this.state.copyMessage}
-              placement="left"
-              onOpen={() => { if (!this.state.copyOpen) this.setState({copyOpen: true, copyMessage: 'Copy'})}}
-              onClose={() => this.setState({copyOpen: false})}
-              open={this.state.copyOpen}
-            >
-              <CopyToClipboard
-                text={this.props.hydroId}
-                onCopy={() => {
-                  this.setState({copyMessage: 'Copied!'})
-                }}
-              >
-                <Chip
-                  avatar={<Avatar><AccountCircle /></Avatar>}
-                  color='primary'
-                  label={this.props.hydroId}
-                  className={classes.chip}
-                  clickable
-                />
-              </CopyToClipboard>
-            </Tooltip>
+            <Copyable value={this.props.hydroId}>
+              <Chip
+                avatar={<Avatar><AccountCircle /></Avatar>}
+                color='primary'
+                label={this.props.hydroId}
+                className={classes.chip}
+                clickable
+              />
+            </Copyable>
 
             <Chip
               avatar={

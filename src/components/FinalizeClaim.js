@@ -1,14 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withWeb3 } from 'web3-webpacked-react';
 import { withRouter } from 'react-router'
-
-import TransactionButton from './TransactionButton'
-import { getContract } from '../common/utilities'
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, TextField } from '@material-ui/core';
+import { Button, Typography, TextField } from '@material-ui/core';
 import { Snackbar, SnackbarContent } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import { Link } from 'react-router-dom'
+
+import TransactionButton from './TransactionButton'
+import Copyable from './Copyable'
+import { getContract } from '../common/utilities'
 
 const styles = theme => ({
   snackbar: {
@@ -19,6 +23,15 @@ const styles = theme => ({
   },
   warning: {
     backgroundColor: theme.palette.error.main
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit
+  },
+  close: {
+    marginLeft: theme.spacing.unit / 2
+  },
+  white: {
+    color: "white"
   }
 })
 
@@ -26,50 +39,56 @@ class FinalizeClaim extends Component {
   constructor(props) {
     super(props)
 
+    this.getContract = getContract.bind(this)
+
     this.state = {
+      finalizeAddress: '',
       finalizeSecret:  '',
       finalizeHydroId: '',
       claimAddress:    '',
+      activeClaim:     undefined,
       claimSnackbar:   false,
       addressSnackbar: false
     }
 
     const state = this.props.location.state || {}
-    if (state.address || state.secret || state.hydroId) {
-      this.state.finalizeSecret  = state.secret  || ''
-      this.state.finalizeHydroId = state.hydroId || ''
-      this.state.claimSnackbar   = true
+    const claim = this.getClaim()
 
-      this.setFromURL = true
-
-      if (this.props.w3w.account.toLowerCase() !== state.address.toLowerCase()) {
-        this.finalizeAddress = state.address || ''
-        this.state.addressSnackbar = true
+    // try to set state from url
+    if (state.address || state.secret || state.hydroId)
+      this.state = {
+        ...this.state,
+        finalizeAddress: state.address,
+        finalizeSecret:  state.secret,
+        finalizeHydroId: state.hydroId,
+        activeClaim:     {address: state.address, secret: state.secret, hydroId: state.hydroId},
+        claimSnackbar:   true
       }
-    }
+    // try to get claim from session storage
+    else if (claim)
+      this.state = {
+        ...this.state,
+        finalizeAddress: claim.address,
+        finalizeSecret:  claim.secret,
+        finalizeHydroId: claim.hydroId,
+        activeClaim:     claim,
+        claimSnackbar:   true
+      }
 
-    // get random value
+    // show snackbar if we need to
+    if (
+      this.state.activeClaim &&
+      (this.props.w3w.account.toLowerCase() !== this.state.finalizeAddress.toLowerCase())
+    )
+      this.state = {
+        ...this.state,
+        addressSnackbar: true
+      }
+
+    // get random value for new claims in case we need it
     const randomValues = new Uint32Array(1)
     window.crypto.getRandomValues(randomValues)
     this.hashedSecret = this.props.w3w.web3js.utils.sha3(randomValues[0].toString())
-
-    this.getContract = getContract.bind(this)
-  }
-
-  componentDidMount() {
-    // try to get claim from session storage
-    if (!this.setFromURL && this.getClaim()) {
-      this.setState({
-        finalizeSecret:  this.getClaim().secret,
-        finalizeHydroId: this.getClaim().hydroId,
-        claimSnackbar:   true
-      })
-
-      if (this.getClaim().address.toLowerCase() !== this.props.w3w.account.toLowerCase()) {
-        this.finalizeAddress = this.getClaim().address
-        this.setState({addressSnackbar: true})
-      }
-    }
   }
 
   getClaimKey() {
@@ -90,6 +109,35 @@ class FinalizeClaim extends Component {
     sessionStorage.removeItem(this.getClaimKey())
   }
 
+  deleteLocalClaim = () => {
+    this.setState({
+      finalizeAddress: '',
+      finalizeSecret:  '',
+      finalizeHydroId: '',
+      activeClaim:     undefined,
+      claimSnackbar:   false,
+      addressSnackbar: false,
+    })
+
+    this.removeClaim()
+
+    if (this.props.location.state)
+      this.props.history.replace({
+        ...this.props.location,
+        state: {}
+      })
+  }
+
+  getUrlFromClaim = (claim) => {
+    return !this.state.activeClaim ? '' :
+      [
+        window.location.origin,
+        process.env.PUBLIC_URL,
+        this.props.location.pathname,
+        `/${claim.address}/${claim.secret}/${claim.hydroId}`
+      ].join('')
+  }
+
   updateLocalClaim() {
     const { claimAddress } = this.state
     const { hydroId } = this.props
@@ -98,6 +146,8 @@ class FinalizeClaim extends Component {
   }
 
   render() {
+    const { classes } = this.props
+
     return (
       <div>
         <Snackbar
@@ -105,18 +155,28 @@ class FinalizeClaim extends Component {
             vertical: 'bottom',
             horizontal: 'left',
           }}
+          autoHideDuration={10000}
           className={this.props.classes.snackbar}
           open={this.state.claimSnackbar}
-          autoHideDuration={8000}
-          onClose={() => this.setState({ claimSnackbar: false })}
+          onClose={(e, reason) => reason === "clickaway" ? null : this.setState({ claimSnackbar: false })}
         >
           <SnackbarContent
             className={this.props.classes.success}
-            message={<p>We{"'"}ve detected a claim and pre-filled the information above!</p>}
+            message={<p>Claim detected! We{"'"}ve pre-filled the fields above.</p>}
             action={[
+              <Button
+                key="clear"
+                size="small"
+                onClick={this.deleteLocalClaim}
+                className={classes.white}
+              >
+                Delete Claim
+                <DeleteIcon className={classes.rightIcon} />
+              </Button>,
               <IconButton
                 key="close"
                 color="inherit"
+                className={classes.close}
                 onClick={() => this.setState({claimSnackbar: false})}
               >
                 <CloseIcon />
@@ -125,20 +185,42 @@ class FinalizeClaim extends Component {
           />
         </Snackbar>
 
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          className={this.props.classes.snackbar}
-          open={this.state.addressSnackbar}
-          onClose={(e, reason) => reason === "clickaway" ? null : this.setState({ addressSnackbar: false })}
-        >
-          <SnackbarContent
-            className={this.props.classes.warning}
-            message={<p>Please switch to {this.finalizeAddress} to finalize your claim.</p>}
-          />
-        </Snackbar>
+        {this.props.hydroId ? null :
+          <Button variant="contained" color="primary" component={Link} to="/">Need a Snowflake?</Button>
+        }
+
+        {!this.state.activeClaim ? null :
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            className={this.props.classes.snackbar}
+            open={this.state.addressSnackbar}
+            onClose={(e, reason) => reason === "clickaway" ? null : this.setState({ addressSnackbar: false })}
+          >
+            <SnackbarContent
+              className={this.props.classes.warning}
+              message={
+                <p>
+                  Please switch to {this.state.activeClaim.address}, or visit the link to the right.
+                </p>
+              }
+              action={[
+                <Copyable key="copy" placement="top" value={this.getUrlFromClaim(this.state.activeClaim)}>
+                  <Button
+                    key="clear"
+                    size="small"
+                    className={classes.white}
+                  >
+                    Copy Link
+                    <FileCopyIcon className={classes.rightIcon} />
+                  </Button>
+                </Copyable>
+              ]}
+            />
+          </Snackbar>
+        }
 
 
         <Typography variant='display1' gutterBottom color="textPrimary">
@@ -151,20 +233,20 @@ class FinalizeClaim extends Component {
 
         <TextField
           label='Hydro ID'
-          helperText='Your Hydro ID.'
           margin="normal"
           value={this.state.finalizeHydroId}
           onChange={e => this.setState({finalizeHydroId: e.target.value})}
+          disabled={!!this.state.activeClaim}
           fullWidth
         />
 
         <TextField
           label='Secret'
-          helperText='A secret value.'
           type="password"
           margin="normal"
           value={this.state.finalizeSecret}
           onChange={e => this.setState({finalizeSecret: e.target.value})}
+          disabled={!!this.state.activeClaim}
           fullWidth
         />
 
@@ -174,40 +256,49 @@ class FinalizeClaim extends Component {
             this.getClaim().secret, this.getClaim().hydroId
           )}
           onConfirmation={() => {
-            this.props.removeClaim()
+            this.removeClaim()
             this.props.getAccountDetails()
           }}
         />
 
-        <Typography variant='display1' gutterBottom color="textPrimary" style={{marginTop: 20}}>
-          Claiming a New Address?
-        </Typography>
+      {!this.props.hydroId || (this.state.activeClaim) ? null :
+        <Fragment>
+          <Typography variant='display1' gutterBottom color="textPrimary" style={{marginTop: 20}}>
+            Claim a New Address
+          </Typography>
 
-        <form noValidate autoComplete="off">
-          <TextField
-            label='Address'
-            helperText='Must be able to transact from this address'
-            margin="normal"
-            value={this.state.claimAddress}
-            onChange={e => {
-              this.setState({claimAddress: e.target.value}, this.updateLocalClaim)
-            }}
-            fullWidth
-          />
-          <TransactionButton
-            onTransactionHash={() => {
-              this.finalizeAddress = this.claim.address
-            }}
-            onConfirmation={() => {
-              this.setState({addressSnackbar: true})
-            }}
-            buttonInitial='Initiate Claim'
-            method={() => {
-              this.setClaim(this.claim.address, this.claim.secret, this.claim.hydroId)
-              return this.getContract('snowflake').methods.initiateClaim(this.claim.claim)}
-            }
-          />
-        </form>
+          <Typography variant='body2' gutterBottom color="textPrimary">
+            Enter the address you{"'"}d like to claim below.
+          </Typography>
+
+          <form noValidate autoComplete="off">
+            <TextField
+              label='Address'
+              helperText='Must be able to transact from this address'
+              margin="normal"
+              value={this.state.claimAddress}
+              onChange={e => {
+                this.setState({claimAddress: e.target.value}, this.updateLocalClaim)
+              }}
+              fullWidth
+            />
+            <TransactionButton
+              onConfirmation={() => {
+                this.setState({
+                  activeClaim: this.submittedClaim,
+                  addressSnackbar: true
+                })
+              }}
+              buttonInitial='Initiate Claim'
+              method={() => {
+                this.setClaim(this.claim.address, this.claim.secret, this.claim.hydroId)
+                this.submittedClaim = this.claim
+                return this.getContract('snowflake').methods.initiateClaim(this.claim.claim)}
+              }
+            />
+          </form>
+        </Fragment>
+        }
       </div>
     )
   }

@@ -6,6 +6,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 
 import TransactionButton from './TransactionButton'
@@ -84,7 +85,7 @@ class SnowflakeAddresses extends Component {
         <Typography>Authorize another Ethereum wallet to access your Snowflake Identity.</Typography>
         <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
           <TransactionButton
-            buttonInitial={<AddIcon/>}
+            buttonInitial={<DeleteIcon/>}
             method={this.getContract('snowflake').methods.unclaim(selectedAddresses)}
             onConfirmation={this.props.getAccountDetails}
           />
