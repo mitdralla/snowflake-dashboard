@@ -11,11 +11,10 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts("/snowflake-dashboard/workbox-v3.6.2/workbox-sw.js");
-workbox.setConfig({modulePathPrefix: "/snowflake-dashboard/workbox-v3.6.2"});
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.2/workbox-sw.js");
 
 importScripts(
-  "/snowflake-dashboard/precache-manifest.3f7d2d0c6f86a32a0809a804c88ef634.js"
+  "/snowflake-dashboard/precache-manifest.f85364d4c081784190305b36892c78c0.js"
 );
 
 workbox.clientsClaim();
