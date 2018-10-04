@@ -33,7 +33,7 @@ class Snowflake725View extends Component {
 
   render() {
     const need725 = this.state.contractAddress === "0x0000000000000000000000000000000000000000" ? "block" : "none";
-    const have725 = this.state.contractAddress != "0x0000000000000000000000000000000000000000" ? "block" : "none";
+    const have725 = this.state.contractAddress !== "0x0000000000000000000000000000000000000000" ? "block" : "none";
 
     return (
       <div>
