@@ -40,7 +40,7 @@ class TransactionManager extends Component {
         error: (error, message) => {
           console.error(error.message) // eslint-disable-line no-console
           this.setState({
-            buttonState: 'error',
+            transactionState: 'error',
             transactionError: error,
             transactionErrorMessage: message
           })
