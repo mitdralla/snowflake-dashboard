@@ -5,7 +5,6 @@ import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@m
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import SnowflakeAddresses from './SnowflakeAddresses'
-import SnowflakeTokens from './SnowflakeTokens'
 import SnowflakeResolvers from './SnowflakeResolvers'
 
 class Snowflake extends Component {
@@ -38,18 +37,6 @@ class Snowflake extends Component {
               owner={snowflakeDetails.owner}
               ownedAddresses={snowflakeDetails.ownedAddresses}
               hydroId={hydroId}
-            />
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="headline">Token Management</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <SnowflakeTokens
-              hydroId={hydroId}
-              getAccountDetails={getAccountDetails}
             />
           </ExpansionPanelDetails>
         </ExpansionPanel>

@@ -36,9 +36,7 @@ class DAppStore extends Component {
 
     this.state = {
       resolverAddress: '',
-      whitelistResolverAddress: '',
       allowance: '',
-      whitelistResolverMessage: '',
       resolvers: [],
       open: false
     };
@@ -81,22 +79,6 @@ class DAppStore extends Component {
 
     return (
       <div>
-        <form noValidate autoComplete="off">
-          <TextField
-            label="Resolver Address"
-            helperText="The resolver smart contract address."
-            margin="normal"
-            value={this.state.whitelistResolverAddress}
-            onChange={ e => this.setState({whitelistResolverAddress: e.target.value}) }
-            fullWidth
-            />
-
-          <TransactionButton
-            buttonInitial='Whitelist Resolver'
-            method={this.getContract('snowflake').methods.whitelistResolver(this.state.whitelistResolverAddress)}
-            />
-        </form>
-
         <form noValidate autoComplete="off">
           <TextField
             label="Resolver Address"

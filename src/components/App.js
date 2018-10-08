@@ -52,7 +52,6 @@ class App extends Component {
       hydroId:             undefined, // implicitly, the snowflake hydroID
       raindropOnly:        undefined,
       snowflakeDetails:    {},
-      snowflakeDataLoaded: undefined,
       value:               false
     }
 
@@ -64,24 +63,21 @@ class App extends Component {
     this.getAccountDetails()
   }
 
-  getAccountDetails = reset => {
+  getAccountDetails = () => {
     const refresh = () => {
       this.getHydroId()
       this.getHydroBalance()
       this.getEtherBalance()
     }
 
-    if (reset) {
-      this.setState({
-        hydroBalance:    undefined,
-        etherBalance:    undefined,
-        raindropHydroId: undefined,
-        hydroId:         undefined,
-        raindropOnly:    undefined
-      }, refresh)
-    } else {
-      refresh()
-    }
+    this.setState({
+      hydroBalance:        undefined,
+      etherBalance:        undefined,
+      raindropHydroId:     undefined,
+      hydroId:             undefined,
+      raindropOnly:        undefined,
+      snowflakeDetails:    {}
+    }, refresh)
   }
 
   getHydroId = () => {
@@ -136,10 +132,12 @@ class App extends Component {
               owner:            snowflakeDetails.owner,
               ownedAddresses:   snowflakeDetails.ownedAddresses,
               resolvers:        snowflakeDetails.resolvers,
-              snowflakeBalance: this.props.w3w.toDecimal(snowflakeDetails.balance, 18)
+              snowflakeBalance:
+                Number(this.props.w3w.toDecimal(snowflakeDetails.balance, 18))
+                .toLocaleString(undefined, { maximumFractionDigits: 3 })
             }
 
-            this.setState({snowflakeDetails: snowflakeDetailsWithResolverDetails, snowflakeDataLoaded: true})
+            this.setState({snowflakeDetails: snowflakeDetailsWithResolverDetails})
           })
       })
   }
@@ -170,7 +168,7 @@ class App extends Component {
         <DAppStore
           hydroId={this.state.hydroId}
           addedResolvers={this.state.snowflakeDetails.resolvers}
-          getAccountDetails={this.props.getAccountDetails}
+          getAccountDetails={this.getAccountDetails}
         />
       )
     }
@@ -234,7 +232,7 @@ class App extends Component {
             <Route path="/dapp-store" render={() => Store} />
 
             { this.state.hydroId === null || this.state.raindropOnly ? <Redirect from='/get-hydro' to='/path'/> : null }
-            <Route path="/get-hydro" render={() => <GetHydro />} />
+            <Route path="/get-hydro" render={() => <GetHydro getAccountDetails={this.getAccountDetails} />} />
 
             <Route
               path="/claim-address/:address?/:secret?/:hydroId?"

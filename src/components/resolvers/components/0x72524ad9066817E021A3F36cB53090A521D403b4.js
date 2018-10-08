@@ -4,7 +4,7 @@ import { withWeb3 } from 'web3-webpacked-react';
 
 import TransactionButton from '../../TransactionButton'
 
-class ResolverView extends Component {
+class Status extends Component {
   constructor(props) {
     super(props)
 
@@ -101,4 +101,4 @@ class ResolverView extends Component {
   }
 }
 
-export default withWeb3(ResolverView);
+export default withWeb3(Status);

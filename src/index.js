@@ -40,7 +40,7 @@ theme.palette.success.contrastText = theme.palette.getContrastText(green[700])
 
 const Page = (
   <MuiThemeProvider theme={theme}>
-    <Web3Provider supportedNetworks={[4]}>
+    <Web3Provider supportedNetworks={[1, 4]}>
       <Web3Consumer>
         {context => <App w3w={context} />}
       </Web3Consumer>
