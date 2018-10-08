@@ -8,8 +8,8 @@ self.__precacheManifest = [
     "url": "/snowflake-dashboard/static/js/0.33bf857e.chunk.js"
   },
   {
-    "revision": "42e29ebffc286fb0b442",
-    "url": "/snowflake-dashboard/static/js/main.42e29ebf.chunk.js"
+    "revision": "6d9bce90a5256fa3391a",
+    "url": "/snowflake-dashboard/static/js/main.6d9bce90.chunk.js"
   },
   {
     "revision": "a7aa4ae6e6172b0556f7",
@@ -48,11 +48,11 @@ self.__precacheManifest = [
     "url": "/snowflake-dashboard/static/media/0x0CC83693657393Bd4499E656aFaEBDe1aD1CB569.9c231d0f.png"
   },
   {
-    "revision": "42e29ebffc286fb0b442",
+    "revision": "6d9bce90a5256fa3391a",
     "url": "/snowflake-dashboard/static/css/main.07d01a76.chunk.css"
   },
   {
-    "revision": "b6017c3352441795eff3d9b4f4e70c9f",
+    "revision": "1661038026523b73a23515df915d5b1d",
     "url": "/snowflake-dashboard/index.html"
   }
 ];
