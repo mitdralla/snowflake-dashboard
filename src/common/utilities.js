@@ -1,70 +1,66 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import React from 'react'
+import Typography from '@material-ui/core/Typography'
 
 import contracts from './contracts'
+import { default as defaultLogo } from '../components/resolvers/defaultLogo.png'
 
-export function getContract (contractName, isResolver) {
-  let contractData
-
-  if (isResolver) {
-    const resolvers = contracts[this.props.w3w.getNetworkName()].resolvers
-    if (Object.keys(resolvers).includes(contractName)) {
-      contractData = resolvers[contractName]
-      contractData.address = contractName
-    } else {
-      const genericResolverABI = [{"constant":true,"inputs":[],"name":"snowflakeDescription","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"snowflakeName","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_address","type":"address"}],"name":"setSnowflakeAddress","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"snowflakeAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"hydroId","type":"string"},{"name":"allowance","type":"uint256"}],"name":"onSignUp","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}] // eslint-disable-line
-      contractData = {ABI: genericResolverABI, address: contractName}
-    }
-  } else {
-    contractData = contracts[this.props.w3w.getNetworkName()][contractName]
-  }
+export function getContract (contractName) {
+  const contractData = contracts[this.props.w3w.getNetworkName()][contractName]
   return this.props.w3w.getContract(contractData.ABI, contractData.address)
 }
 
-export function getResolverImage (resolver) {
-  return import(`../components/resolvers/logos/${resolver}.png`)
-    .catch(() => {
-      return import('../components/resolvers/logos/default.png')
-    })
+export async function getResolverDetails (address) {
+  const resolverPath = `components/resolvers/${this.props.w3w.getNetworkName()}/${address}`
+  const resolverData = await import('../' + resolverPath)
+    .catch(() => null)
+
+  // get contract object
+  if (resolverData === null) {
+    const genericResolverABI = [{"constant":false,"inputs":[],"name":"renounceOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"snowflakeDescription","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"snowflakeName","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"callOnRemoval","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isOwner","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"callOnSignUp","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"snowflakeAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_snowflakeName","type":"string"},{"name":"_snowflakeDescription","type":"string"},{"name":"_snowflakeAddress","type":"address"},{"name":"_callOnSignUp","type":"bool"},{"name":"_callOnRemoval","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"constant":false,"inputs":[{"name":"_snowflakeAddress","type":"address"}],"name":"setSnowflakeAddress","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"einTo","type":"uint256"},{"name":"amount","type":"uint256"}],"name":"depositHydroBalanceTo","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}] // eslint-disable-line
+
+    return {contract: this.props.w3w.getContract(genericResolverABI, address)}
+  }
+
+  if (!resolverData.default) throw Error(`No default member exported from ${resolverPath}.`)
+  if (!resolverData.ABI) throw Error(`No 'ABI' member exported from ${resolverPath}.`)
+
+  return {
+    'default':         resolverData.default,
+    logo:              resolverData.logo || defaultLogo,
+    requiredAllowance: resolverData.requiredAllowance || "0",
+    contract:          this.props.w3w.getContract(resolverData.ABI, address)
+  }
 }
 
-export function getAllResolvers () {
-  const resolvers = contracts[this.props.w3w.getNetworkName()].resolvers
-
-  return Object.keys(resolvers)
+export async function getAllResolvers () {
+  // eslint-disable-next-line
+  return (await import('../' + `components/resolvers/${this.props.w3w.getNetworkName()}`)).default
 }
 
-export function getResolverData (resolverAddress, hydroId) {
-  const getContractObject = getContract.bind(this)
-  const getLogo = getResolverImage.bind(this)
+export async function getResolverData (resolverAddress, hydroId) {
+  const snowflakeContract = getContract.bind(this)('snowflake')
+  const resolverDetails = await getResolverDetails.bind(this)(resolverAddress)
 
-  const resolvers = contracts[this.props.w3w.getNetworkName()].resolvers
-  const requiredAllowance = resolvers[resolverAddress] === undefined || resolvers[resolverAddress].requiredAllowance === undefined ? "0" : resolvers[resolverAddress].requiredAllowance
-
-  const resolverContract = getContractObject(resolverAddress, true)
-
-  const logo = getLogo(resolverAddress)
+  const name = resolverDetails.contract.methods.snowflakeName().call()
     .catch(() => '')
-  const name = resolverContract.methods.snowflakeName().call()
+  const description = resolverDetails.contract.methods.snowflakeDescription().call()
     .catch(() => '')
-  const description = resolverContract.methods.snowflakeDescription().call()
-    .catch(() => '')
-  const allowance = getContractObject('snowflake').methods.getResolverAllowance(hydroId || this.props.hydroId, resolverAddress).call()
+  const allowance = snowflakeContract.methods.getResolverAllowance(hydroId || this.props.hydroId, resolverAddress).call()
     .then(allowance => {
       return this.props.w3w.toDecimal(allowance, 18)
     })
     .catch(() => '')
 
   // this should never throw
-  return Promise.all([logo, name, description, allowance])
-    .then(([logo, name, description, allowance]) => {
+  return Promise.all([name, description, allowance])
+    .then(([name, description, allowance]) => {
       return {
         name:              name,
         description:       description,
         allowance:         allowance,
-        requiredAllowance: requiredAllowance,
+        requiredAllowance: resolverDetails.requiredAllowance,
         address:           resolverAddress,
-        logo:              logo.default
+        logo:              resolverDetails.logo
       }
     })
 }

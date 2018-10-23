@@ -51,27 +51,30 @@ class DAppStore extends Component {
     this.loadResolvers()
   }
 
-  loadResolvers = () => {
+  loadResolvers = async () => {
     const { addedResolvers } = this.props
 
-    var resolverMap = this.getAllResolvers().map(resolver => {
-      return this.getResolverData(resolver, this.props.hydroId)
-    })
+    const resolvers = await this.getAllResolvers()
 
-    Promise.all(resolverMap).then(result => {
-      let resultLength = result.length
-      let addedResolverLength = addedResolvers.length
-      for (var i = 0; i < resultLength; i++)  {
-        result[i].added = 0
-        for (var j = 0; j < addedResolverLength; j++) {
-          if (result[i].address === addedResolvers[j]) {
-            result[i].added = 1
+    Promise.all(
+      resolvers.map(resolver => {
+        return this.getResolverData(resolver, this.props.hydroId)
+      })
+    )
+      .then(result => {
+        let resultLength = result.length
+        let addedResolverLength = addedResolvers.length
+        for (var i = 0; i < resultLength; i++)  {
+          result[i].added = 0
+          for (var j = 0; j < addedResolverLength; j++) {
+            if (result[i].address === addedResolvers[j]) {
+              result[i].added = 1
+            }
           }
         }
-      }
 
-      this.setState({resolvers: result})
-    })
+        this.setState({resolvers: result})
+      })
   }
 
   render() {

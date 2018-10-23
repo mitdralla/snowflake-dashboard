@@ -25,8 +25,9 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "npm run build-resolver-list && react-scripts start",
+    "build-resolver-list": "node buildResolverList.js",
+    "build": "npm run build-resolver-list && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

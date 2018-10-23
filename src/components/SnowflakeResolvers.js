@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import TransactionButton from './TransactionButton'
 import ResolverModal from './resolvers/ResolverModal'
 
-import { getContract, linkify } from '../common/utilities'
+import { getContract, getResolverDetails, linkify } from '../common/utilities'
 
 const styles = {
   addResolver: {
@@ -33,6 +33,7 @@ class SnowflakeResolvers extends Component {
 
     this.linkify = linkify.bind(this)
     this.getContract = getContract.bind(this)
+    this.getResolverDetails = getResolverDetails.bind(this)
   }
 
   componentDidMount() {
@@ -56,16 +57,16 @@ class SnowflakeResolvers extends Component {
         newAllowance: this.props.resolverDetails[resolver].allowance
       }
 
-      const ResolverComponent = await import(`./resolvers/components/${resolver}.js`)
-        .then(component => component.default)
-        .catch(() => undefined)
+      const resolverDetails = await this.getResolverDetails(resolver)
 
-      if (ResolverComponent !== undefined) {
+      const { default: ResolverComponent, contract } = resolverDetails
+
+      if (ResolverComponent) {
         resolverComponents[resolver] = (
           <ResolverModal resolverName={rows[resolver].name}>
             <ResolverComponent
               hydroId={this.props.hydroId}
-              resolverContract={this.getContract(resolver, true)}
+              resolverContract={contract}
               snowflakeContract={this.getContract('snowflake')}
             />
           </ResolverModal>
