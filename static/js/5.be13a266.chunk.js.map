@@ -1,0 +1,1 @@
+{"version":3,"sources":["components/resolvers/Mainnet/0x72524ad9066817E021A3F36cB53090A521D403b4/logo.png"],"names":["module","exports","__webpack_require__","p"],"mappings":"6EAAAA,EAAAC,QAAiBC,EAAAC,EAAuB","file":"static/js/5.be13a266.chunk.js","sourcesContent":["module.exports = __webpack_public_path__ + \"static/media/logo.9c231d0f.png\";"],"sourceRoot":""}
