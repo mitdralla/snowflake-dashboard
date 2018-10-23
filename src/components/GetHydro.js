@@ -48,7 +48,7 @@ class SnowflakeTokens extends Component {
             <form noValidate autoComplete="off">
               <TransactionButton
                 buttonInitial='Get Testnet Hydro'
-                method={this.getContract('token').methods.getMoreTokens()}
+                method={() => this.getContract('token').methods.getMoreTokens()}
                 onConfirmation={this.props.getAccountDetails}
               />
             </form>
@@ -72,7 +72,7 @@ class SnowflakeTokens extends Component {
           />
           <TransactionButton
             buttonInitial='Deposit Hydro'
-            method={this.getContract('token').methods.approveAndCall(
+            method={() => this.getContract('token').methods.approveAndCall(
               this.getContract('snowflake')._address, depositAmount, '0x00'
             )}
             onConfirmation={this.props.getAccountDetails}
@@ -102,7 +102,7 @@ class SnowflakeTokens extends Component {
           />
           <TransactionButton
             buttonInitial='Transfer Hydro'
-            method={this.getContract('snowflake').methods.transferSnowflakeBalance(
+            method={() => this.getContract('snowflake').methods.transferSnowflakeBalance(
               this.state.transferHydroId, transferAmount
             )}
             onConfirmation={this.props.getAccountDetails}
@@ -124,7 +124,7 @@ class SnowflakeTokens extends Component {
           />
           <TransactionButton
             buttonInitial='Withdraw Hydro'
-            method={this.getContract('snowflake').methods.withdrawSnowflakeBalance(
+            method={() => this.getContract('snowflake').methods.withdrawSnowflakeBalance(
               this.props.w3w.account, withdrawAmount
             )}
             onConfirmation={this.props.getAccountDetails}

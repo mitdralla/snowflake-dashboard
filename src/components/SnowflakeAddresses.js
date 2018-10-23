@@ -86,7 +86,7 @@ class SnowflakeAddresses extends Component {
         <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
           <TransactionButton
             buttonInitial={<DeleteIcon/>}
-            method={this.getContract('snowflake').methods.unclaim(selectedAddresses)}
+            method={() => this.getContract('snowflake').methods.unclaim(selectedAddresses)}
             onConfirmation={this.props.getAccountDetails}
           />
         </Toolbar>

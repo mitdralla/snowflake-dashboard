@@ -115,24 +115,24 @@ class SnowflakeResolvers extends Component {
 
         <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
           <TransactionButton
-            buttonInitial={allowanceChanged ?
-              <React.Fragment>Update Allowances<SwapVertIcon/></React.Fragment>
-              :
-              <React.Fragment>Remove<DeleteIcon/></React.Fragment>
-            }
-            method={allowanceChanged ?
-              this.getContract('snowflake').methods.changeResolverAllowances(
-                selectedResolvers,
-                selectedResolvers.map(resolver => {
-                  const amount = this.state.rows[resolver].newAllowance
-                  return this.props.w3w.fromDecimal(String(amount), 18)
-                })
-              )
-              :
-              this.getContract('snowflake').methods.removeResolvers(selectedResolvers, false)
-            }
+            show={!allowanceChanged}
+            buttonInitial={<React.Fragment>Remove<DeleteIcon/></React.Fragment>}
+            method={() => this.getContract('snowflake').methods.removeResolvers(selectedResolvers, false)}
             onConfirmation={this.props.getAccountDetails}
           />
+          <TransactionButton
+            show={allowanceChanged}
+            buttonInitial={<React.Fragment>Update Allowances<SwapVertIcon/></React.Fragment>}
+            method={() => this.getContract('snowflake').methods.changeResolverAllowances(
+              selectedResolvers,
+              selectedResolvers.map(resolver => {
+                const amount = this.state.rows[resolver].newAllowance
+                return this.props.w3w.fromDecimal(String(amount), 18)
+              })
+            )}
+            onConfirmation={this.props.getAccountDetails}
+          />
+
         </Toolbar>
 
         <Table>

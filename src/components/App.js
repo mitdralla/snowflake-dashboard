@@ -132,9 +132,7 @@ class App extends Component {
               owner:            snowflakeDetails.owner,
               ownedAddresses:   snowflakeDetails.ownedAddresses,
               resolvers:        snowflakeDetails.resolvers,
-              snowflakeBalance:
-                Number(this.props.w3w.toDecimal(snowflakeDetails.balance, 18))
-                .toLocaleString(undefined, { maximumFractionDigits: 3 })
+              snowflakeBalance: snowflakeDetails.balance
             }
 
             this.setState({snowflakeDetails: snowflakeDetailsWithResolverDetails})
@@ -167,6 +165,7 @@ class App extends Component {
       Store = (
         <DAppStore
           hydroId={this.state.hydroId}
+          snowflakeBalance={this.state.snowflakeDetails.snowflakeBalance}
           addedResolvers={this.state.snowflakeDetails.resolvers}
           getAccountDetails={this.getAccountDetails}
         />

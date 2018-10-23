@@ -45,13 +45,15 @@ export async function getResolverData (resolverAddress, hydroId) {
     .catch(() => '')
   const description = resolverDetails.contract.methods.snowflakeDescription().call()
     .catch(() => '')
-  const allowance = snowflakeContract.methods.getResolverAllowance(hydroId || this.props.hydroId, resolverAddress).call()
-    .then(allowance => {
-      return this.props.w3w.toDecimal(allowance, 18)
-    })
-    .catch(() => '')
 
-  // this should never throw
+  const allowance = !hydroId ? undefined :
+    snowflakeContract.methods.getResolverAllowance(hydroId, resolverAddress).call()
+      .then(allowance => {
+        return this.props.w3w.toDecimal(allowance, 18)
+      })
+      .catch(() => '')
+
+  // this never throws
   return Promise.all([name, description, allowance])
     .then(([name, description, allowance]) => {
       return {

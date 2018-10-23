@@ -50,7 +50,7 @@ class NoHydroId extends Component {
         />
         <TransactionButton
           buttonInitial="Get Snowflake"
-          method={this.getContract('clientRaindrop').methods.signUpUser(this.state.hydroId)}
+          method={() => this.getContract('clientRaindrop').methods.signUpUser(this.state.hydroId)}
           onConfirmation={this.props.getAccountDetails}
         />
       </div>

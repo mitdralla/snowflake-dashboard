@@ -72,7 +72,7 @@ class Status extends Component {
           />
           <TransactionButton
             buttonInitial='Set New Status'
-            method={this.props.resolverContract.methods.setStatus(this.state.newStatus)}
+            method={() => this.props.resolverContract.methods.setStatus(this.state.newStatus)}
             onConfirmation={() => {
               this.getCurrentStatus()
             }}

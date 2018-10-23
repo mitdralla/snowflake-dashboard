@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Web3Consumer } from 'web3-webpacked-react';
 import { Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -188,6 +188,7 @@ class _SnowflakeButton extends Component {
 
 _SnowflakeButton.propTypes = {
   buttonInitial: PropTypes.node.isRequired,
+  w3w:           PropTypes.object.isRequired,
   classes:       PropTypes.object.isRequired,
   theme:         PropTypes.object.isRequired
 }
@@ -196,9 +197,9 @@ const SnowflakeButton = withTheme()(withStyles(styles)(_SnowflakeButton))
 
 class TransactionButton extends Component {
   render() {
-    const { buttonInitial, ...rest } = this.props
+    const { show, buttonInitial, ...rest } = this.props
 
-    return (
+    return !show ? <Fragment /> : (
       <Web3Consumer>
         {context =>
           <TransactionManager w3w={context} {...rest}>
@@ -211,16 +212,15 @@ class TransactionButton extends Component {
 }
 
 TransactionButton.propTypes = {
+  show:              PropTypes.bool,
   buttonInitial:     PropTypes.node.isRequired,
-  method:            PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.func
-  ]).isRequired,
+  method:            PropTypes.func.isRequired,
   onTransactionHash: PropTypes.func,
   onConfirmation:    PropTypes.func
 }
 
 TransactionButton.defaultProps = {
+  show:              true,
   onTransactionHash: () => {},
   onConfirmation:    () => {}
 }

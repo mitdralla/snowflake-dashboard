@@ -54,7 +54,10 @@ class SnowflakeHeader extends Component {
                   </SvgIcon>
                 </Avatar>
               }
-              label={snowflakeBalance}
+              label={
+                Number(this.props.w3w.toDecimal(snowflakeBalance, 18))
+                  .toLocaleString(undefined, { maximumFractionDigits: 3 })
+              }
               className={classes.chip}
             />
           </Fragment>

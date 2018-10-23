@@ -5,10 +5,12 @@ This is a demo frontend for the [Snowflake identity protocol](https://github.com
 Visit the [live dashboard](https://noahhydro.github.io/snowflake-dashboard/).
 
 ## Adding Resolver Modals
-1. Add the checksummed `address`, `ABI`, and optional `requiredAllowance` of your resolver smart contract in [src/common/contracts.js](./src/common/contracts.js).
-2. Create a React component that displays your resolver's data and place it in [src/components/resolvers/components](./src/components/resolvers/components), ensuring that its name is the checksum of the resolver address.
-3. Optionally, add a 256x256 png logo four your resolver in [src/components/resolvers/logos](./src/components/resolvers/logos), with the name as the checksum of your resolver address.
 
-**ALL instances of your resolver address must be checksummed.**
-
-Note that for any user to be able to add your resolver, you must first whitelist it from an address with a snowflake (this functionality is available from the add a resolver modal available on the dashboard to accounts with a Snowflake).
+1. Create a Snowflake-compatible smart contract and deploy it to `Rinkeby` or `Mainnet`.
+2. Add a folder named per the **checksummed** `address` of your smart contract in [src/components/resolvers/](./src/components/resolvers/).
+3. Create an `index.js` file in the folder.
+4. In this file, create a React component that displays your resolver's data and make it the default export.
+5. Additionally, make sure to include the following named exports:
+	- `logo`: A 256x256 png logo for your resolver.
+	- `ABI`: The ABI of your contract.
+	- `requiredAllowance`: The HYDRO amount a user must set as their initial allowance for your resolver on sign-up.
