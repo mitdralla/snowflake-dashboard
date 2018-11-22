@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { TextField, Typography, Button } from '@material-ui/core';
 import { withWeb3 } from 'web3-webpacked-react';
 
-import TransactionButton from '../../../TransactionButton'
+import TransactionButton from '../../../common/TransactionButton'
 
 export { default as logo } from './logo.png'
 

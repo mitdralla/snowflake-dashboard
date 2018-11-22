@@ -1,0 +1,37 @@
+{
+  "plugins": [
+    "react"
+  ],
+  "env": {
+    "es6":     true,
+    "browser": true,
+    "node":    true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "rules": {
+    "new-cap": "off",
+    "react/prop-types": 0
+  },
+  "globals": {
+    "it": false,
+    "assert": false,
+    "contract": false,
+    "artifacts": false,
+    "describe": false
+  },
+  "settings": {
+    "react": {
+      "version": "16.7.0-alpha.2"
+    }
+  }
+}
