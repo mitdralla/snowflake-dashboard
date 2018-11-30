@@ -6,11 +6,10 @@ import { Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import { withStyles } from '@material-ui/core'
 import { TextField } from '@material-ui/core'
-import DeleteIcon from '@material-ui/icons/Delete'
 import SwapVertIcon from '@material-ui/icons/SwapVert'
 import Typography from '@material-ui/core/Typography'
 import { useWeb3Context } from 'web3-react/hooks'
-import { getEtherscanLink, fromDecimal } from 'web3-react/utilities'
+import { getEtherscanLink } from 'web3-react/utilities'
 
 import { useNamedContract } from '../../common/hooks'
 import TransactionButton from '../common/TransactionButton'
@@ -59,7 +58,7 @@ function selectedReducer (state, action) {
 export default
   withRouter(
     withStyles(styles)(
-      function SnowflakeResolvers ({ classes, resolvers, resolverDetails, resolverAllowances }) {
+      function SnowflakeResolvers ({ classes, resolvers, resolverDetails, resolverAllowances, ein }) {
   const context = useWeb3Context()
   const [selectedResolvers, dispatchSelected] = useReducer(
     selectedReducer, Array(Object.keys(resolverAllowances).length).fill(false)
@@ -71,9 +70,6 @@ export default
   const handleCheckboxClick = (resolver, i) => {
     dispatchAllowance({ type: 'reset', newValues: resolverAllowances })
     dispatchSelected({ type: 'toggle', index: i })
-    // // reset new allowances
-    // setNewAllowances(resolverAllowances)
-    // return {isSelected: {...oldState.isSelected, [id]: !oldState.isSelected[id]}, rows: newRows}
   }
 
   const anySelected = selectedResolvers.some(x => x)
@@ -90,23 +86,11 @@ export default
 
       <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
         <TransactionButton
-          show={!allowanceChanged}
-          readyText={<React.Fragment>Remove<DeleteIcon/></React.Fragment>}
-          method={() => snowflakeContract.methods.removeResolvers(
-            Object.values(selectedResolvers),
-            Array(Object.keys(selectedResolvers).length).fill(false),
-            Array(Object.keys(selectedResolvers).length).fill(true))
-          }
-          onConfirmation={context.reRenderers.forceAccountReRender}
-        />
-        <TransactionButton
           show={allowanceChanged}
           readyText={<React.Fragment>Update Allowances<SwapVertIcon/></React.Fragment>}
           method={() => snowflakeContract.methods.changeResolverAllowances(
-            Object.values(selectedResolvers),
-            Object.keys(selectedResolvers).map(resolver =>
-              fromDecimal(newAllowances[resolver], 18)
-            )
+            resolvers.filter((r, i) => selectedResolvers[i]),
+            newAllowances.filter((r, i) => selectedResolvers[i])
           )}
           onConfirmation={context.reRenderers.forceAccountReRender}
         />
@@ -128,9 +112,9 @@ export default
             </TableCell>
             <TableCell>Resolver</TableCell>
             <TableCell>Name</TableCell>
+            <TableCell padding="checkbox"></TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Allowance</TableCell>
-            <TableCell padding="checkbox"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -155,6 +139,13 @@ export default
                 </a>
               </TableCell>
               <TableCell>{resolverDetails[i].name}</TableCell>
+              <TableCell padding="checkbox">
+                {resolverDetails[i].component === null ? '' :
+                  <ResolverModal ein={ein}>
+                    {resolverDetails[i].component}
+                  </ResolverModal>
+                }
+              </TableCell>
               <TableCell>{resolverDetails[i].description}</TableCell>
               <TableCell >
                 {!selectedResolvers[i] ? resolverAllowances[i] :
@@ -166,13 +157,6 @@ export default
                     type="number"
                     margin="normal"
                   />
-                }
-              </TableCell>
-              <TableCell padding="checkbox">
-                {resolverDetails[i].component === null ? '' :
-                  <ResolverModal resolverName={resolverDetails[i].name}>
-                    {resolverDetails[i].component()}
-                  </ResolverModal>
                 }
               </TableCell>
             </TableRow>

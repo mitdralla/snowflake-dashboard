@@ -1,25 +1,34 @@
-import React, { Component } from 'react';
-import { IconButton } from '@material-ui/core';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import React, { useState, Suspense } from 'react'
+import { IconButton } from '@material-ui/core'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import { Button, Dialog, DialogActions, DialogContent } from '@material-ui/core';
 
-import Modal from '../common/Modal';
+export default function ResolverModal ({ ein, children: ResolverComponent }) {
+  const [open, setOpen] = useState(false)
 
-class ResolverModal extends Component {
-  render() {
-    return (
-      <div>
-        <Modal
-          fullScreen
-          opener={(props) => {
-            return <IconButton {...props}> <OpenInNewIcon /> </IconButton>
-          }}
-          title={this.props.resolverName}
-        >
-          {this.props.children}
-        </Modal>
-      </div>
-    )
-  }
+  return (
+    <>
+      <IconButton onClick={() => setOpen(true)}>
+        <OpenInNewIcon />
+      </IconButton>
+
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <DialogContent>
+          <Suspense fallback={<div />}>
+            <ResolverComponent ein={ein} />
+          </Suspense>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  )
 }
-
-export default ResolverModal;

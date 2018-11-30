@@ -58,7 +58,7 @@ function AccountHeader({ classes }) {
           color='primary'
           variant='h2'
           component="a"
-          href={snowflakeLink}
+          href="https://docs.google.com/a/hydrogenplatform.com/forms/d/1Nt0XfdlJIxqLm52GkV_bNZ9iw4Na3OR7yqIxyiSavks"
           target="_blank"
         >
           Beta

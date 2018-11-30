@@ -17,14 +17,13 @@ const styles = theme => ({
 export default withStyles(styles)(function GetHydro ({ classes }) {
   const context = useWeb3Context()
   const tokenContract = useNamedContract('token')
-  const snowflakeAddress = useNamedContract('snowflake')._address
+  const snowflakeContract = useNamedContract('snowflake')
 
   const [depositAmount, setDepositAmount] = useState('')
   const [withdrawAmount, setWithdrawAmount] = useState('')
 
   return (
     <div style={{width: '100%'}}>
-      <button onClick={context.reRenderers.forceAccountReRender}>force</button>
       <Typography variant='h6' gutterBottom color="textPrimary" className={classes.marginTop}>
         Manage your Snowflake Token Balances
       </Typography>
@@ -58,7 +57,7 @@ export default withStyles(styles)(function GetHydro ({ classes }) {
 
       <TransactionButton
         readyText='Deposit Hydro'
-        method={() => tokenContract.methods.approveAndCall(snowflakeAddress, fromDecimal(depositAmount, 18), '0x00')}
+        method={() => tokenContract.methods.approveAndCall(snowflakeContract._address, fromDecimal(depositAmount, 18), '0x00')}
         onConfirmation={context.reRenderers.forceAccountReRender}
       />
 
@@ -77,7 +76,9 @@ export default withStyles(styles)(function GetHydro ({ classes }) {
 
       <TransactionButton
         readyText='Withdraw Hydro'
-        method={() => tokenContract.methods.withdrawSnowflakeBalance(context.account, fromDecimal(withdrawAmount, 18))}
+        method={
+          () => snowflakeContract.methods.withdrawSnowflakeBalance(context.account, fromDecimal(withdrawAmount, 18))
+        }
         onConfirmation={context.reRenderers.forceAccountReRender}
       />
     </div>

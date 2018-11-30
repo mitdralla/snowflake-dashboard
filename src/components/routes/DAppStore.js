@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, Suspense } from 'react';
 import { TextField, Button, GridList, GridListTile, GridListTileBar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import DoneIcon from '@material-ui/icons/Done';
@@ -8,6 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Link } from 'react-router-dom'
 import { useWeb3Context, useNetworkName } from 'web3-react/hooks'
 import { fromDecimal } from 'web3-react/utilities'
+import { Dialog, DialogActions, DialogContent } from '@material-ui/core';
 
 import ALL_SNOWFLAKE_RESOLVERS from '../resolvers'
 
@@ -33,7 +34,16 @@ const styles = theme => ({
   icon: {
     color: 'rgba(255, 255, 255, 1)',
   },
-});
+  modal: {
+    top: '50%',
+    left: '50%',
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+  }
+})
 
 const initialHydroSnackbar = {
   show: false,
@@ -57,6 +67,9 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
   const [hydroSnackbar, dispatchHydroSnackbar] = useReducer(hydroSnackbarReducer, initialHydroSnackbar)
   const [alreadySetSnackbar, setAlreadySetSnackbar] = useState(false)
 
+  const [extraDataModalOpen, setExtraDataModalOpen] = useState(true)
+  const [extraData, setExtraData] = useState('0x00')
+
   const context = useWeb3Context()
   const networkName = useNetworkName()
   const snowflakeContract = useNamedContract('snowflake')
@@ -68,6 +81,14 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
   const resolverDetails = useResolverDetails(allResolvers)
 
   const ready = einDetails && resolverDetails && snowflakeBalance
+
+  function receiveExtraData(extraData) {
+    setExtraData(extraData)
+    setExtraDataModalOpen(false)
+  }
+
+  const recognizedResolver = allResolvers.includes(resolverAddress)
+  const recognizedResolverIndex = allResolvers.findIndex(e => e === resolverAddress)
 
   return (
     <div>
@@ -91,10 +112,42 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
             fullWidth
           />
 
+        {recognizedResolver && resolverDetails[recognizedResolverIndex].extraDataComponent &&
+            <Dialog
+              fullScreen
+              open={extraDataModalOpen}
+              onClose={() => {
+                setResolverAddress('')
+                setAllowance('')
+              }}
+            >
+              <DialogContent>
+                <Suspense fallback={<div />}>
+                  {React.createElement(
+                    resolverDetails[recognizedResolverIndex].extraDataComponent,
+                    { ein: ein, sendExtraData: receiveExtraData }
+                  )}
+                </Suspense>
+              </DialogContent>
+
+              <DialogActions>
+                <Button onClick={() => {
+                    setResolverAddress('')
+                    setAllowance('')
+                  }}
+                  color="primary"
+                >
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          }
+
           <TransactionButton
+            show={resolverAddress !== '' && context.web3js.utils.checkAddressChecksum(resolverAddress)}
             readyText='Set Resolver'
-            method={() => snowflakeContract.methods.addResolvers(
-              [resolverAddress], [true], [fromDecimal(allowance, 18)]
+            method={() => snowflakeContract.methods.addResolver(
+              resolverAddress, true, fromDecimal(allowance, 18), extraData
             )}
             onConfirmation={context.reRenderers.forceAccountReRender}
           />
@@ -168,7 +221,7 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
                 horizontal: 'left'
               }}
               autoHideDuration={10000}
-              open={hydroSnackbar[0]}
+              open={hydroSnackbar.show}
               onClose={(e, reason) => reason === "clickaway" ? null : dispatchHydroSnackbar({ type: 'hide' })}
               >
               <SnackbarContent

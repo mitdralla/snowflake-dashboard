@@ -27,6 +27,7 @@ export default function Body ({ ein }) {
             <ExpansionPanelDetails style={{overflowX: 'auto'}}>
               <SnowflakeResolvers
                 key={JSON.stringify(einDetails.resolvers)}
+                ein={ein}
                 resolvers={einDetails.resolvers}
                 resolverDetails={resolverDetails}
                 resolverAllowances={resolverAllowances}

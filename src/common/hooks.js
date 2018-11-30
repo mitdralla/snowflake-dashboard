@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useWeb3Context, useNetworkName, useERC20Balance, useAccountEffect } from 'web3-react/hooks'
 import { toDecimal } from 'web3-react/utilities'
 
@@ -7,12 +7,14 @@ import { GENERIC_SNOWFLAKE_RESOLVER_ABI } from './utilities'
 import { default as defaultLogo } from '../components/resolvers/defaultLogo.png'
 
 export function useNamedContract(name) {
-  const context = useWeb3Context()
   const networkName = useNetworkName()
-
   const contractVariables = contracts[networkName][name]
+  return useGenericContract(contractVariables.address, contractVariables.ABI)
+}
 
-  return new context.web3js.eth.Contract(contractVariables.ABI, contractVariables.address)
+export function useGenericContract(address, ABI) {
+  const context = useWeb3Context()
+  return useMemo(() => new context.web3js.eth.Contract(ABI, address), [address, ABI])
 }
 
 export function useEIN () {
@@ -40,7 +42,7 @@ export function useHydroId () {
 
   useAccountEffect(() => {
     if (ein) {
-      clientRaindropContract.methods.getDetails(ein).call()
+      clientRaindropContract.methods["getDetails(uint256)"](ein).call()
         .then(result => setHydroId(result.casedHydroID))
         .catch(() => setHydroId(null))
     }
@@ -95,7 +97,7 @@ export function useResolverAllowances (resolvers = []) {
 
   useAccountEffect(() => {
     if (ein && resolvers.length > 0) {
-      Promise.all(resolvers.map(async resolver =>
+      Promise.all(resolvers.map(resolver =>
         snowflakeContract.methods.resolverAllowances(ein, resolver).call()
           .then(allowance => toDecimal(allowance, 18))
       ))
@@ -125,14 +127,16 @@ async function getResolverDetails(web3js, snowflakeContract, networkName, resolv
   const resolverPath = `components/resolvers/${networkName}/${resolver}`
   const localDetails = await import('../' + resolverPath)
     .then(details => ({
-      component:         details.default,
-      logo:              details.logo || defaultLogo,
-      requiredAllowance: details.requiredAllowance || 0,
+      component:          details.default,
+      logo:               details.logo || defaultLogo,
+      requiredAllowance:  details.requiredAllowance || 0,
+      extraDataComponent: details.extraDataComponent || null,
     }))
     .catch(() => ({
       component:         null,
       logo:              null,
       requiredAllowance: null,
+      extraDataComponent:    null
     }))
 
   return {...chainDetails, ...localDetails}
@@ -146,7 +150,7 @@ export function useResolverDetails (resolvers = []) {
 
   useAccountEffect(() => {
     if (resolvers.length > 0)
-      Promise.all(resolvers.map(async resolver =>
+      Promise.all(resolvers.map(resolver =>
         getResolverDetails(context.web3js, snowflakeContract, networkName, resolver)
       ))
         .then(results => setResolverDetails(results))

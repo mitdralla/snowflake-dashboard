@@ -11,7 +11,7 @@ import { AddLocation as AddLocationIcon } from '@material-ui/icons';
 const Body = lazy(() => import('./routes/Body'))
 const Store = lazy(() => import('./routes/DAppStore'))
 const GetHydro = lazy(() => import('./routes/GetHydro'))
-const FinalizeClaim = lazy(() => import('./AccountHeader'))
+const FinalizeClaim = lazy(() => import('./routes/FinalizeClaim'))
 
 const routeNames = ['/', '/dapp-store', '/get-hydro', '/claim-address']
 const MyTabs = withRouter(({location, ...props}) => {

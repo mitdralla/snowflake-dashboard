@@ -3,8 +3,7 @@ import { Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { withTheme, withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types';
-import { useWeb3Context, useTransactionManager } from 'web3-react/hooks'
-import { getEtherscanLink } from 'web3-react/utilities'
+import { useSignPersonalManager } from 'web3-react/hooks'
 
 const styles = theme => ({
   ready: {
@@ -39,25 +38,25 @@ const styles = theme => ({
 
 const ProgressIcon = withTheme()(({ theme }) => <CircularProgress size={theme.typography.button.fontSize} />)
 
-function TransactionButton ({ show, method, readyText, classes, onTransactionHash, onConfirmation }) {
-  const context = useWeb3Context()
-  const [transactionState, transactionData, sendTransaction, resetTransaction] = useTransactionManager(
-    method, { handlers: { transactionHash: onTransactionHash, receipt: onConfirmation } }
+function SignatureButton ({ show, message, readyText, classes, onSuccess }) {
+  // eslint-disable-next-line no-unused-vars
+  const [signatureState, _, signPersonal, resetSignature] = useSignPersonalManager(
+    message, { handlers: { success: onSuccess } }
   )
 
-  switch (transactionState) {
+  switch (signatureState) {
     case 'ready':
       return (
         <Button
           style={show ? undefined : {display: 'none'}}
           variant="contained"
-          onClick={sendTransaction}
+          onClick={signPersonal}
           className={classes.ready}
         >
           {readyText}
         </Button>
       )
-    case 'sending':
+    case 'pending':
       return (
         <Button
           style={show ? undefined : {display: 'none'}}
@@ -68,28 +67,12 @@ function TransactionButton ({ show, method, readyText, classes, onTransactionHas
           <ProgressIcon />
         </Button>
       )
-    case 'pending':
-      return (
-        <Button
-          style={show ? undefined : {display: 'none'}}
-          variant="contained"
-          className={classes.sendingPending}
-          component="a"
-          href={getEtherscanLink(context.networkId, 'transaction', transactionData.transactionHash)}
-          target="_blank"
-        >
-          <span>Pending Confirmation <ProgressIcon /></span>
-        </Button>
-      )
     case 'success':
       return (
         <Button
           style={show ? undefined : {display: 'none'}}
           variant="contained"
           className={classes.success}
-          component="a"
-          href={getEtherscanLink(context.networkId, 'transaction', transactionData.transactionHash)}
-          target="_blank"
         >
           <span>Success!</span>
         </Button>
@@ -99,7 +82,7 @@ function TransactionButton ({ show, method, readyText, classes, onTransactionHas
         <Button
           style={show ? undefined : {display: 'none'}}
           variant="contained"
-          onClick={resetTransaction}
+          onClick={resetSignature}
           className={classes.error}
         >
           <span>Error. Retry?</span>
@@ -110,19 +93,17 @@ function TransactionButton ({ show, method, readyText, classes, onTransactionHas
   }
 }
 
-TransactionButton.propTypes = {
+SignatureButton.propTypes = {
   show:              PropTypes.bool,
-  method:            PropTypes.func.isRequired,
+  message:           PropTypes.string.isRequired,
   readyText:         PropTypes.node.isRequired,
   classes:           PropTypes.object.isRequired,
-  onTransactionHash: PropTypes.func,
-  onConfirmation:    PropTypes.func
+  onSuccess:         PropTypes.func
 }
 
-TransactionButton.defaultProps = {
+SignatureButton.defaultProps = {
   show:              true,
-  onTransactionHash: () => {},
-  onConfirmation:    () => {}
+  onSuccess: () => {},
 }
 
-export default withStyles(styles)(TransactionButton)
+export default withStyles(styles)(SignatureButton)

@@ -38,7 +38,7 @@ const styles = theme => ({
 
 export default withStyles(styles)(withRouter(function FinalizeClaim () {
   return (
-    <Typography variant='display1' gutterBottom color="textPrimary">
+    <Typography variant='h4' gutterBottom color="textPrimary">
       Coming soon!
     </Typography>
   )
