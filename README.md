@@ -14,7 +14,7 @@ Visit the [live dashboard](https://noahhydro.github.io/snowflake-dashboard/).
 4. This file should export the following exports:
 	- `default`: A React Component **wrapped in React.lazy**. This component will receive a user's EIN in the props as `ein`.
 		- `export default lazy(() => import('./ResolverComponent'))`.
-	- `extraDataComponent`: A React Component **wrapped in React.lazy**. This component will receive a user's EIN in the props as `ein` and a function `sendExtraData`. This function should be called with the `bytes` argument to be passed to your resolver on sign-up.
+	- `extraDataComponent`: An optional React Component **wrapped in React.lazy**. This component will receive a user's EIN in the props as `ein` and a function `sendExtraData`. This function should be called with the `bytes` argument to be passed to your resolver on sign-up.
 		- `export default lazy(() => import('./ExtraDataComponent'))`.
 	- `ABI`: The ABI of your contract.
 	- `logo`: A 256x256 png logo for your resolver.
