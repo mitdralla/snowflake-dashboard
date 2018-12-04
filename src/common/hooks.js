@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useWeb3Context, useNetworkName, useERC20Balance, useAccountEffect } from 'web3-react/hooks'
 import { toDecimal } from 'web3-react/utilities'
 
@@ -17,13 +17,13 @@ export function useGenericContract(address, ABI) {
   return useMemo(() => new context.web3js.eth.Contract(ABI, address), [address, ABI])
 }
 
-export function useEIN () {
+export function useEIN (address) {
   const context = useWeb3Context()
   const _1484Contract = useNamedContract('1484')
   const [ein, setEIN] = useState()
 
   useAccountEffect(() => {
-    _1484Contract.methods.getEIN(context.account).call()
+    _1484Contract.methods.getEIN(address || context.account).call()
       .then(result => {
         if (result === '3963877391197344453575983046348115674221700746820753546331534351508065746944')
           throw Error('web3js bug')
@@ -38,17 +38,19 @@ export function useEIN () {
 export function useHydroId () {
   const clientRaindropContract = useNamedContract('clientRaindrop')
   const ein = useEIN()
-  const [hydroId, setHydroId] = useState()
+  const [hydroId, setHydroId] = useState({hydroId: undefined, hydroIdAddress: undefined})
 
   useAccountEffect(() => {
     if (ein) {
       clientRaindropContract.methods["getDetails(uint256)"](ein).call()
-        .then(result => setHydroId(result.casedHydroID))
+        .then(result => setHydroId({ hydroId: result.casedHydroID, hydroIdAddress: result._address }))
         .catch(() => setHydroId(null))
     }
   }, [ein])
 
-  return ein === null ? null : hydroId
+  if (ein === null) return null
+
+  return [hydroId.hydroId, hydroId.hydroIdAddress]
 }
 
 export function useHydroBalance () {
@@ -157,4 +159,43 @@ export function useResolverDetails (resolvers = []) {
   }, [JSON.stringify(resolvers)])
 
   return resolverDetails
+}
+
+export function useDebounce (value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay)
+    return () => clearTimeout(handler)
+  }, [value, delay])
+
+  return debouncedValue
+}
+
+export function useSessionStorageState(defaultValue, key) {
+  const firstRender = useRef(true)
+
+  useEffect(() => {
+    firstRender.current = false
+  }, [])
+
+  let initialSessionStorageState = defaultValue
+  if (firstRender.current) {
+    const potentialSessionStorageState = sessionStorage.getItem(key)
+    if (potentialSessionStorageState) initialSessionStorageState = JSON.parse(potentialSessionStorageState)
+  }
+
+  const [sessionStorageState, setSessionStorageState] = useState(initialSessionStorageState)
+
+  function setSessionStorageStateWrapper (newSessionStorageState) {
+    sessionStorage.setItem(key, JSON.stringify(newSessionStorageState))
+    setSessionStorageState(newSessionStorageState)
+  }
+
+  function removeSessionStorageState () {
+    sessionStorage.removeItem(key)
+    setSessionStorageState(defaultValue)
+  }
+
+  return [sessionStorageState, setSessionStorageStateWrapper, removeSessionStorageState]
 }

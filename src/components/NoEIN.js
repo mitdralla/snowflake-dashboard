@@ -1,32 +1,71 @@
 import React, { useState, useRef } from 'react';
 import { Typography } from '@material-ui/core'
-import { useWeb3Context } from 'web3-react/hooks'
+import { useWeb3Context, useAccountEffect } from 'web3-react/hooks'
 import { Button } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
+import { Link } from 'react-router-dom'
 
-import { useNamedContract } from '../common/hooks'
+import { useNamedContract, useDebounce } from '../common/hooks'
 import SignatureButton from './common/SignatureButton'
 import TransactionButton from './common/TransactionButton'
 
 export default function NoEIN () {
+  const context = useWeb3Context()
+
+  const oldClientRaindropContract = useNamedContract('oldClientRaindrop')
+  const clientRaindropContract = useNamedContract('clientRaindrop')
+
   const [hydroId, setHydroId] = useState('')
+  function wrappedSetHydroId (hydroId) {
+    setHydroIdError(undefined)
+    setHydroId(hydroId)
+  }
+  const debouncedHydroId = useDebounce(hydroId, 500)
+  const [hydroIdError, setHydroIdError] = useState(undefined)
+
+  function validateNewClientRaindrop() {
+    clientRaindropContract.methods.hydroIDAvailable(debouncedHydroId).call()
+      .then(result => result ? setHydroIdError(null) : setHydroIdError('Name is already reserved.'))
+  }
+
+  useAccountEffect(() => {
+    if (debouncedHydroId === '') {
+      setHydroIdError(undefined)
+      return
+    }
+    else {
+      if (!(Buffer.from(debouncedHydroId).length > 2)) {
+        setHydroIdError('Too short.')
+        return
+      }
+
+      if (!(Buffer.from(debouncedHydroId).length < 33)) {
+        setHydroIdError('Too long.')
+        return
+      }
+
+      oldClientRaindropContract.methods.getUserByName(debouncedHydroId).call()
+        .then(result => {
+          if (result.userAddress !== context.account) setHydroIdError('Name is already reserved.')
+          else validateNewClientRaindrop()
+        })
+        .catch(() => {
+          validateNewClientRaindrop() // errors just mean that the function threw i.e. the name is untaken in old CR
+        })
+    }
+  }, [debouncedHydroId])
+
   const [signature, setSignature] = useState('')
   const [activeStep, setActiveStep] = useState(0)
-  const context = useWeb3Context()
   const snowflakeContract = useNamedContract('snowflake')
   const _1484Address = useNamedContract('1484')._address
 
-  function stepBack () {
-    setActiveStep(activeStep - 1)
-  }
-
-  function stepForward () {
-    setActiveStep(activeStep + 1)
-  }
+  function stepBack () { setActiveStep(activeStep - 1) }
+  function stepForward () { setActiveStep(activeStep + 1) }
 
   const timestamp = useRef(Math.round(new Date() / 1000) - 120)
   const message = context.web3js.utils.soliditySha3(
@@ -60,17 +99,21 @@ export default function NoEIN () {
         <Step key={0}>
           <StepLabel>{activeStep === 0 ? 'Pick a Hydro ID' : `Hydro ID: ${hydroId}`}</StepLabel>
           <StepContent>
+            Before claiming your identity, you need to pick a Hydro ID. This is a public, on-chain identifier that will be linked to and identify your account.
             <TextField
               key='Hydro ID'
               label='Hydro ID'
-              helperText='This is a public identifier.'
+              helperText={!hydroIdError ? 'This is a public identifier.' : hydroIdError}
+              error={!!hydroIdError}
+              required
               margin="normal"
               value={hydroId}
-              onChange={e => setHydroId(e.target.value)}
+              onChange={e => wrappedSetHydroId(e.target.value)}
               fullWidth
             />
             <Button
               variant="contained"
+              disabled={hydroId === '' || hydroIdError !== null}
               onClick={stepForward}
             >
               Next
@@ -79,15 +122,17 @@ export default function NoEIN () {
         </Step>
 
         <Step key={1}>
-          <StepLabel>Give permission</StepLabel>
+          <StepLabel>Give Permission</StepLabel>
           <StepContent>
+            The next step is for you to give us permission to create your account. This requires your signature of a hashed permission string.
+            <br />
             <Button
               variant="contained"
+              style={{marginRight: '15px'}}
               onClick={stepBack}
             >
               Back
             </Button>
-            <br />
             <SignatureButton
               readyText='Sign'
               message={message}
@@ -102,13 +147,15 @@ export default function NoEIN () {
         <Step key={2}>
           <StepLabel>Claim your Identity</StepLabel>
           <StepContent>
+            Click below to claim your new on-chain identity!
+            <br />
             <Button
               variant="contained"
+              style={{marginRight: '15px'}}
               onClick={stepBack}
             >
               Back
             </Button>
-            <br />
             <TransactionButton
               readyText='Send'
               method={() => snowflakeContract.methods.createIdentityDelegated(
@@ -120,15 +167,7 @@ export default function NoEIN () {
         </Step>
       </Stepper>
 
-      <Typography variant='body2' gutterBottom color="textPrimary">
-        Already have an Identity and just want to use it with your current address? Linking is coming soon!
-      </Typography>
-
-      {/*<Router basename={process.env.PUBLIC_URL}>
-        <div className={classes.width} style={{margin: "0 auto", marginBottom: 100}}>
-          <Button variant="contained" color="primary" component={Link} to="/claim-address">Finalize Claim</Button>
-        </div>
-      </Router>*/}
+      <Button component={Link} to="/claim-address">Linking your address to an existing Identity?</Button>
     </div>
   )
 }

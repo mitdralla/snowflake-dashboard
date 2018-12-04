@@ -9,7 +9,7 @@ import SnowflakeAddresses from './SnowflakeAddresses'
 import SnowflakeResolvers from './SnowflakeResolvers'
 
 
-export default function Body ({ ein }) {
+export default function Body ({ ein, hydroIdAddress }) {
   const einDetails = useEINDetails(ein)
   const resolverDetails = useResolverDetails((einDetails && einDetails.resolvers) || [])
   const resolverAllowances = useResolverAllowances((einDetails && einDetails.resolvers) || [])
@@ -42,6 +42,7 @@ export default function Body ({ ein }) {
             <ExpansionPanelDetails style={{overflowX: 'auto'}}>
               <SnowflakeAddresses
                 key={JSON.stringify(einDetails.associatedAddresses)}
+                hydroIdAddress={hydroIdAddress}
                 associatedAddresses={einDetails.associatedAddresses}
               />
             </ExpansionPanelDetails>

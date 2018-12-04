@@ -1,6 +1,7 @@
 import React from 'react';
 import Web3Provider from 'web3-react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { BrowserRouter as Router } from 'react-router-dom'
 import green from '@material-ui/core/colors/green';
 
 import App from './App'
@@ -40,7 +41,9 @@ export default function AppWrapper () {
   return (
     <MuiThemeProvider theme={theme}>
       <Web3Provider supportedNetworks={[4]}>
-        <App />
+        <Router basename={process.env.PUBLIC_URL}>
+          <App />
+        </Router>
       </Web3Provider>
     </MuiThemeProvider>
   )

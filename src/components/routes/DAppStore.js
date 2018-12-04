@@ -160,7 +160,7 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
                   cols={1}
                   key={resolver}
                   onClick={() => {
-                    if (resolver.added) {
+                    if (einDetails.resolvers.includes(resolver)) {
                       setResolverAddress('')
                       setAllowance('')
                       setAlreadySetSnackbar(true)

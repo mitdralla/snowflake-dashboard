@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
-
-import { useEIN, useHydroId } from '../common/hooks'
+import { withRouter, Switch, Route, Redirect } from 'react-router'
 import { withStyles } from '@material-ui/core/styles'
+import { useEIN, useHydroId } from '../common/hooks'
 
 import AccountHeader from './AccountHeader'
 import SnowflakeHeader from './SnowflakeHeader'
@@ -9,6 +9,7 @@ import SnowflakeHeader from './SnowflakeHeader'
 const NoEIN = lazy(() => import('./NoEIN'))
 const NoHydroId = lazy(() => import('./NoHydroId'))
 const RouteTabs = lazy(() => import('./RouteTabs'))
+const FinalizeClaim = lazy(() => import('./routes/FinalizeClaim'))
 
 const styles = theme => ({
   width: {
@@ -22,18 +23,51 @@ const styles = theme => ({
   },
 })
 
-export default withStyles(styles)(function App ({ classes }) {
+export default withRouter(withStyles(styles)(function App ({ classes, location }) {
   const ein = useEIN()
-  const hydroId = useHydroId()
+  const [hydroId, hydroIdAddress] = useHydroId()
+
+  const ready = (ein || ein === null) && (hydroId || hydroId === null)
+  const claimingAddress = location.pathname.match(/\/claim-address.*/)
 
   const Display = () => {
-    if (ein === null)
-      return <NoEIN />
-    if (ein && hydroId === null)
-      return <NoHydroId />
-    if (ein && hydroId) {
-      return <RouteTabs ein={ein} />
-    }
+    if (!ready) return null
+    if (claimingAddress && ein === null) return <FinalizeClaim />
+    if (ein === null) return <NoEIN />
+    if (ein && hydroId === null) return <NoHydroId />
+    if (ein && hydroId) return <RouteTabs ein={ein} hydroIdAddress={hydroIdAddress} />
+  }
+
+  const ClaimingAddress = () => {
+    if (!ready) return null
+    return (
+      <Switch>
+        <Route
+          path="/claim-address/:targetAddress/:targetIsApproving/:signingAddress/:signature/:timestamp"
+          render={
+            ({ match }) => <Redirect to={{ pathname: '/claim-address', state: {
+              targetAddress: match.params.targetAddress,
+              targetIsApproving: match.params.targetIsApproving,
+              signingAddress: match.params.signingAddress,
+              signature: match.params.signature,
+              timestamp: match.params.timestamp
+            }}} />
+          }
+        />
+        <Redirect from='/claim-address(.+)' to='/claim-address'/>
+        {!(ein && hydroId) &&
+          <Route
+            path="/(.+)"
+            render={
+              ({ location }) => {
+                if (location.pathname !== '/claim-address') return <Redirect to='/' />
+                return null
+              }
+            }
+          />
+        }
+      </Switch>
+    )
   }
 
   return (
@@ -41,11 +75,13 @@ export default withStyles(styles)(function App ({ classes }) {
       <AccountHeader />
       <hr />
       <SnowflakeHeader ein={ein} hydroId={hydroId} />
+
       <div className={classes.width}>
         <Suspense fallback={<div />}>
+          {ClaimingAddress()}
           {Display()}
         </Suspense>
       </div>
     </div>
   )
-})
+}))

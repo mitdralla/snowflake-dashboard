@@ -4,9 +4,14 @@ import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete'
 import Typography from '@material-ui/core/Typography';
 import { useWeb3Context } from 'web3-react/hooks'
 import { getEtherscanLink } from 'web3-react/utilities'
+
+import { useNamedContract } from '../../common/hooks'
+import TransactionButton from '../common/TransactionButton'
+
 
 const styles = theme => ({
   addAddress: {
@@ -18,8 +23,9 @@ const styles = theme => ({
   }
 })
 
-export default withStyles(styles)(function SnowflakeAddresses ({ classes, associatedAddresses }) {
+export default withStyles(styles)(function SnowflakeAddresses ({ classes, associatedAddresses, hydroIdAddress }) {
   const context = useWeb3Context()
+  const _1484Contract = useNamedContract('1484')
 
   return (
     <div style={{width: '100%'}}>
@@ -28,6 +34,7 @@ export default withStyles(styles)(function SnowflakeAddresses ({ classes, associ
         <TableHead>
           <TableRow>
             <TableCell>Address</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -41,6 +48,15 @@ export default withStyles(styles)(function SnowflakeAddresses ({ classes, associ
                   >
                   {address}
                 </a>
+              </TableCell>
+              <TableCell padding="checkbox">
+                {address !== hydroIdAddress &&
+                  <TransactionButton
+                    readyText={<DeleteIcon />}
+                    method={() => _1484Contract.methods.removeAssociatedAddress()}
+                    onConfirmation={context.reRenderers.forceAccountReRender}
+                  />
+                }
               </TableCell>
             </TableRow>
           ))}

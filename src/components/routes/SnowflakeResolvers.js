@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { withRouter } from "react-router"
 import { Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
+import DeleteIcon from '@material-ui/icons/Delete'
 import { withStyles } from '@material-ui/core'
 import { TextField } from '@material-ui/core'
 import SwapVertIcon from '@material-ui/icons/SwapVert'
@@ -66,6 +67,7 @@ export default
   const [newAllowances, dispatchAllowance] = useReducer(allowancesReducer, resolverAllowances)
 
   const snowflakeContract = useNamedContract('snowflake')
+  const clientRaindropAddress = useNamedContract('clientRaindrop')._address
 
   const handleCheckboxClick = (resolver, i) => {
     dispatchAllowance({ type: 'reset', newValues: resolverAllowances })
@@ -115,6 +117,7 @@ export default
             <TableCell padding="checkbox"></TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Allowance</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -156,6 +159,17 @@ export default
                     onChange={e => dispatchAllowance({ type: 'change', newValue: e.target.value, index: i })}
                     type="number"
                     margin="normal"
+                  />
+                }
+              </TableCell>
+              <TableCell padding="checkbox">
+                {resolver !== clientRaindropAddress &&
+                  <TransactionButton
+                    readyText={<DeleteIcon />}
+                    method={() => snowflakeContract.methods.removeResolver(
+                      resolver, true, '0x00'
+                    )}
+                    onConfirmation={context.reRenderers.forceAccountReRender}
                   />
                 }
               </TableCell>
