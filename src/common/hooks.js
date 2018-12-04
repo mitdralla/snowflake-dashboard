@@ -43,12 +43,12 @@ export function useHydroId () {
   useAccountEffect(() => {
     if (ein) {
       clientRaindropContract.methods["getDetails(uint256)"](ein).call()
-        .then(result => setHydroId({ hydroId: result.casedHydroID, hydroIdAddress: result._address }))
+        .then(result => setHydroId({hydroId: result.casedHydroID, hydroIdAddress: result._address}))
         .catch(() => setHydroId(null))
     }
   }, [ein])
 
-  if (ein === null) return null
+  if (ein === null) return [null, null]
 
   return [hydroId.hydroId, hydroId.hydroIdAddress]
 }
