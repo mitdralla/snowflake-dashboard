@@ -10,6 +10,7 @@ import { TextField } from '@material-ui/core'
 import SwapVertIcon from '@material-ui/icons/SwapVert'
 import Typography from '@material-ui/core/Typography'
 import { useWeb3Context } from 'web3-react/hooks'
+import { fromDecimal } from 'web3-react/utilities'
 import { getEtherscanLink } from 'web3-react/utilities'
 
 import { useNamedContract } from '../../common/hooks'
@@ -92,7 +93,7 @@ export default
           readyText={<React.Fragment>Update Allowances<SwapVertIcon/></React.Fragment>}
           method={() => snowflakeContract.methods.changeResolverAllowances(
             resolvers.filter((r, i) => selectedResolvers[i]),
-            newAllowances.filter((r, i) => selectedResolvers[i])
+            newAllowances.filter((a, i) => selectedResolvers[i]).map(a => fromDecimal(a, 18))
           )}
           onConfirmation={context.reRenderers.forceAccountReRender}
         />
