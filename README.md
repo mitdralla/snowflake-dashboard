@@ -1,10 +1,10 @@
 # Snowflake Dashboard
 
-[![Build Status](https://travis-ci.org/NoahHydro/snowflake-dashboard.svg?branch=master)](https://travis-ci.org/NoahHydro/snowflake-dashboard)
+[![Build Status](https://travis-ci.org/HydroBlockchain/snowflake-dashboard.svg?branch=master)](https://travis-ci.org/HydroBlockchain/snowflake-dashboard)
 
 This is a demo frontend for the [Snowflake identity protocol](https://github.com/hydrogen-dev/smart-contracts/tree/master/snowflake) written in React. It utilizes the [web3-react](https://github.com/NoahZinsmeister/web3-react) library. For more information on Snowflake, please refer to the [white paper](https://github.com/hydrogen-dev/hydro-docs/tree/master/Snowflake).
 
-Visit the [live dashboard](https://noahhydro.github.io/snowflake-dashboard/).
+Visit the [live dashboard](https://HydroBlockchain.github.io/snowflake-dashboard/).
 
 ## Adding Your Resolver To the Dashboard
 
