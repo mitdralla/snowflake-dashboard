@@ -54,7 +54,7 @@ export default withStyles(styles)(function SnowflakeAddresses ({ classes, associ
                   <TransactionButton
                     readyText={<DeleteIcon />}
                     method={() => _1484Contract.methods.removeAssociatedAddress()}
-                    onConfirmation={context.reRenderers.forceAccountReRender}
+                    onConfirmation={context.forceAccountReRender}
                   />
                 }
               </TableCell>

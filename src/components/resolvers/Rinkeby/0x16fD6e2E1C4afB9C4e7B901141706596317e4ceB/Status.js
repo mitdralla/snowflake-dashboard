@@ -17,7 +17,7 @@ export default function Status ({ ein }) {
   const [lookupStatus, setLookupStatus]  = useState('')
 
   const clientRaindropContract = useNamedContract('clientRaindrop')
-  const statusContract = useGenericContract('0xbB54D790860B07DE1E1b2db0eD553a6cB713E2f0', ABI)
+  const statusContract = useGenericContract('0x16fD6e2E1C4afB9C4e7B901141706596317e4ceB', ABI)
   useAccountEffect(() => {
     statusContract.methods.getStatus(ein).call().then(status => setCurrentStatus(status))
   })
@@ -53,7 +53,7 @@ return (
       <TransactionButton
         readyText='Set Status'
         method={() => statusContract.methods.setStatus(newStatus)}
-        onConfirmation={context.reRenderers.forceAccountReRender}
+        onConfirmation={context.forceAccountReRender}
       />
 
       <hr style={{marginTop: 30, marginBottom: 30}} />

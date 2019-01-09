@@ -72,7 +72,7 @@ function SignWithApproving ({ ein, setCurrentClaim }) {
   function stepForward () { setActiveStep(activeStep + 1) }
 
   const timestamp = useRef(Math.round(new Date() / 1000) - 120)
-  const message = targetAddressError !== null ? null : context.web3js.utils.soliditySha3(
+  const message = targetAddressError !== null ? null : context.library.utils.soliditySha3(
     '0x19', '0x00', _1484Contract._address,
     'I authorize adding this address to my Identity.',
     ein,
@@ -162,7 +162,7 @@ const ApproveClaim = withStyles(styles)(function ApproveClaim ({ classes, locati
 
   if (!ein) return null
 
-  if (context.account === claim.targetAddress)
+  if (context.account.toLowerCase() === claim.targetAddress.toLowerCase())
     return (
       <>
         <Typography gutterBottom color="textPrimary">
@@ -187,7 +187,7 @@ const ApproveClaim = withStyles(styles)(function ApproveClaim ({ classes, locati
           onConfirmation={() => {
             setRedirect(true)
             deleteCurrentClaim()
-            context.reRenderers.forceAccountReRender()
+            context.forceAccountReRender()
           }}
         />
       </>

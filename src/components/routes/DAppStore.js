@@ -144,12 +144,12 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
           }
 
           <TransactionButton
-            show={resolverAddress !== '' && context.web3js.utils.checkAddressChecksum(resolverAddress)}
+            show={resolverAddress !== '' && context.library.utils.checkAddressChecksum(resolverAddress)}
             readyText='Set Resolver'
             method={() => snowflakeContract.methods.addResolver(
               resolverAddress, true, fromDecimal(allowance, 18), extraData
             )}
-            onConfirmation={context.reRenderers.forceAccountReRender}
+            onConfirmation={context.forceAccountReRender}
           />
 
           <div className={classes.root}>

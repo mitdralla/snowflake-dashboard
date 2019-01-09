@@ -68,7 +68,7 @@ export default function NoEIN () {
   function stepForward () { setActiveStep(activeStep + 1) }
 
   const timestamp = useRef(Math.round(new Date() / 1000) - 120)
-  const message = context.web3js.utils.soliditySha3(
+  const message = context.library.utils.soliditySha3(
     '0x19', '0x00', _1484Address,
     'I authorize the creation of an Identity on my behalf.',
     context.account,
@@ -161,7 +161,7 @@ export default function NoEIN () {
               method={() => snowflakeContract.methods.createIdentityDelegated(
                 signature.from, signature.from, [], hydroId, signature.v, signature.r, signature.s, timestamp.current
               )}
-              onConfirmation={context.reRenderers.forceAccountReRender}
+              onConfirmation={context.forceAccountReRender}
             />
           </StepContent>
         </Step>

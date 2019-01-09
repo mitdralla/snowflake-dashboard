@@ -71,7 +71,7 @@ export default withRouter(function RouteTabs ({ ein, hydroIdAddress }) {
           <Redirect from='/dapp-store(.+)' to='/dapp-store'/>
           <Route path="/dapp-store" render={() => <Store ein={ein}/>} />
           <Redirect from='/get-hydro(.+)' to='/get-hydro'/>
-          <Route path="/get-hydro" render={() => <GetHydro />} />
+          <Route path="/get-hydro" render={() => <GetHydro ein={ein} />} />
           <Route path="/claim-address" render={() => <FinalizeClaim ein={ein} />} />
           <Redirect to="/" />
         </Switch>

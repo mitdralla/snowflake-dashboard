@@ -9,7 +9,12 @@ export default function NoHydroId () {
   const [potentialHydroId, setPotentialHydroId] = useState('')
 
   const context = useWeb3Context()
-  const clientRaindrop = useNamedContract('clientRaindrop')
+  const snowflake = useNamedContract('snowflake')
+  const clientRaindropAddress = useNamedContract('clientRaindrop')._address
+
+  const bytes = context.library.eth.abi.encodeParameters(
+    ['address', 'string'], [context.account, potentialHydroId]
+  )
 
   return (
     <div>
@@ -18,7 +23,7 @@ export default function NoHydroId () {
       </Typography>
 
       <Typography variant='body2' gutterBottom color="textPrimary">
-        Just one last step: please choose a Hydro ID to be associated with your Hydro ID.
+        Just one last step: please choose a Hydro ID to be associated with your Identity.
       </Typography>
 
       <TextField
@@ -33,8 +38,8 @@ export default function NoHydroId () {
 
       <TransactionButton
         readyText='Claim Hydro ID!'
-        method={() => clientRaindrop.methods['signUp(string)'](potentialHydroId)}
-        onConfirmation={context.reRenderers.forceAccountReRender}
+        method={() => snowflake.methods.addResolver(clientRaindropAddress, true, 0, bytes)}
+        onConfirmation={context.forceAccountReRender}
       />
     </div>
   )

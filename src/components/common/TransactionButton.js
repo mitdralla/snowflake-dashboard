@@ -39,10 +39,15 @@ const styles = theme => ({
 
 const ProgressIcon = withTheme()(({ theme }) => <CircularProgress size={theme.typography.button.fontSize} />)
 
-function TransactionButton ({ show, method, readyText, classes, onTransactionHash, onConfirmation }) {
+function TransactionButton ({ show, method, readyText, classes, onTransactionHash, onConfirmation, transactionOptions })
+{
   const context = useWeb3Context()
   const [transactionState, transactionData, sendTransaction, resetTransaction] = useTransactionManager(
-    method, { handlers: { transactionHash: onTransactionHash, receipt: onConfirmation } }
+    method,
+    {
+      handlers: { transactionHash: onTransactionHash, receipt: onConfirmation },
+      transactionOptions: transactionOptions
+    }
   )
 
   switch (transactionState) {
@@ -111,12 +116,13 @@ function TransactionButton ({ show, method, readyText, classes, onTransactionHas
 }
 
 TransactionButton.propTypes = {
-  show:              PropTypes.bool,
-  method:            PropTypes.func.isRequired,
-  readyText:         PropTypes.node.isRequired,
-  classes:           PropTypes.object.isRequired,
-  onTransactionHash: PropTypes.func,
-  onConfirmation:    PropTypes.func
+  show:               PropTypes.bool,
+  method:             PropTypes.func.isRequired,
+  readyText:          PropTypes.node.isRequired,
+  classes:            PropTypes.object.isRequired,
+  onTransactionHash:  PropTypes.func,
+  onConfirmation:     PropTypes.func,
+  transactionOptions: PropTypes.object
 }
 
 TransactionButton.defaultProps = {

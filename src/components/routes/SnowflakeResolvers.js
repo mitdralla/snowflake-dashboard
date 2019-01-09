@@ -95,7 +95,7 @@ export default
             resolvers.filter((r, i) => selectedResolvers[i]),
             newAllowances.filter((a, i) => selectedResolvers[i]).map(a => fromDecimal(a, 18))
           )}
-          onConfirmation={context.reRenderers.forceAccountReRender}
+          onConfirmation={context.forceAccountReRender}
         />
       </Toolbar>
 
@@ -167,10 +167,8 @@ export default
                 {resolver !== clientRaindropAddress &&
                   <TransactionButton
                     readyText={<DeleteIcon />}
-                    method={() => snowflakeContract.methods.removeResolver(
-                      resolver, true, '0x00'
-                    )}
-                    onConfirmation={context.reRenderers.forceAccountReRender}
+                    method={() => snowflakeContract.methods.removeResolver(resolver, true, '0x00')}
+                    onConfirmation={context.forceAccountReRender}
                   />
                 }
               </TableCell>

@@ -14,7 +14,7 @@ export function useNamedContract(name) {
 
 export function useGenericContract(address, ABI) {
   const context = useWeb3Context()
-  return useMemo(() => new context.web3js.eth.Contract(ABI, address), [address, ABI])
+  return useMemo(() => new context.library.eth.Contract(ABI, address), [address, ABI])
 }
 
 export function useEIN (address) {
@@ -48,9 +48,10 @@ export function useHydroId () {
     }
   }, [ein])
 
-  if (ein === null) return [null, null]
-
-  return [hydroId.hydroId, hydroId.hydroIdAddress]
+  if (ein === null)
+    return [null, null]
+  else
+    return hydroId === null ? [null, null] : [hydroId.hydroId, hydroId.hydroIdAddress]
 }
 
 export function useHydroBalance () {
@@ -60,7 +61,7 @@ export function useHydroBalance () {
   return useERC20Balance(contracts[networkName].token.address, context.account)
 }
 
-export function useSnowflakeBalance (ein) {
+export function useSnowflakeBalance (ein, unconverted = false) {
   const snowflakeContract = useNamedContract('snowflake')
   const [snowflakeBalance, setSnowflakeBalance] = useState()
 
@@ -68,7 +69,7 @@ export function useSnowflakeBalance (ein) {
     if (ein) {
       snowflakeContract.methods.deposits(ein).call()
         .then(balance => {
-          setSnowflakeBalance(Number(toDecimal(balance, 18)).toLocaleString(undefined, { maximumFractionDigits: 3 }))
+          setSnowflakeBalance(unconverted ? balance : Number(toDecimal(balance, 18)).toLocaleString(undefined, { maximumFractionDigits: 3 }))
         })
     }
   }, [ein])
@@ -153,7 +154,7 @@ export function useResolverDetails (resolvers = []) {
   useAccountEffect(() => {
     if (resolvers.length > 0)
       Promise.all(resolvers.map(resolver =>
-        getResolverDetails(context.web3js, snowflakeContract, networkName, resolver)
+        getResolverDetails(context.library, snowflakeContract, networkName, resolver)
       ))
         .then(results => setResolverDetails(results))
   }, [JSON.stringify(resolvers)])

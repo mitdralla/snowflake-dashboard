@@ -1,11 +1,12 @@
 import React, { Suspense, lazy } from 'react';
 import { withRouter, Switch, Route, Redirect } from 'react-router'
 import { withStyles } from '@material-ui/core/styles'
-import { useEIN, useHydroId } from '../common/hooks'
+import { useEIN, useHydroId, useEINDetails, useNamedContract } from '../common/hooks'
 
 import AccountHeader from './AccountHeader'
 import SnowflakeHeader from './SnowflakeHeader'
 
+const NoSnowflakeProvider = lazy(() => import('./NoSnowflakeProvider'))
 const NoEIN = lazy(() => import('./NoEIN'))
 const NoHydroId = lazy(() => import('./NoHydroId'))
 const RouteTabs = lazy(() => import('./RouteTabs'))
@@ -26,6 +27,8 @@ const styles = theme => ({
 export default withRouter(withStyles(styles)(function App ({ classes, location }) {
   const ein = useEIN()
   const [hydroId, hydroIdAddress] = useHydroId()
+  const einDetails = useEINDetails(ein)
+  const snowflakeAddress = useNamedContract('snowflake')._address
 
   const ready = (ein || ein === null) && (hydroId || hydroId === null)
   const claimingAddress = location.pathname.match(/\/claim-address.*/)
@@ -33,6 +36,7 @@ export default withRouter(withStyles(styles)(function App ({ classes, location }
   const Display = () => {
     if (!ready) return null
     if (claimingAddress && ein === null) return <FinalizeClaim />
+    if (einDetails && !einDetails.providers.includes(snowflakeAddress)) return <NoSnowflakeProvider />
     if (ein === null) return <NoEIN />
     if (ein && hydroId === null) return <NoHydroId />
     if (ein && hydroId) return <RouteTabs ein={ein} hydroIdAddress={hydroIdAddress} />
