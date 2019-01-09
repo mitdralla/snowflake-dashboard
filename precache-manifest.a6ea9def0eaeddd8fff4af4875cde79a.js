@@ -68,8 +68,8 @@ self.__precacheManifest = [
     "url": "/snowflake-dashboard/static/js/1.b7280271.chunk.js"
   },
   {
-    "revision": "9bbcb8508bc386ebf104",
-    "url": "/snowflake-dashboard/static/js/17.9bbcb850.chunk.js"
+    "revision": "bb6ec6ad38a8127efcba",
+    "url": "/snowflake-dashboard/static/js/17.bb6ec6ad.chunk.js"
   },
   {
     "revision": "ccc7153027d21d9ee684",
@@ -96,8 +96,8 @@ self.__precacheManifest = [
     "url": "/snowflake-dashboard/static/js/22.44c27166.chunk.js"
   },
   {
-    "revision": "37e71d182b6a87e4045a",
-    "url": "/snowflake-dashboard/static/js/23.37e71d18.chunk.js"
+    "revision": "c941a14bf9b7c3a4126d",
+    "url": "/snowflake-dashboard/static/js/23.c941a14b.chunk.js"
   },
   {
     "revision": "9b1683b818f30bfa9b4c",
@@ -112,8 +112,8 @@ self.__precacheManifest = [
     "url": "/snowflake-dashboard/static/js/26.d2221574.chunk.js"
   },
   {
-    "revision": "a36cd1c5aa2c8e3a3747",
-    "url": "/snowflake-dashboard/static/js/runtime~main.a36cd1c5.js"
+    "revision": "f6010f4482bff0d83037",
+    "url": "/snowflake-dashboard/static/js/runtime~main.f6010f44.js"
   },
   {
     "revision": "14d3224c09391e029d1aae8ae0d8991d",
@@ -124,7 +124,7 @@ self.__precacheManifest = [
     "url": "/snowflake-dashboard/static/css/main.4a68952d.chunk.css"
   },
   {
-    "revision": "dddac38404e1e2a605a0256ed4bfcfaf",
+    "revision": "85a0827e4ec587bcaadced901059932b",
     "url": "/snowflake-dashboard/index.html"
   }
 ];
