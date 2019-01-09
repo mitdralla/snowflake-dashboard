@@ -58,12 +58,12 @@ export default withStyles(styles)(function GetHydro ({ ein, classes }) {
         .then(([rate, ethAmount]) => {
           setExchangeRate(rate.toString())
 
-          const ethRequired = context.library.utils.fromWei(ethAmount, 'ether')
+          const ethRequired = context.library.utils.fromWei(ethAmount.toString(), 'ether')
           setEthRequiredToBuy(ethRequired)
 
-          const slippage = 100 - rate
+          const slippage = 100 - (rate
             .mul(context.library.utils.toBN(SLIPPAGE_MULTIPLIER))
-            .div(context.library.utils.toBN(baseExchangeRate)).toNumber() / (SLIPPAGE_MULTIPLIER / 100)
+            .div(context.library.utils.toBN(baseExchangeRate)).toNumber() / (SLIPPAGE_MULTIPLIER / 100))
           setSlippage(slippage)
         })
         .catch(e => {
