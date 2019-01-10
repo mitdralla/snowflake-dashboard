@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Web3Provider from 'web3-react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter as Router } from 'react-router-dom'
 import green from '@material-ui/core/colors/green';
 import { MetaMaskConnector } from 'web3-react/connectors'
-import { useWeb3Context } from 'web3-react/hooks'
+
+import InitializingWeb3 from './TEMP/InitializingWeb3'
 
 import App from './App'
 
@@ -42,25 +43,15 @@ theme.palette.success.contrastText = theme.palette.getContrastText(green[700])
 const metamask = new MetaMaskConnector({ supportedNetworks: [4] })
 const connectors = { metamask }
 
-function Web3Switch () {
-  const context = useWeb3Context()
-
-  useEffect(() => {
-    context.setConnector('metamask')
-      .catch(() => console.error('unable to activate')) // eslint-disable-line no-console
-  }, [])
-
-  return !context.active ? null :
-    <Router basename={process.env.PUBLIC_URL}>
-      <App />
-    </Router>
-}
-
 export default function AppWrapper () {
   return (
     <MuiThemeProvider theme={theme}>
       <Web3Provider connectors={connectors}>
-        <Web3Switch />
+        <InitializingWeb3 connectors={connectors}>
+          <Router basename={process.env.PUBLIC_URL}>
+            <App />
+          </Router>
+        </InitializingWeb3>
       </Web3Provider>
     </MuiThemeProvider>
   )

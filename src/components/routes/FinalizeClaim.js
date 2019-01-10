@@ -190,6 +190,11 @@ const ApproveClaim = withStyles(styles)(function ApproveClaim ({ classes, locati
             context.forceAccountReRender()
           }}
         />
+
+        <Button onClick={deleteCurrentClaim}>
+          Delete Claim
+          <DeleteIcon className={classes.rightIcon} />
+        </Button>
       </>
     )
 
