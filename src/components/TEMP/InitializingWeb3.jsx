@@ -164,11 +164,15 @@ function getDetails(connector: Connector) {
 
 export default function InitializingWeb3 ({ children, connectors }) {
   const context = useWeb3Context()
+  const [initializationOver, setInitializationOver] = useState(false)
 
-  // useEffect(() => {
-  //   context.setConnector('metamask')
-  //     .catch(() => console.log('Unable to automatically activate MetaMask')) // eslint-disable-line no-console
-  // }, [])
+  useEffect(() => {
+    context.setConnector('metamask')
+      .catch(() => {
+        setInitializationOver(true)
+        console.log('Unable to automatically activate MetaMask') // eslint-disable-line no-console
+      })
+  }, [])
 
   const walletConnectCalled = useRef(false)
   const activeTimeouts = useRef([])
@@ -226,6 +230,7 @@ export default function InitializingWeb3 ({ children, connectors }) {
     context.unsetConnector()
   }
 
+  if (!initializationOver && !context.active) return null
   if (context.error) return <Web3Error error={context.error} connectors={connectors} connectorName={context.connectorName} unsetConnector={unsetConnectorWrapper} />
   if (context.active) return children
 
