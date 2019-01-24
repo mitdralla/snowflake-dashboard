@@ -22,6 +22,3 @@ jobs:
     script:
     - echo -e "machine github.com\n  login $GH_TOKEN" > ~/.netrc
     - npm run deploy
-notifications:
-  slack:
-    secure: FmZvcSfliKgOwqNTD2wpvOZZs5/dSQRj+ZFjg/mRNNLSATtAQLqEagInVY8/EZXf26yNSWxvz59FIXM8m2YHlGbqFVnX9aaaMbfwD470ZHYjG5LPQTUaSaeeD96G2EzzJEUapv7wGdI2Z3mNo1CooZEPwQoNAVKjWl3784ECHv5h2D5sOCeoefSql3+5XZneHrXFt2jcTOkDEjyEqVcf9uADMH6H5lNDhcbTqKMz95JRubT8yiPCyVVVPW0U5+CYDER4RZTeJcOJo4JWxX1qEMRlJXNFvDI1G2cwLEL5jIj6ooIGAkl9rjRwzvaGc71GE2mdNiCd4c39Z9iiGl3tNXdWUCG1if0R1z4TW7cMe9UJMfgb7S0LXLXz4InDZQM+36me+nFAHIPkrrrhjD7QGonMUupy7/m9DYiqJlal7uA+8dcpAf1XbN0+ui4Fk95/YyIJvzVdZjc4iD3jxahowCdlSlkEglNpZlv5GF0SrJ8h7jHfptNdJM4rLGm/WTwmutZzM/wU2yPT23jknuXUZVgPKUtCNLFxFt+qzAhm8+9S6WGcX4Hr/YWtDtM7wdjaH3Ay00tfaDfTyplm4buxdnLsFIzK2FoTNyyd/lpIFyDJ5HhrZPMS4OmNGQ9jzA0CE7PPlXWpJYDRzY36QHw2PzfVlGIMHejY0G/dL9xd0do=
