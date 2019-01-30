@@ -17,23 +17,25 @@ export default function Oxide ({ ein }) {
   const [committedWager, setWager]  = useState('')
   const [activePunters, setPunters]  = useState('')
   const [leaderboardData, setLeaderboard]  = useState('')
-
   const clientRaindropContract = useNamedContract('clientRaindrop')
-  const oxideContract = useGenericContract('0x16fD6e2E1C4afB9C4e7B901141706596317e4ceB', ABI)
-  useAccountEffect(() => {
+  const oxideContract = useGenericContract('0xDE4c7A8C0F757afE33f3772C434DE717cAaCbE83', ABI)
+
+  function componentDidMount() {
+      oxideBalance(context.selectedAccount).then((oxide) => setOxide(oxide))
+      getRound().then(() => refreshLeaderboard())
       getParticipants()
       getPot()
-  })
+  }
 
-  function refreshLeaderboard () {
+  function refreshLeaderboard() {
     oxideContract.getPastEvents("scoreLog", { fromBlock: 0, toBlock: 'latest' })
       .then(result => {
         var leaderboard = { account: [], wager: [] , roll: [] }
         for(var x = 0; x < result.length; x++){
           if(JSON.stringify(result[x].args.wagerRound) === activeRound){
-            leaderboard[account].push(JSON.stringify(result[x].args.wagerUser))
-            leaderboard[wager].push(JSON.stringify(result[x].args.wagerAmount))
-            leaderboard[roll].push(JSON.stringify(result[x].args.wagerRoll))
+            leaderboard.account.push(JSON.stringify(result[x].args.wagerUser))
+            leaderboard.wager.push(JSON.stringify(result[x].args.wagerAmount))
+            leaderboard.roll.push(JSON.stringify(result[x].args.wagerRoll))
           }
         }
         setLeaderboard(leaderboard)
@@ -43,7 +45,7 @@ export default function Oxide ({ ein }) {
       })
   }
 
-  function placeWager () {
+  function placeWager() {
     oxideContract.methods.placeWager(committedWager)
     .send({ from: context.selectedAccount })
       .catch(() => {
@@ -56,14 +58,51 @@ export default function Oxide ({ ein }) {
     .then(punters => setPunters(punters))
   }
 
+  function getRound() {
+    oxideContract.methods.getRound().call()
+    .then(round => setRound(round))
+  }
+
   function getPot() {
     oxideContract.methods.getPot().call()
-    .then(pot => activePot(punters))
+    .then(pot => activePot(pot))
+  }
+
+  function oxideBalance(_address) {
+    return oxideContract.methods.oxideBalance(_address).call()
   }
 
 return (
     <div>
-     I'm BLANK !
-    </div>
+
+    <Typography variant='h3' gutterBottom align="center" color="textPrimary">
+    Pot: {activePot}
+    </Typography>
+
+    <Typography variant='h3' gutterBottom align="center" color="textPrimary">
+    Round:  {activeRound}
+    </Typography>
+
+    <Typography variant='h3' gutterBottom align="center" color="textPrimary">
+    Punters: {activePunters}
+    </Typography>
+
+    <TextField
+      label="Wager Amount"
+      helperText="Disclaimer: You are placing a bet and could possibly lose your funds."
+      margin="normal"
+      value={committedWager}
+      onChange={e => setWager(e.target.value)}
+      fullWidth
+    />
+
+    <Button
+        onClick={placeWager}
+        onConfirmation={context.forceAccountReRender}
+      >
+      wager !
+      </Button>
+
+        </div>
   )
 }
