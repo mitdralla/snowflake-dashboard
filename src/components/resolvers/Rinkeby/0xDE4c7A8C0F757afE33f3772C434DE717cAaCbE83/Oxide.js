@@ -23,8 +23,6 @@ import { ABI } from './index'
 
 import './Oxide.css'
 
-const blankLeaderboard = { ein: [], id: [], wager: [] , roll: [], oxide: [] }
-
 const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: '#0971f5',
@@ -46,22 +44,27 @@ export default function Oxide ({ ein }) {
   const [activePunters, setPunters]  = useState(0)
   const [hydroId, hydroIdAddress] = useHydroId()
   const [waitForRender, setInit]  = useState(false)
-  const [leaderboardData, setLeaderboard]  = useState(blankLeaderboard)
+  const [leaderboardData, setLeaderboard]  = useState([])
   const clientRaindropContract = useNamedContract('clientRaindrop')
   const oxideContract = useGenericContract('0xDE4c7A8C0F757afE33f3772C434DE717cAaCbE83', ABI)
   const snowflakeBalance = useSnowflakeBalance(ein)
 
   function refreshLeaderboard()  {
-    setLeaderboard(blankLeaderboard)
+    setLeaderboard([])
     oxideContract.getPastEvents("scoreLog", { fromBlock: 0, toBlock: 'latest' })
     .then((result) => {
-        var leaderboard = blankLeaderboard
+        var leaderboard = [];
         for(var x = 0; x < result.length; x++){
           var round = parseInt(parseObject(result[x].returnValues.wagerRound))
           if(round == activeRound){
-            leaderboard.ein.push(parseObject(result[x].returnValues.wagerUser))
-            leaderboard.wager.push(parseNumber(parseObject(result[x].returnValues.wagerAmount)))
-            leaderboard.roll.push(parseNumber(parseObject(result[x].returnValues.wagerRoll)))
+            leaderboard.push(createData(
+            parseObject(result[x].returnValues.wagerUser),
+            parseNumber(parseObject(result[x].returnValues.wagerAmount)),
+            parseNumber(parseObject(result[x].returnValues.wagerRoll)),
+            null,
+            null,
+            null,
+            ))
           }
         }
         setLeaderboard(leaderboard)
@@ -76,6 +79,10 @@ export default function Oxide ({ ein }) {
   function parseNumber(_value) {
       return _value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   }
+
+function createData(ein, id, wager, roll, oxide) {
+  return { ein, id, wager, roll, oxide };
+}
 
   useAccountEffect(() => {
       oxideContract.methods.oxideBalance(context.account).call()
@@ -94,14 +101,16 @@ export default function Oxide ({ ein }) {
   <div>
 
          <Grid container direction="row" justify="center" alignItems="center" className="OxideStats">
-           <Grid item >
+          <Grid item xs={1}>
            </Grid>
-           <Grid item >
+           <Grid item xs={1}>
            <Chip
              avatar={<Avatar><UsersIcon/></Avatar>}
              color='primary'
              label={activePunters}
            />
+           </Grid>
+           <Grid item xs={1}>
            </Grid>
            <Grid item >
            <Chip
@@ -110,6 +119,8 @@ export default function Oxide ({ ein }) {
              label={activePot}
            />
            </Grid>
+           <Grid item xs={1}>
+           </Grid>
            <Grid item >
            <Chip
              avatar={<Avatar><TimerIcon/></Avatar>}
@@ -117,7 +128,7 @@ export default function Oxide ({ ein }) {
              label={activeRound}
            />
            </Grid>
-           <Grid item >
+           <Grid item xs={1}>
            </Grid>
         </Grid>
 
@@ -135,22 +146,24 @@ export default function Oxide ({ ein }) {
                    </TableRow>
                  </TableHead>
                  <TableBody>
+                 {leaderboardData.map(data => (
                      <TableRow>
-                       <CustomTableCell component="th" scope="row">
-                         {leaderboardData.ein[0]}
+                       <CustomTableCell component="th" scope="row" key={data.ein}>
+                         {data.ein}
                        </CustomTableCell>
-                       <CustomTableCell align="right">{leaderboardData.id[0]}</CustomTableCell>
-                       <CustomTableCell align="right">{leaderboardData.wager[0]}</CustomTableCell>
-                       <CustomTableCell align="right">{leaderboardData.roll[0]}</CustomTableCell>
-                       <CustomTableCell align="right">{leaderboardData.oxide[0]}</CustomTableCell>
+                       <CustomTableCell align="right">{data.id}</CustomTableCell>
+                       <CustomTableCell align="right">{data.wager}</CustomTableCell>
+                       <CustomTableCell align="right">{data.roll}</CustomTableCell>
+                       <CustomTableCell align="right">{data.oxide}</CustomTableCell>
                      </TableRow>
+                   ))}
                  </TableBody>
                </Table>
                </Grid>
                </Grid>
 
          <Grid container direction="row" justify="center" alignItems="center"  className="OxideWager">
-         <Grid item >
+         <Grid item xs={2}>
          </Grid>
          <Grid item >
          <Chip
@@ -164,6 +177,8 @@ export default function Oxide ({ ein }) {
            label={snowflakeBalance}
          />
          </Grid>
+         <Grid item xs={1}>
+         </Grid>
          <Grid item>
          <Chip
            avatar={
@@ -175,12 +190,12 @@ export default function Oxide ({ ein }) {
            label={oxideBalance}
          />
          </Grid>
-         <Grid item >
+         <Grid item xs={2}>
          </Grid>
          </Grid>
 
          <Grid container direction="row" justify="center" alignItems="center">
-           <Grid item >
+         <Grid item xs={4}>
            </Grid>
            <Grid item >
            <TextField
@@ -192,23 +207,17 @@ export default function Oxide ({ ein }) {
              halfWidth
            />
            </Grid>
-           <Grid item >
+           <Grid item xs={4}>
            </Grid>
          </Grid>
 
          <Grid container direction="row" justify="center" alignItems="center"  className="OxideButton">
-           <Grid item >
-           </Grid>
-           <Grid item >
-           </Grid>
            <Grid item >
          <TransactionButton
            readyText='Wager'
            method={() => oxideContract.methods.placeWager(committedWager)}
            onConfirmation={context.forceAccountReRender}
           />
-          </Grid>
-          <Grid item >
           </Grid>
         </Grid>
    </div>

@@ -16,12 +16,20 @@
 
 .OxideWager {
 
-  height: 25vh;
+  height: 15vh;
 
 }
 
+.IconPhoto {
+
+  font-size: 30vw;
+  color: #0971f5;
+
+}
+
+
 .OxideButton {
 
-  height: 5vh;
+  height: 22.5vh;
 
 }

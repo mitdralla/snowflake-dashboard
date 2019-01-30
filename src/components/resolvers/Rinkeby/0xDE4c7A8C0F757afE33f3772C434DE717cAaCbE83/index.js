@@ -499,4 +499,4 @@ export const ABI = [
 
 export const requiredAllowance = "0"
 
-export { default as logo } from './logo.png'
+export { default as logo } from './Oxide.png'
