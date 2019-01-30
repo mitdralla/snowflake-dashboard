@@ -1,31 +1,34 @@
 import React, { useState } from 'react'
-import { TextField, Typography, Button } from '@material-ui/core'
+import { Grid, TextField, Typography, Button } from '@material-ui/core'
+import Chip from '@material-ui/core/Chip'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import Avatar from '@material-ui/core/Avatar'
+import OxideIcon from '@material-ui/icons/InvertColors';
+import TimerIcon from '@material-ui/icons/HourglassEmpty';
+import UsersIcon from '@material-ui/icons/People';
+import StarIcon from '@material-ui/icons/StarBorder';
 
 import { useAccountEffect, useWeb3Context } from 'web3-react/hooks'
 
-import { useGenericContract, useNamedContract } from '../../../../common/hooks'
+import { useHydroId, useEINDetails, useSnowflakeBalance, useGenericContract, useNamedContract } from '../../../../common/hooks'
 import TransactionButton from '../../../common/TransactionButton'
 
 import { ABI } from './index'
 
 export default function Oxide ({ ein }) {
   const context = useWeb3Context()
-  const [activePot, setPot]  = useState('')
-  const [rollResult, setRoll]  = useState('')
-  const [oxideBalance, setOxide]  = useState('')
-  const [activeRound, setRound]  = useState('')
-  const [committedWager, setWager]  = useState('')
-  const [activePunters, setPunters]  = useState('')
+  const einDetails = useEINDetails(ein)
+  const [activePot, setPot]  = useState(0)
+  const [rollResult, setRoll]  = useState(0)
+  const [activeRound, setRound]  = useState(0)
+  const [oxideBalance, setOxide]  = useState(0)
+  const [committedWager, setWager]  = useState(0)
+  const [activePunters, setPunters]  = useState(0)
+  const [hydroId, hydroIdAddress] = useHydroId()
   const [leaderboardData, setLeaderboard]  = useState('')
   const clientRaindropContract = useNamedContract('clientRaindrop')
   const oxideContract = useGenericContract('0xDE4c7A8C0F757afE33f3772C434DE717cAaCbE83', ABI)
-
-  function componentDidMount() {
-      oxideBalance(context.selectedAccount).then((oxide) => setOxide(oxide))
-      getRound().then(() => refreshLeaderboard())
-      getParticipants()
-      getPot()
-  }
+  const snowflakeBalance = useSnowflakeBalance(ein)
 
   function refreshLeaderboard() {
     oxideContract.getPastEvents("scoreLog", { fromBlock: 0, toBlock: 'latest' })
@@ -45,64 +48,111 @@ export default function Oxide ({ ein }) {
       })
   }
 
-  function placeWager() {
-    oxideContract.methods.placeWager(committedWager)
-    .send({ from: context.selectedAccount })
-      .catch(() => {
-        setWager('Error cannot submit wager')
-      })
-  }
+  useAccountEffect(() => {
+      oxideContract.methods.oxideBalance(context.account).call()
+      .then((oxide) => setOxide(oxide.toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")))
+      oxideContract.methods.getParticipants().call()
+      .then((punters) => setPunters(punters))
+      oxideContract.methods.getRound().call()
+      .then(round => setRound(round))
+      oxideContract.methods.getPot().call()
+      .then(pot => activePot(pot))
+  })
 
-  function getParticipants() {
-    oxideContract.methods.getParticipants().call()
-    .then(punters => setPunters(punters))
-  }
-
-  function getRound() {
-    oxideContract.methods.getRound().call()
-    .then(round => setRound(round))
-  }
-
-  function getPot() {
-    oxideContract.methods.getPot().call()
-    .then(pot => activePot(pot))
-  }
-
-  function oxideBalance(_address) {
-    return oxideContract.methods.oxideBalance(_address).call()
-  }
 
 return (
     <div>
+         <Grid container spacing={12}>
+           <Grid item xs>
+           </Grid>
+           <Grid item xs={3}>
+           <Chip
+             avatar={<Avatar><UsersIcon/></Avatar>}
+             color='primary'
+             label={activePunters}
+           />
+           </Grid>
+           <Grid item xs={3}>
+           <Chip
+             avatar={<Avatar><StarIcon/></Avatar>}
+             color='primary'
+             label={activePot}
+           />
+           </Grid>
+           <Grid item xs={3}>
+           <Chip
+             avatar={<Avatar><TimerIcon/></Avatar>}
+             color='primary'
+             label={activeRound}
+           />
+           </Grid>
+           <Grid item xs>
+           </Grid>
+        </Grid>
 
-    <Typography variant='h3' gutterBottom align="center" color="textPrimary">
-    Pot: {activePot}
-    </Typography>
+         <Grid container spacing={12}>
+         <Grid item xs>
+         </Grid>
+         <Grid item xs={3}>
+         <Chip
+           avatar={
+             <Avatar>
+             <SvgIcon viewBox="0 0 512 512">
+               <path d="M256,512C114.62,512,0,397.38,0,256S114.62,0,256,0,512,114.62,512,256,397.38,512,256,512Zm0-89c70.69,0,128-60.08,128-134.19q0-62.17-90.1-168.44Q282.38,106.74,256,77.91q-27.8,30.42-39.84,44.71Q128,227.27,128,288.77C128,362.88,185.31,423,256,423Z" />
+             </SvgIcon>
+             </Avatar>
+           }
+           label={snowflakeBalance}
+         />
+         </Grid>
+         <Grid item xs={3}>
+         <Chip
+           avatar={
+             <Avatar>
+             <OxideIcon/>
+             </Avatar>
+           }
+           color='primary'
+           label={oxideBalance}
+         />
+         </Grid>
+         <Grid item xs>
+         </Grid>
+         </Grid>
 
-    <Typography variant='h3' gutterBottom align="center" color="textPrimary">
-    Round:  {activeRound}
-    </Typography>
+         <Grid container spacing={12}>
+           <Grid item xs={3}>
+           </Grid>
+           <Grid item xs={6}>
+           <TextField
+             label="Wager Amount"
+             helperText="Disclaimer: You are placing a bet and could possibly lose your funds."
+             margin="normal"
+             value={committedWager}
+             onChange={e => setWager(e.target.value)}
+             halfWidth
+           />
+           </Grid>
+           <Grid item xs={3}>
+           </Grid>
+         </Grid>
 
-    <Typography variant='h3' gutterBottom align="center" color="textPrimary">
-    Punters: {activePunters}
-    </Typography>
-
-    <TextField
-      label="Wager Amount"
-      helperText="Disclaimer: You are placing a bet and could possibly lose your funds."
-      margin="normal"
-      value={committedWager}
-      onChange={e => setWager(e.target.value)}
-      fullWidth
-    />
-
-    <Button
-        onClick={placeWager}
-        onConfirmation={context.forceAccountReRender}
-      >
-      wager !
-      </Button>
-
-        </div>
+         <Grid container spacing={12}>
+           <Grid item xs={3}>
+           </Grid>
+           <Grid item xs={3}>
+           </Grid>
+           <Grid item xs={3}>
+         <TransactionButton
+           readyText='Wager'
+           method={() => oxideContract.methods.placeWager(committedWager)}
+           onConfirmation={context.forceAccountReRender}
+          />
+          </Grid>
+          <Grid item xs={3}>
+          </Grid>
+        </Grid>
+       </div>
   )
 }
