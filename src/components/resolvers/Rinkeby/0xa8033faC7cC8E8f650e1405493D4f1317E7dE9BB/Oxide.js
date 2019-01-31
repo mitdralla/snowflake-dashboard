@@ -46,25 +46,27 @@ export default function Oxide ({ ein }) {
   const [waitForRender, setInit]  = useState(false)
   const [leaderboardData, setLeaderboard]  = useState([])
   const clientRaindropContract = useNamedContract('clientRaindrop')
-  const oxideContract = useGenericContract('0xF8F185420697033C8695EB3C81298c468F12855d', ABI)
+  const oxideContract = useGenericContract('0xa8033faC7cC8E8f650e1405493D4f1317E7dE9BB', ABI)
   const snowflakeBalance = useSnowflakeBalance(ein)
 
-  function refreshLeaderboard()  {
+  function refreshLeaderboard(_round)  {
     setLeaderboard([])
     oxideContract.getPastEvents("scoreLog", { fromBlock: 0, toBlock: 'latest' })
     .then((result) => {
         var leaderboard = [];
         for(var x = 0; x < result.length; x++){
           var round = parseInt(parseObject(result[x].returnValues.round))
-          if(round == activeRound){
+          console.log(round , _round);
+          if(round == _round){
             leaderboard.push(createData(
             parseObject(result[x].returnValues.ein),
             parseNumber(parseObject(result[x].returnValues.amount)),
             parseNumber(parseObject(result[x].returnValues.roll)),
-            null,
-            null,
-            null,
-            ))
+            parseNumber(Math.pow(
+              parseObject(result[x].returnValues.roll),
+              parseObject(result[x].returnValues.roll))
+              *parseObject(result[x].returnValues.amount),
+            )))
           }
         }
         setLeaderboard(leaderboard)
@@ -80,20 +82,22 @@ export default function Oxide ({ ein }) {
       return _value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   }
 
-function createData(ein, id, wager, roll, oxide) {
-  return { ein, id, wager, roll, oxide };
+function createData(ein, wager, roll, oxide) {
+  return { ein, wager, roll, oxide };
 }
 
   useAccountEffect(() => {
       oxideContract.methods.oxideBalance(context.account).call()
       .then((oxide) => setOxide(parseNumber(oxide)))
+      oxideContract.methods.getPot().call()
+      .then((pot) => setPot(parseNumber(parseInt(pot/Math.pow(10,18)))))
       oxideContract.methods.getParticipants().call()
       .then((punters) => setPunters(punters))
       oxideContract.methods.getRound().call()
-      .then(round => setRound(round))
-      oxideContract.methods.getPot().call()
-      .then(pot => activePot(pot))
-      refreshLeaderboard()
+      .then((round) => {
+        refreshLeaderboard(round)
+        setRound(round)
+      })
   })
 
     return (
@@ -138,11 +142,10 @@ function createData(ein, id, wager, roll, oxide) {
           <Table>
                  <TableHead>
                    <TableRow>
-                     <CustomTableCell>Score</CustomTableCell>
-                     <CustomTableCell align="right">EIN</CustomTableCell>
-                     <CustomTableCell align="right">HydroId</CustomTableCell>
+                     <CustomTableCell> <TimerIcon/> EIN</CustomTableCell>
                      <CustomTableCell align="right">Wager</CustomTableCell>
                      <CustomTableCell align="right">Roll</CustomTableCell>
+                     <CustomTableCell align="right">H20</CustomTableCell>
                    </TableRow>
                  </TableHead>
                  <TableBody>
@@ -151,7 +154,6 @@ function createData(ein, id, wager, roll, oxide) {
                        <CustomTableCell component="th" scope="row" key={data.ein}>
                          {data.ein}
                        </CustomTableCell>
-                       <CustomTableCell align="right">{data.id}</CustomTableCell>
                        <CustomTableCell align="right">{data.wager}</CustomTableCell>
                        <CustomTableCell align="right">{data.roll}</CustomTableCell>
                        <CustomTableCell align="right">{data.oxide}</CustomTableCell>

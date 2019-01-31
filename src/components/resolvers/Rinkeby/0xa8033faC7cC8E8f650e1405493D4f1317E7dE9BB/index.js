@@ -233,11 +233,11 @@ export const ABI = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "ein",
+				"name": "",
 				"type": "uint256"
 			},
 			{
-				"name": "allowance",
+				"name": "",
 				"type": "uint256"
 			},
 			{
