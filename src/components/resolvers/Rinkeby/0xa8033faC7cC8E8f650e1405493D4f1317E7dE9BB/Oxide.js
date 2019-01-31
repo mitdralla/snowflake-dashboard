@@ -8,6 +8,13 @@ import TimerIcon from '@material-ui/icons/HourglassEmpty';
 import UsersIcon from '@material-ui/icons/People';
 import WagerIcon from '@material-ui/icons/LocalDrink';
 import DiceIcon from '@material-ui/icons/Casino';
+import WinnerIcon from '@material-ui/icons/Whatshot';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import { createMuiTheme } from '@material-ui/core/styles';
 
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
@@ -18,6 +25,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 
 import { useAccountEffect, useWeb3Context } from 'web3-react/hooks'
 import { toDecimal, fromDecimal } from 'web3-react/utilities'
@@ -48,24 +58,24 @@ export default function Oxide ({ ein }) {
   const [activePot, setPot]  = useState(0)
   const [rollResult, setRoll]  = useState(0)
   const [activeRound, setRound]  = useState(0)
+  const [activeWinner, setWinner]  = useState(0)
   const [oxideBalance, setOxide]  = useState(0)
   const [committedWager, setWager]  = useState(0)
   const [activePunters, setPunters]  = useState(0)
   const [hydroId, hydroIdAddress] = useHydroId()
   const [waitForRender, setInit]  = useState(false)
+  const [open, setOpen] = useState(false);
   const [leaderboardData, setLeaderboard]  = useState([])
   const clientRaindropContract = useNamedContract('clientRaindrop')
   const oxideContract = useGenericContract('0xa8033faC7cC8E8f650e1405493D4f1317E7dE9BB', ABI)
   const snowflakeBalance = useSnowflakeBalance(ein)
 
   function refreshLeaderboard(_round)  {
-    setLeaderboard([])
     oxideContract.getPastEvents("scoreLog", { fromBlock: 0, toBlock: 'latest' })
     .then((result) => {
         var leaderboard = [];
         for(var x = 0; x < result.length; x++){
           var round = parseInt(parseObject(result[x].returnValues.round))
-          console.log(round , _round);
           if(round == _round){
             leaderboard.push(createData(
             parseObject(result[x].returnValues.ein),
@@ -78,10 +88,39 @@ export default function Oxide ({ ein }) {
             )))
           }
         }
-        setLeaderboard(leaderboard)
-      })
-      setInit(true)
+      setLeaderboard(leaderboard)
+    })
   }
+
+  function getWinner(_round){
+    oxideContract.getPastEvents("scoreLog", { fromBlock: 0, toBlock: 'latest' })
+    .then((result) => {
+      for(var x = 0; x < result.length; x++){
+        var round = parseInt(parseObject(result[x].returnValues.round))
+        if(round == _round){
+          setWinner(parseInt(parseObject(result[x].returnValues.ein)))
+        }
+      }
+    })
+  }
+
+  function watchWinner() {
+    oxideContract.events.winnerAlert({ fromBlock: 0 },
+    (error, event) => {  })
+    .on('data', (event) => {
+      setWinner(event.returnValues.ein)
+    }).on('changed', (event) => { })
+    .on('error', console.error);
+  }
+
+  function watchScores(_round){
+    oxideContract.events.scoreLog({ fromBlock: 0 },
+    (error, event) => {  })
+    .on('data', (event) => {
+      refreshLeaderboard(_round)
+    }).on('changed', (event) => { })
+    .on('error', console.error);
+    }
 
   function parseObject(_object) {
       return JSON.stringify(_object).replace(/["]+/g, '')
@@ -91,29 +130,38 @@ export default function Oxide ({ ein }) {
       return _value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   }
 
-function createData(ein, wager, roll, oxide) {
-  return { ein, wager, roll, oxide };
-}
+  function createData(ein, wager, roll, oxide) {
+      return { ein, wager, roll, oxide };
+  }
+
+  function handleClickOpen() {
+      setOpen(true);
+  }
+
+    function handleClose() {
+      setOpen(false);
+    }
 
   useAccountEffect(() => {
       oxideContract.methods.oxideBalance(context.account).call()
       .then((oxide) => setOxide(parseNumber(oxide)))
-      oxideContract.methods.getPot().call()
-      .then((pot) => setPot(parseNumber(parseInt(pot/Math.pow(10,18)))))
       oxideContract.methods.getParticipants().call()
       .then((punters) => setPunters(punters))
+      oxideContract.methods.getPot().call()
+      .then((pot) => setPot(toDecimal(pot, 18)))
       oxideContract.methods.getRound().call()
       .then((round) => {
         refreshLeaderboard(round)
+        watchScores(round)
+        getWinner(round)
         setRound(round)
+        watchWinner()
       })
   })
 
 
     return (
-
-  <div>
-
+      <div>
          <Grid container direction="row" justify="center" alignItems="center" className="OxideStats">
           <Grid item xs={2}>
            </Grid>
@@ -122,6 +170,15 @@ function createData(ein, wager, roll, oxide) {
              avatar={<Avatar><UsersIcon/></Avatar>}
              color='primary'
              label={activePunters}
+           />
+           </Grid>
+           <Grid item xs={1}>
+           </Grid>
+           <Grid item >
+           <Chip
+             avatar={<Avatar><WinnerIcon/></Avatar>}
+             color='primary'
+             label={activeWinner}
            />
            </Grid>
            <Grid item xs={1}>
@@ -173,7 +230,7 @@ function createData(ein, wager, roll, oxide) {
                </Grid>
                </Grid>
          <Grid container direction="row" justify="center" alignItems="center"  className="OxideWager">
-         <Grid item xs={5}>
+         <Grid item xs={4}>
          </Grid>
          <Grid item >
          <Chip
@@ -203,10 +260,11 @@ function createData(ein, wager, roll, oxide) {
          <Grid item xs={4}>
          </Grid>
          <Grid item >
-           <Typography variant='h5' gutterBottom align="right" className="OxideLegend">
+           <Typography variant='h5' gutterBottom align="left" className="OxideLegend">
            Legend
            </Typography>
            <p className="OxideLegend"><UsersIcon/> Punters</p>
+           <p className="OxideLegend"><WinnerIcon/> Winner</p>
            <p className="OxideLegend"><OxideIcon/> Oxide</p>
            <p className="OxideLegend"><TimerIcon/> Round</p>
            <p className="OxideLegend"><StarIcon/> Pot</p>
@@ -225,18 +283,49 @@ function createData(ein, wager, roll, oxide) {
            />
            </Grid>
          </Grid>
-
          <Grid container direction="row" justify="center" alignItems="center"  className="OxideButton">
-           <Grid item >
+        <Grid item >
          <TransactionButton
            readyText='Wager'
            method={() => oxideContract.methods.placeWager(
              fromDecimal(committedWager.toString(), 18))}
           />
-          </Grid>
+          &nbsp;&nbsp;
+            &nbsp;&nbsp;
+              &nbsp;&nbsp;
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+           How to play?
+       </Button>
+        </Grid>
         </Grid>
 
 
-   </div>
+        <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">{"How to play?"}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                  <p> Approve a specified amount of HYDRO via your resolver management </p>
+                  <p> Place your wager and wait until your roll and oxide (H20) amount show on the leaderboard
+                      the results shall be determined with every week or so based on demand.</p>
+                  <p> The max wager is 50,000 HYDRO and the punter who <span style={{ fontWeight: 'bold' }}> first </span> hits the highest oxide amount, takes all the pot. </p>
+                  <p>So meaning if someone rolls a <span style={{ fontWeight: 'bold' }}> 15 </span> and a correlating <span style={{ fontWeight: 'bold' }}> 50,000 HYDRO </span> wager, it's not worth your time because they have
+                  <span style={{ fontWeight: 'bold' }}> already won! </span></p>
+                  <p><span style={{ fontWeight: 'bold' }}> Operating fee: 500 HYDRO per round</span> </p>
+                  <p>Created for HDCP task #228 by <span style={{ fontWeight: 'bold' }}>Gozzy</span> </p>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary" autoFocus>
+                    Ok, let me play!
+                  </Button>
+                </DialogActions>
+              </Dialog>
+
+    </div>
   )
 }
