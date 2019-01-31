@@ -6,6 +6,11 @@ import Avatar from '@material-ui/core/Avatar'
 import OxideIcon from '@material-ui/icons/InvertColors';
 import TimerIcon from '@material-ui/icons/HourglassEmpty';
 import UsersIcon from '@material-ui/icons/People';
+import WagerIcon from '@material-ui/icons/LocalDrink';
+import DiceIcon from '@material-ui/icons/Casino';
+import { createMuiTheme } from '@material-ui/core/styles';
+
+import FingerprintIcon from '@material-ui/icons/Fingerprint';
 import { withStyles } from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/StarBorder';
 import Table from '@material-ui/core/Table';
@@ -15,6 +20,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import { useAccountEffect, useWeb3Context } from 'web3-react/hooks'
+import { toDecimal, fromDecimal } from 'web3-react/utilities'
 
 import { useHydroId, useEINDetails, useSnowflakeBalance, useGenericContract, useNamedContract } from '../../../../common/hooks'
 import TransactionButton from '../../../common/TransactionButton'
@@ -27,11 +33,14 @@ const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: '#0971f5',
     color: theme.palette.common.white,
+    fontSize: 20,
+
   },
   body: {
     fontSize: 14,
   },
 }))(TableCell);
+
 
 export default function Oxide ({ ein }) {
   const context = useWeb3Context()
@@ -100,14 +109,15 @@ function createData(ein, wager, roll, oxide) {
       })
   })
 
+
     return (
 
   <div>
 
          <Grid container direction="row" justify="center" alignItems="center" className="OxideStats">
-          <Grid item xs={1}>
+          <Grid item xs={2}>
            </Grid>
-           <Grid item xs={1}>
+           <Grid item>
            <Chip
              avatar={<Avatar><UsersIcon/></Avatar>}
              color='primary'
@@ -132,40 +142,38 @@ function createData(ein, wager, roll, oxide) {
              label={activeRound}
            />
            </Grid>
-           <Grid item xs={1}>
+           <Grid item xs={2}>
            </Grid>
         </Grid>
-
-
-        <Grid container direction="row" justify="center" alignItems="center"  className="OxideLeaderboard">
+        <br></br><br></br>
+        <Grid container direction="row" justify="center" alignItems="center">
         <Grid item >
-          <Table>
-                 <TableHead>
-                   <TableRow>
-                     <CustomTableCell> <TimerIcon/> EIN</CustomTableCell>
-                     <CustomTableCell align="right">Wager</CustomTableCell>
-                     <CustomTableCell align="right">Roll</CustomTableCell>
-                     <CustomTableCell align="right">H20</CustomTableCell>
+          <Table component="div" style={createMuiTheme({ display: 'block' })}>
+                 <TableHead component="div" style={createMuiTheme({  width: '60vw', display: 'block' })}>
+                   <TableRow component="div" style={createMuiTheme({ display: 'block' })}>
+                     <CustomTableCell  style={createMuiTheme({ width: '15vw' })} align="right"> <FingerprintIcon/> EIN</CustomTableCell>
+                     <CustomTableCell  style={createMuiTheme({ width: '15vw' })} align="right"> <WagerIcon/> Wager</CustomTableCell>
+                     <CustomTableCell  style={createMuiTheme({ width: '15vw' })} align="right"> <DiceIcon/> Roll</CustomTableCell>
+                     <CustomTableCell  style={createMuiTheme({ width: '15vw' })} align="right"> <OxideIcon/> H20</CustomTableCell>
                    </TableRow>
                  </TableHead>
-                 <TableBody>
+                 <TableBody component="div" style={createMuiTheme({ width: '60vw' , height: '20vh', overflow: 'auto', display: 'block' })}>
                  {leaderboardData.map(data => (
-                     <TableRow>
-                       <CustomTableCell component="th" scope="row" key={data.ein}>
+                     <TableRow component="div" style={createMuiTheme({ display: 'flex' })}>
+                       <CustomTableCell style={createMuiTheme({ height: 25, width: '15vw' })} align="right" key={data.ein}>
                          {data.ein}
                        </CustomTableCell>
-                       <CustomTableCell align="right">{data.wager}</CustomTableCell>
-                       <CustomTableCell align="right">{data.roll}</CustomTableCell>
-                       <CustomTableCell align="right">{data.oxide}</CustomTableCell>
+                       <CustomTableCell style={createMuiTheme({ height: 25, width: '15vw' })}  align="right">{data.wager}</CustomTableCell>
+                       <CustomTableCell style={createMuiTheme({ height: 25, width: '15vw' })}  align="right">{data.roll}</CustomTableCell>
+                       <CustomTableCell style={createMuiTheme({ height: 25, width: '15vw' })}  align="right">{data.oxide}</CustomTableCell>
                      </TableRow>
                    ))}
                  </TableBody>
                </Table>
                </Grid>
                </Grid>
-
          <Grid container direction="row" justify="center" alignItems="center"  className="OxideWager">
-         <Grid item xs={2}>
+         <Grid item xs={5}>
          </Grid>
          <Grid item >
          <Chip
@@ -179,10 +187,10 @@ function createData(ein, wager, roll, oxide) {
            label={snowflakeBalance}
          />
          </Grid>
-         <Grid item xs={1}>
-         </Grid>
          <Grid item>
-         <Chip
+          &nbsp;&nbsp;
+            &nbsp;&nbsp;
+              &nbsp;&nbsp;<Chip
            avatar={
              <Avatar>
              <OxideIcon/>
@@ -192,13 +200,20 @@ function createData(ein, wager, roll, oxide) {
            label={oxideBalance}
          />
          </Grid>
-         <Grid item xs={2}>
+         <Grid item xs={4}>
+         </Grid>
+         <Grid item >
+           <Typography variant='h5' gutterBottom align="right" className="OxideLegend">
+           Legend
+           </Typography>
+           <p className="OxideLegend"><UsersIcon/> Punters</p>
+           <p className="OxideLegend"><OxideIcon/> Oxide</p>
+           <p className="OxideLegend"><TimerIcon/> Round</p>
+           <p className="OxideLegend"><StarIcon/> Pot</p>
          </Grid>
          </Grid>
 
          <Grid container direction="row" justify="center" alignItems="center">
-         <Grid item xs={4}>
-           </Grid>
            <Grid item >
            <TextField
              label="Wager Amount"
@@ -209,19 +224,19 @@ function createData(ein, wager, roll, oxide) {
              halfWidth
            />
            </Grid>
-           <Grid item xs={4}>
-           </Grid>
          </Grid>
 
          <Grid container direction="row" justify="center" alignItems="center"  className="OxideButton">
            <Grid item >
          <TransactionButton
            readyText='Wager'
-           method={() => oxideContract.methods.placeWager(committedWager)}
-           onConfirmation={context.forceAccountReRender}
+           method={() => oxideContract.methods.placeWager(
+             fromDecimal(committedWager.toString(), 18))}
           />
           </Grid>
         </Grid>
+
+
    </div>
   )
 }

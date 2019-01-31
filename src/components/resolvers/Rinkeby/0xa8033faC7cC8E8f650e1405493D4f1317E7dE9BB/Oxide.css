@@ -1,10 +1,5 @@
-.OxideLeaderboard {
 
-  height: 25vh;
-  left: 0;
-  right: 0;
 
-}
 
 
 .OxideStats {
@@ -13,10 +8,9 @@
 
 }
 
-
 .OxideWager {
 
-  height: 15vh;
+  height: 20vh;
 
 }
 
@@ -27,9 +21,12 @@
 
 }
 
+.OxideLegend {
+  color: #0971f5;
+}
 
 .OxideButton {
 
-  height: 22.5vh;
+  height: 10vh;
 
 }
