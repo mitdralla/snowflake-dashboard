@@ -46,7 +46,7 @@ export default function Oxide ({ ein }) {
   const [waitForRender, setInit]  = useState(false)
   const [leaderboardData, setLeaderboard]  = useState([])
   const clientRaindropContract = useNamedContract('clientRaindrop')
-  const oxideContract = useGenericContract('0xDE4c7A8C0F757afE33f3772C434DE717cAaCbE83', ABI)
+  const oxideContract = useGenericContract('0xF8F185420697033C8695EB3C81298c468F12855d', ABI)
   const snowflakeBalance = useSnowflakeBalance(ein)
 
   function refreshLeaderboard()  {
@@ -55,12 +55,12 @@ export default function Oxide ({ ein }) {
     .then((result) => {
         var leaderboard = [];
         for(var x = 0; x < result.length; x++){
-          var round = parseInt(parseObject(result[x].returnValues.wagerRound))
+          var round = parseInt(parseObject(result[x].returnValues.round))
           if(round == activeRound){
             leaderboard.push(createData(
-            parseObject(result[x].returnValues.wagerUser),
-            parseNumber(parseObject(result[x].returnValues.wagerAmount)),
-            parseNumber(parseObject(result[x].returnValues.wagerRoll)),
+            parseObject(result[x].returnValues.ein),
+            parseNumber(parseObject(result[x].returnValues.amount)),
+            parseNumber(parseObject(result[x].returnValues.roll)),
             null,
             null,
             null,

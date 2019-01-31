@@ -417,26 +417,31 @@ export const ABI = [
 		"type": "constructor"
 	},
 	{
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
 				"indexed": false,
-				"name": "wagerUser",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "wagerRoll",
+				"name": "ein",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
-				"name": "wagerAmount",
+				"name": "amount",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
-				"name": "wagerRound",
+				"name": "roll",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "round",
 				"type": "uint256"
 			}
 		],
@@ -448,17 +453,17 @@ export const ABI = [
 		"inputs": [
 			{
 				"indexed": false,
-				"name": "wagerUser",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "wagerPot",
+				"name": "ein",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
-				"name": "wagerRound",
+				"name": "pot",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "round",
 				"type": "uint256"
 			}
 		],
@@ -481,6 +486,18 @@ export const ABI = [
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"name": "gwei",
+				"type": "uint256"
+			}
+		],
+		"name": "oracleFund",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": true,
 				"name": "previousOwner",
 				"type": "address"
@@ -495,7 +512,6 @@ export const ABI = [
 		"type": "event"
 	}
 ]
-
 
 export const requiredAllowance = "0"
 
