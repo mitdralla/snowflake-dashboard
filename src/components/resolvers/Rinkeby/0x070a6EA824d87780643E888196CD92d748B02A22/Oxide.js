@@ -67,7 +67,7 @@ export default function Oxide ({ ein }) {
   const [open, setOpen] = useState(false);
   const [leaderboardData, setLeaderboard]  = useState([])
   const clientRaindropContract = useNamedContract('clientRaindrop')
-  const oxideContract = useGenericContract('0xa8033faC7cC8E8f650e1405493D4f1317E7dE9BB', ABI)
+  const oxideContract = useGenericContract('0x070a6EA824d87780643E888196CD92d748B02A22', ABI)
   const snowflakeBalance = useSnowflakeBalance(ein)
 
   function refreshLeaderboard(_round)  {
@@ -93,7 +93,7 @@ export default function Oxide ({ ein }) {
   }
 
   function getWinner(_round){
-    oxideContract.getPastEvents("scoreLog", { fromBlock: 0, toBlock: 'latest' })
+    oxideContract.getPastEvents("winnerAlert", { fromBlock: 0, toBlock: 'latest' })
     .then((result) => {
       for(var x = 0; x < result.length; x++){
         var round = parseInt(parseObject(result[x].returnValues.round))
@@ -247,7 +247,10 @@ export default function Oxide ({ ein }) {
          <Grid item>
           &nbsp;&nbsp;
             &nbsp;&nbsp;
-              &nbsp;&nbsp;<Chip
+              &nbsp;&nbsp;
+              &nbsp;&nbsp;
+                &nbsp;&nbsp;
+                  &nbsp;&nbsp;<Chip
            avatar={
              <Avatar>
              <OxideIcon/>
@@ -257,7 +260,7 @@ export default function Oxide ({ ein }) {
            label={oxideBalance}
          />
          </Grid>
-         <Grid item xs={4}>
+         <Grid item xs={3}>
          </Grid>
          <Grid item >
            <Typography variant='h5' gutterBottom align="left" className="OxideLegend">
@@ -315,7 +318,7 @@ export default function Oxide ({ ein }) {
                   <p> The max wager is 50,000 HYDRO and the punter who <span style={{ fontWeight: 'bold' }}> first </span> hits the highest oxide amount, takes all the pot. </p>
                   <p>So meaning if someone rolls a <span style={{ fontWeight: 'bold' }}> 15 </span> and a correlating <span style={{ fontWeight: 'bold' }}> 50,000 HYDRO </span> wager, it's not worth your time because they have
                   <span style={{ fontWeight: 'bold' }}> already won! </span></p>
-                  <p><span style={{ fontWeight: 'bold' }}> Operating fee: 500 HYDRO per round</span> </p>
+                  <p><span style={{ fontWeight: 'bold' }}> Operating fee per round and minimum wager: 500 HYDRO</span> </p>
                   <p>Created for HDCP task #228 by <span style={{ fontWeight: 'bold' }}>Gozzy</span> </p>
                   </DialogContentText>
                 </DialogContent>
