@@ -70,7 +70,7 @@ export default function Oxide ({ ein }) {
         var leaderboard = [];
         for(var x = 0; x < result.length; x++){
           var round = parseInt(parseObject(result[x].returnValues.round))
-          if(round == _round){
+          if(round === _round){
             leaderboard.push(createData(
             parseObject(result[x].returnValues.ein),
             parseNumber(parseObject(result[x].returnValues.amount)),
@@ -91,7 +91,7 @@ export default function Oxide ({ ein }) {
     .then((result) => {
       for(var x = 0; x < result.length; x++){
         var round = parseInt(parseObject(result[x].returnValues.round))
-        if(round == _round){
+        if(round === _round){
           setWinner(parseInt(parseObject(result[x].returnValues.ein)))
         }
       }
@@ -308,7 +308,7 @@ export default function Oxide ({ ein }) {
                   <p> Place your wager and wait until your roll and oxide (H20) amount show on the leaderboard
                       the results shall be determined with every week or so based on demand.</p>
                   <p> The max wager is 50,000 HYDRO and the punter who <span style={{ fontWeight: 'bold' }}> first </span> hits the highest oxide amount, takes all the pot. </p>
-                  <p>So meaning if someone rolls a <span style={{ fontWeight: 'bold' }}> 15 </span> and a correlating <span style={{ fontWeight: 'bold' }}> 50,000 HYDRO </span> wager, it&apos;s not worth your time because they have 
+                  <p>So meaning if someone rolls a <span style={{ fontWeight: 'bold' }}> 15 </span> and a correlating <span style={{ fontWeight: 'bold' }}> 50,000 HYDRO </span> wager, it&apos;s not worth your time because they have
                   <span style={{ fontWeight: 'bold' }}> already won!</span></p>
                   <p><span style={{ fontWeight: 'bold' }}> Operating fee per round and minimum wager: 500 HYDRO</span> </p>
                   <p>Created for HDCP task #228 by <span style={{ fontWeight: 'bold' }}>Gozzy</span> </p>
