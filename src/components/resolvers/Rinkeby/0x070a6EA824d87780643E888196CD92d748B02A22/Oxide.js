@@ -70,6 +70,7 @@ export default function Oxide ({ ein }) {
         var leaderboard = [];
         for(var x = 0; x < result.length; x++){
           var round = parseInt(parseObject(result[x].returnValues.round))
+           _round = parseInt(parseObject(_round))
           if(round === _round){
             leaderboard.push(createData(
             parseObject(result[x].returnValues.ein),
