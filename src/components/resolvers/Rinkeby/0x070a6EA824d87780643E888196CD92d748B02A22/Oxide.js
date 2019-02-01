@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import React, { useState } from 'react'
 import { Grid, TextField, Typography, Button } from '@material-ui/core'
 import Chip from '@material-ui/core/Chip'
@@ -25,14 +27,11 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 
 import { useAccountEffect, useWeb3Context } from 'web3-react/hooks'
 import { toDecimal, fromDecimal } from 'web3-react/utilities'
 
-import { useHydroId, useEINDetails, useSnowflakeBalance, useGenericContract, useNamedContract } from '../../../../common/hooks'
+import { useSnowflakeBalance, useGenericContract } from '../../../../common/hooks'
 import TransactionButton from '../../../common/TransactionButton'
 
 import { ABI } from './index'
@@ -54,19 +53,14 @@ const CustomTableCell = withStyles(theme => ({
 
 export default function Oxide ({ ein }) {
   const context = useWeb3Context()
-  const einDetails = useEINDetails(ein)
   const [activePot, setPot]  = useState(0)
-  const [rollResult, setRoll]  = useState(0)
   const [activeRound, setRound]  = useState(0)
   const [activeWinner, setWinner]  = useState(0)
   const [oxideBalance, setOxide]  = useState(0)
   const [committedWager, setWager]  = useState(0)
   const [activePunters, setPunters]  = useState(0)
-  const [hydroId, hydroIdAddress] = useHydroId()
-  const [waitForRender, setInit]  = useState(false)
   const [open, setOpen] = useState(false);
   const [leaderboardData, setLeaderboard]  = useState([])
-  const clientRaindropContract = useNamedContract('clientRaindrop')
   const oxideContract = useGenericContract('0x070a6EA824d87780643E888196CD92d748B02A22', ABI)
   const snowflakeBalance = useSnowflakeBalance(ein)
 
@@ -106,20 +100,18 @@ export default function Oxide ({ ein }) {
 
   function watchWinner() {
     oxideContract.events.winnerAlert({ fromBlock: 0 },
-    (error, event) => {  })
+    () => { })
     .on('data', (event) => {
       setWinner(event.returnValues.ein)
-    }).on('changed', (event) => { })
-    .on('error', console.error);
+    })
   }
 
   function watchScores(_round){
     oxideContract.events.scoreLog({ fromBlock: 0 },
-    (error, event) => {  })
-    .on('data', (event) => {
+    () => { })
+    .on('data', () => {
       refreshLeaderboard(_round)
-    }).on('changed', (event) => { })
-    .on('error', console.error);
+      })
     }
 
   function parseObject(_object) {
@@ -216,8 +208,8 @@ export default function Oxide ({ ein }) {
                  </TableHead>
                  <TableBody component="div" style={createMuiTheme({ width: '60vw' , height: '20vh', overflow: 'auto', display: 'block' })}>
                  {leaderboardData.map(data => (
-                     <TableRow component="div" style={createMuiTheme({ display: 'flex' })}>
-                       <CustomTableCell style={createMuiTheme({ height: 25, width: '15vw' })} align="right" key={data.ein}>
+                     <TableRow component="div" style={createMuiTheme({ display: 'flex' })} key={data.ein}>
+                       <CustomTableCell style={createMuiTheme({ height: 25, width: '15vw' })} align="right">
                          {data.ein}
                        </CustomTableCell>
                        <CustomTableCell style={createMuiTheme({ height: 25, width: '15vw' })}  align="right">{data.wager}</CustomTableCell>
@@ -316,8 +308,8 @@ export default function Oxide ({ ein }) {
                   <p> Place your wager and wait until your roll and oxide (H20) amount show on the leaderboard
                       the results shall be determined with every week or so based on demand.</p>
                   <p> The max wager is 50,000 HYDRO and the punter who <span style={{ fontWeight: 'bold' }}> first </span> hits the highest oxide amount, takes all the pot. </p>
-                  <p>So meaning if someone rolls a <span style={{ fontWeight: 'bold' }}> 15 </span> and a correlating <span style={{ fontWeight: 'bold' }}> 50,000 HYDRO </span> wager, it's not worth your time because they have
-                  <span style={{ fontWeight: 'bold' }}> already won! </span></p>
+                  <p>So meaning if someone rolls a <span style={{ fontWeight: 'bold' }}> 15 </span> and a correlating <span style={{ fontWeight: 'bold' }}> 50,000 HYDRO </span> wager, it&apos;s not worth your time because they have 
+                  <span style={{ fontWeight: 'bold' }}> already won!</span></p>
                   <p><span style={{ fontWeight: 'bold' }}> Operating fee per round and minimum wager: 500 HYDRO</span> </p>
                   <p>Created for HDCP task #228 by <span style={{ fontWeight: 'bold' }}>Gozzy</span> </p>
                   </DialogContentText>
