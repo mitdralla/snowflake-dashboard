@@ -61,7 +61,7 @@ export default function Oxide ({ ein }) {
   const [activePunters, setPunters]  = useState(0)
   const [open, setOpen] = useState(false);
   const [leaderboardData, setLeaderboard]  = useState([])
-  const oxideContract = useGenericContract('0x070a6EA824d87780643E888196CD92d748B02A22', ABI)
+  const oxideContract = useGenericContract('0xD9D40Ca7BedcC47E5D4084c4011dAc50566F8d4f', ABI)
   const snowflakeBalance = useSnowflakeBalance(ein)
 
   function refreshLeaderboard(_round)  {
