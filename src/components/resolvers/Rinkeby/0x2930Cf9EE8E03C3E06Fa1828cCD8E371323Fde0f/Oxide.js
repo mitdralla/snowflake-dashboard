@@ -61,7 +61,7 @@ export default function Oxide ({ ein }) {
   const [activePunters, setPunters]  = useState(0)
   const [open, setOpen] = useState(false);
   const [leaderboardData, setLeaderboard]  = useState([])
-  const oxideContract = useGenericContract('0xD9D40Ca7BedcC47E5D4084c4011dAc50566F8d4f', ABI)
+  const oxideContract = useGenericContract('0x2930Cf9EE8E03C3E06Fa1828cCD8E371323Fde0f', ABI)
   const snowflakeBalance = useSnowflakeBalance(ein)
 
   function refreshLeaderboard(_round)  {
@@ -69,17 +69,17 @@ export default function Oxide ({ ein }) {
     .then((result) => {
         var leaderboard = [];
         for(var x = 0; x < result.length; x++){
-          var round = parseInt(parseObject(result[x].returnValues.round))
+          var round = parseInt(parseObject(result[x].returnValues.wagerRound))
            _round = parseInt(parseObject(_round))
           if(round === _round){
             leaderboard.push(createData(
-            parseObject(result[x].returnValues.ein),
-            parseNumber(parseObject(result[x].returnValues.amount)),
-            parseNumber(parseObject(result[x].returnValues.roll)),
+            parseObject(result[x].returnValues.wagerEIN),
+            parseNumber(parseObject(result[x].returnValues.wagerAmount)),
+            parseNumber(parseObject(result[x].returnValues.wagerRoll)),
             parseNumber(Math.pow(
-              parseObject(result[x].returnValues.roll),
-              parseObject(result[x].returnValues.roll))
-              *parseObject(result[x].returnValues.amount),
+              parseObject(result[x].returnValues.wagerRoll),
+              parseObject(result[x].returnValues.wagerRoll))
+              *parseObject(result[x].returnValues.wagerAmount),
             )))
           }
         }
@@ -91,9 +91,10 @@ export default function Oxide ({ ein }) {
     oxideContract.getPastEvents("winnerAlert", { fromBlock: 0, toBlock: 'latest' })
     .then((result) => {
       for(var x = 0; x < result.length; x++){
-        var round = parseInt(parseObject(result[x].returnValues.round))
-        if(round === _round){
-          setWinner(parseInt(parseObject(result[x].returnValues.ein)))
+        var round = parseInt(parseObject(result[x].returnValues.wagerRound))
+        _round = parseInt(parseObject(_round))
+        if(round === (_round-1)){
+          setWinner(parseInt(parseObject(result[x].returnValues.wagerEIN)))
         }
       }
     })
@@ -103,7 +104,10 @@ export default function Oxide ({ ein }) {
     oxideContract.events.winnerAlert({ fromBlock: 0 },
     () => { })
     .on('data', (event) => {
-      setWinner(event.returnValues.ein)
+      var round = parseInt(parseObject(event.returnValues.wagerRound))
+      if(round === (activeRound - 1)){
+        setWinner(event.returnValues.wagerEIN)
+      }
     })
   }
 
