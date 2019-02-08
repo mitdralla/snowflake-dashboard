@@ -24,14 +24,14 @@ import ReportHistoryTable from './ReportHistoryTable';
 export default class PetCard extends Component {
 	constructor(props) {
 		super(props);
-		 this.state = {
+		this.state = {
 			openEdit: false,
 			openReport:false,
 			openHistory:false,
 			petType: '',
-		    name: '',
+			name: '',
             desc: '',
-		    imgUrl: '',
+			imgUrl: '',
 			reportStatus:0,
 			reportStatusTxt:'',
 			reportSceneDescription:'',
@@ -56,31 +56,29 @@ export default class PetCard extends Component {
 		this.getActiveReport();
 	}
 	
-	 componentWillReceiveProps(nextProps){
-	   	this.getPet();
+	UNSAFE_componentWillReceiveProps(){
+		this.getPet();
 		this.getActiveReport();
   }
   
   
 
 	
-	 getPet(){
-    //let aPet = this.props.resolverContract.methods.getPet('jzafra2').call()
-    this.props.resolverContract.methods.getPet(this.props.petId).call()
-    .then(aPet =>{
-	  this.setState(
-	      {
-		  petType: aPet.petType,
-		  name: aPet.name,
-          desc: aPet.desc,
-		  imgUrl: aPet.imgUrl,
-		  chipId: aPet.chipId
-		});
-	  //this.refreshReportList();
-	 
-      
-    })
-  }
+	getPet(){
+		//let aPet = this.props.resolverContract.methods.getPet('jzafra2').call()
+		this.props.resolverContract.methods.getPet(this.props.petId).call()
+			.then(aPet =>{
+				this.setState(
+				{
+					petType: aPet.petType,
+					name: aPet.name,
+					desc: aPet.desc,
+					imgUrl: aPet.imgUrl,
+					chipId: aPet.chipId
+				});
+				//this.refreshReportList();
+		})
+	}
 
    getActiveReport(){
 	this.props.resolverContract.methods.getLostReport(this.props.petId).call()
@@ -97,7 +95,7 @@ export default class PetCard extends Component {
   
    }
 
-  	formatTimestamp(timestamp){
+	formatTimestamp(timestamp){
 		var date = new Date(parseInt(timestamp)*1000);
 		var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 		var year = date.getFullYear();
@@ -110,7 +108,7 @@ export default class PetCard extends Component {
 		return time;
 	}
 	
-	 handleClickOpenEdit = () => {
+	handleClickOpenEdit = () => {
 		this.setState({ openEdit: true });
 	};
 	
@@ -136,55 +134,48 @@ export default class PetCard extends Component {
 	this.props.refreshPets();
     
   };
+
+	handleCloseHistory = () => {
+		this.setState({ openHistory: false });
+	};
   
-   handleCloseHistory = () => {
-	this.setState({ openHistory: false });
-	    
-  };
-  
-   render() {
-	  
-	   
-    return(
-	<div>
-    
-	  <Card style={{ maxWidth: 300}} elevation={3}>
-      <CardActionArea>
-	  <CardHeader
-          avatar={
-			  <Avatar aria-label={this.state.petType} style={this.getStatusColor()}>
-				   <Tooltip title={this.state.reportStatusTxt}>
-				  <PetIcon/>
-				  </Tooltip>
-				</Avatar>
-			  }
-          title={this.state.name+ ' - ' +this.state.petType}
-		  subheader={'Pet ID: '+this.state.chipId}
-         />
-        <CardMedia   style={{ height: 0, paddingTop: '56%'}}
-          //className={styles.media}
-          //image="https://upload.wikimedia.org/wikipedia/commons/d/db/Pet_Discount_Logo.jpg"
-		  //image= {require ("./logo.png")}
-			image ={this.state.imgUrl===''?require ("./noImage.png"):this.state.imgUrl}
-		  
-          title="pet image"
-		/>
-        <CardContent>
-		   <Typography component="p">{this.state.desc}</Typography>
-		  
-		 </CardContent>
-      </CardActionArea>
-      <CardActions style={{justifyContent: 'center'}}>
-		
-			<Button size="small" color="primary" onClick={this.handleClickOpenEdit}>
-			Edit
-			</Button>
-        
-			<EditPetDialog 
+	render() {
+
+		return(
+		<div>
+
+			<Card style={{ maxWidth: 300}} elevation={3}>
+				<CardActionArea>
+					<CardHeader
+						avatar={
+							<Avatar aria-label={this.state.petType} style={this.getStatusColor()}>
+								<Tooltip title={this.state.reportStatusTxt}>
+									<PetIcon/>
+								</Tooltip>
+							</Avatar>
+						}
+						title={this.state.name+ ' - ' +this.state.petType}
+						subheader={'Pet ID: '+this.state.chipId}
+					/>
+					<CardMedia   style={{ height: 0, paddingTop: '56%'}}
+						//className={styles.media}
+						//image="https://upload.wikimedia.org/wikipedia/commons/d/db/Pet_Discount_Logo.jpg"
+						//image= {require ("./logo.png")}
+						image ={this.state.imgUrl===''?require ("./noImage.png"):this.state.imgUrl}
+						title="pet image"
+					/>
+					<CardContent>
+						<Typography component="p">{this.state.desc}</Typography>
+					</CardContent>
+				</CardActionArea>
+				<CardActions style={{justifyContent: 'center'}}>
+					<Button size="small" color="primary" onClick={this.handleClickOpenEdit}>
+						Edit
+					</Button>
+					<EditPetDialog 
 						hydroId={this.props.hydroId}
 						petId={this.props.petId}
 						chipId={this.state.chipId}
-						
 						petType={this.state.petType}
 						name={this.state.name}
 						timestamp={this.state.timestamp}
@@ -196,13 +187,11 @@ export default class PetCard extends Component {
 						open={this.state.openEdit}
 						resolverContract={this.props.resolverContract}
 						handleClose={this.handleCloseEdit}
-						
-			/>
-		
-			<Button size="small" color="primary" onClick={this.handleClickOpenReport}>
-			Report
-			</Button>
-			<EditReportDialog 
+					/>
+					<Button size="small" color="primary" onClick={this.handleClickOpenReport}>
+						Report
+					</Button>
+					<EditReportDialog 
 						hydroId={this.props.hydroId}
 						petId={this.props.petId}
 						chipId={this.state.chipId}
@@ -216,15 +205,12 @@ export default class PetCard extends Component {
 						resolverContract={this.props.resolverContract}
 						handleClose={this.handleCloseReport}
 						reportClaimerHydroId ={this.state.reportClaimerHydroId}
-						
-						
-			/>
-		
-			<Button size="small" color="primary" onClick={this.handleClickOpenHistory}>
-			History
-			</Button>
-			{this.state.openHistory?( 
-				<ReportHistoryTable 
+					/>
+					<Button size="small" color="primary" onClick={this.handleClickOpenHistory}>
+						History
+					</Button>
+					{this.state.openHistory?( 
+						<ReportHistoryTable 
 							key={'history_'+this.props.petId}
 							hydroId={this.props.hydroId}
 							petId={this.props.petId}
@@ -236,17 +222,12 @@ export default class PetCard extends Component {
 							getStatusTxt ={this.props.getStatusTxt}
 							w3w = {this.props.w3w}
 								
-				/>
-			):''}
-		
-      </CardActions>
-	    
-    </Card>
-	 
-	</div>
-	
+						/>
+					):''}
+				</CardActions>
+			</Card>
+		</div>
     )
   }
-
 }
 

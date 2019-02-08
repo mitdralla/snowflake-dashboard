@@ -38,9 +38,9 @@ class ClaimReportDialog extends Component {
 			petId: props.petId
 		}
 	}
-  
- 
-	componentWillReceiveProps(nextProps){
+
+
+	UNSAFE_componentWillReceiveProps(nextProps){
 		this.setState({
 			reportStatus: nextProps.reportStatus,
 			reportStatusTxt: nextProps.reportStatusTxt,
@@ -54,8 +54,8 @@ class ClaimReportDialog extends Component {
 			petId: nextProps.petId
 		})
 	}
-  
-	componentWillMount(){
+
+	UNSAFE_componentWillMount(){
 		this.setState({
 			reportStatus: this.props.reportStatus,
 			reportStatusTxt: this.props.reportStatusTxt,
@@ -99,8 +99,8 @@ class ClaimReportDialog extends Component {
 		var time = month + ' ' + day + ' ' + year + ', ' + hour + ':' + min + ':' + sec ;
 		return time;
 	}
-  
-	 
+
+
 	handleChangeReportReward(event){
 		this.setState({reportReward: event.target.value}) 
 	}
@@ -117,155 +117,132 @@ class ClaimReportDialog extends Component {
   
 	render() {
 
-    return (
-	<div>
-       
-        <Dialog
-          open={this.props.open}
-          TransitionComponent={Transition}
-          onClose={this.handleClose}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle id="alert-dialog-slide-title">
-            {"Found Pet Report details..."}
-          </DialogTitle>
-          <DialogContent>
-             <form noValidate autoComplete="off">
-                
-				<TextField
-					margin="normal"
-                  label="status"
-                  helperText="Report Status"
-                  value={this.state.reportStatusTxt}
-                  InputProps={{
-					  readOnly: true,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <VerifiedUser />
-                      </InputAdornment>
-                    )
-                  }}
-                  fullWidth
-                />
-	    
-               
-               
-			   <TextField
-                  margin="normal"
-                  label="Scene description"
-                  helperText="Description of scene"
-                  value={this.state.reportSceneDescription}
-                  InputProps={{
-					  readOnly: true,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <VerifiedUser />
-                      </InputAdornment>
-                    )
-                  }}
-                  fullWidth
-                />
-				
-				
-				
-				<TextField
-                  margin="normal"
-                  label="Reward"
-                  helperText="Reward in HYDRO"
-                  value={this.state.reportReward}
-				  type="number"
-                  InputProps={{
-					  readOnly: true,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <VerifiedUser />
-                      </InputAdornment>
-                    )
-                  }}
-                  fullWidth
-                />
-				
-				 <TextField
-				  margin="normal"
-                  label="Owner's Name or Alias"
-                  helperText="Owner's Name or Alias"
-                  value={this.state.contactName}
-                  InputProps={{
-					   readOnly: true,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <VerifiedUser />
-                      </InputAdornment>
-                    )
-                  }}
-				  fullWidth
-                  
-                />
-				
-				
-                 <TextField
-				  margin="normal"
-                  label="Owner's public contact (email,twitter,telegram,facebook...)"
-                  helperText="Owner's Contact details"
-                  value={this.state.contactData}
-                  InputProps={{
-					   readOnly: true,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <VerifiedUser />
-                      </InputAdornment>
-                    )
-                  }}
-				  fullWidth
-				  />
-				
-				<TextField
-                  margin="normal"
-                  label="Report Claimer SnowFlake ID (if already claimed)"
-                  helperText="Report Claimer SnowFlake ID"
-                  value={this.state.reportClaimedHydroId}
-                  InputProps={{
-					  readOnly: true,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <VerifiedUser />
-                      </InputAdornment>
-                    )
-                  }}
-                  fullWidth
-                />
-				
-				
-              </form>
-          </DialogContent>
-          <DialogActions>
-           
-				
-				{this.state.reportStatus==="1"?(
-				<TransactionButton 
-                  readyText='Claim Pet Found...'
-                 method = { this.props.resolverContract.methods.claimLostReport(this.props.petId,this.props.hydroId)}
-                 onConfirmation={() => {
-                    this.props.handleClose()
-                  }}
-                />
-				):''}
-				
-				
-			<Button onClick={this.props.handleClose} color="primary">
-              Close
-            </Button>
-          
-          </DialogActions>
-        </Dialog>
-      </div>
-	  
-     
-    );
-  }
+		return (
+		<div>
+			<Dialog
+				open={this.props.open}
+				TransitionComponent={Transition}
+				onClose={this.handleClose}
+				aria-labelledby="alert-dialog-slide-title"
+				aria-describedby="alert-dialog-slide-description"
+			>
+				<DialogTitle id="alert-dialog-slide-title">
+					{"Found Pet Report details..."}
+				</DialogTitle>
+				<DialogContent>
+					<form noValidate autoComplete="off">
+						<TextField
+							margin="normal"
+							label="status"
+							helperText="Report Status"
+							value={this.state.reportStatusTxt}
+							InputProps={{
+								readOnly: true,
+								startAdornment: (
+									<InputAdornment position="start">
+										<VerifiedUser />
+									</InputAdornment>
+								)
+							}}
+							fullWidth
+						/>
+						<TextField
+							margin="normal"
+							label="Scene description"
+							helperText="Description of scene"
+							value={this.state.reportSceneDescription}
+							InputProps={{
+								readOnly: true,
+								startAdornment: (
+								<InputAdornment position="start">
+									<VerifiedUser />
+								</InputAdornment>
+								)
+							}}
+							fullWidth
+						/>
+						<TextField
+							margin="normal"
+							label="Reward"
+							helperText="Reward in HYDRO"
+							value={this.state.reportReward}
+							type="number"
+							InputProps={{
+								readOnly: true,
+								startAdornment: (
+								<InputAdornment position="start">
+									<VerifiedUser />
+								</InputAdornment>
+								)
+							}}
+							fullWidth
+						/>
+						<TextField
+							margin="normal"
+							label="Owner's Name or Alias"
+							helperText="Owner's Name or Alias"
+							value={this.state.contactName}
+							InputProps={{
+								readOnly: true,
+								startAdornment: (
+									<InputAdornment position="start">
+										<VerifiedUser />
+									</InputAdornment>
+								)
+							}}
+						fullWidth
+						/>
+						<TextField
+							margin="normal"
+							label="Owner's public contact (email,twitter,telegram,facebook...)"
+							helperText="Owner's Contact details"
+							value={this.state.contactData}
+							InputProps={{
+								readOnly: true,
+								startAdornment: (
+								<InputAdornment position="start">
+									<VerifiedUser />
+								</InputAdornment>
+								)
+							}}
+							fullWidth
+						/>
+						<TextField
+							margin="normal"
+							label="Report Claimer SnowFlake ID (if already claimed)"
+							helperText="Report Claimer SnowFlake ID"
+							value={this.state.reportClaimedHydroId}
+							InputProps={{
+								readOnly: true,
+								startAdornment: (
+								<InputAdornment position="start">
+									<VerifiedUser />
+								</InputAdornment>
+								)
+							}}
+							fullWidth
+						/>
+					</form>
+				</DialogContent>
+				<DialogActions>
+					{this.state.reportStatus==="1"?(
+						<TransactionButton 
+							readyText='Claim Pet Found...'
+							method = { this.props.resolverContract.methods.claimLostReport(this.props.petId,this.props.hydroId)}
+							onConfirmation={() => {
+								this.props.handleClose()
+							}}
+						/>
+					):''}
+					<Button onClick={this.props.handleClose} color="primary">
+						Close
+					</Button>
+				</DialogActions>
+			</Dialog>
+		</div>
+		);
+	}
 }
-
 
 
 export default ClaimReportDialog;

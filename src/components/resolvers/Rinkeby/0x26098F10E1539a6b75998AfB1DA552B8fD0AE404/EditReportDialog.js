@@ -49,7 +49,7 @@ class EditReportDialog extends Component {
 		else
 			return {backgroundColor: green[500]};
 	}
-	componentWillReceiveProps(nextProps){
+	UNSAFE_componentWillReceiveProps(nextProps){
 		this.setState({
 			reportStatus: nextProps.reportStatus,
 			reportStatusTxt: nextProps.reportStatusTxt,
@@ -63,7 +63,7 @@ class EditReportDialog extends Component {
 		})
 	}
   
-	componentWillMount(){
+	UNSAFE_componentWillMount(){
 		this.setState({
 			reportStatus: this.props.reportStatus,
 			reportStatusTxt: this.props.reportStatusTxt,
@@ -106,7 +106,6 @@ class EditReportDialog extends Component {
 		return time;
 	}
   
-	  
 	handleChangeReportReward(event){
 		this.setState({reportReward: event.target.value}) 
 	}
@@ -123,160 +122,146 @@ class EditReportDialog extends Component {
 	render() {
 
 		return (
-	<div>
-       
-        <Dialog
-          open={this.props.open}
-          TransitionComponent={Transition}
-          onClose={this.handleClose}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle id="alert-dialog-slide-title">
-            {"Report details..."}
-          </DialogTitle>
-          <DialogContent>
-             <form noValidate autoComplete="off">
-                
-				<TextField
-					margin="normal"
-                  label="status"
-                  helperText="Report Status"
-                  value={this.state.reportStatusTxt}
-                  InputProps={{
-					  readOnly: true,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Info />
-                      </InputAdornment>
-                    )
-                  }}
-                  fullWidth
-                />
-	    
-         
-			   <TextField
-                  margin="normal"
-                  onChange={this.handleReportSceneDesc.bind(this)}
-                  multiline
-				  rows={2}
-				  label="When and where get lost"
-                  helperText="Describe when and where the pet get lost (max two lines)"
-                  value={this.state.reportSceneDescription}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CalendarToday />
-                      </InputAdornment>
-                    )
-                  }}
-                  fullWidth
-                />
-			
-				
-				<TextField
-                  margin="normal"
-                  label="Reward"
-                  helperText="Introduce Reward in HYDRO"
-                  onChange={this.handleChangeReportReward.bind(this)}
-                  value={this.state.reportReward}
-				  type="number"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MoneyIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                  fullWidth
-                />
-				
-				
-				<TextField
-                  margin="normal"
-                  label="Report Claimer Hydro ID"
-                  helperText="Report Claimer HydroID"
-                  value={this.state.reportClaimerHydroId}
-                  InputProps={{
-					  readOnly: true,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <RecordVoiceOver />
-                      </InputAdornment>
-                    )
-                  }}
-                  fullWidth
-                />
-				
-				
-              </form>
-          </DialogContent>
-          <DialogActions>
-		  {
-			  //new, removed or rewarded are states that allow new report creation
-		  }
-           {this.state.reportStatus==="0" || this.state.reportStatus==="3" || this.state.reportStatus==="4"?(
-                <TransactionButton 
-                  readyText='Submit New Report Details...'
-                 method = {() => this.props.resolverContract.methods.putLostReport(this.props.hydroId,this.props.petId,this.state.reportSceneDescription, this.state.reportReward)}
-                 onConfirmation={() => {
-					this.props.handleClose()
-                  }}
-                />
+		<div>
+			<Dialog
+				open={this.props.open}
+				TransitionComponent={Transition}
+				onClose={this.handleClose}
+				aria-labelledby="alert-dialog-slide-title"
+				aria-describedby="alert-dialog-slide-description"
+			>
+			<DialogTitle id="alert-dialog-slide-title">
+				{"Report details..."}
+			</DialogTitle>
+			<DialogContent>
+				<form noValidate autoComplete="off">
+					<TextField
+						margin="normal"
+						label="status"
+						helperText="Report Status"
+						value={this.state.reportStatusTxt}
+						InputProps={{
+							readOnly: true,
+							startAdornment: (
+								<InputAdornment position="start">
+									<Info />
+								</InputAdornment>
+							)
+						}}
+						fullWidth
+					/>
+					<TextField
+						margin="normal"
+						onChange={this.handleReportSceneDesc.bind(this)}
+						multiline
+						rows={2}
+						label="When and where get lost"
+						helperText="Describe when and where the pet get lost (max two lines)"
+						value={this.state.reportSceneDescription}
+						InputProps={{
+							startAdornment: (
+								<InputAdornment position="start">
+									<CalendarToday />
+								</InputAdornment>
+							)
+						}}
+						fullWidth
+					/>
+					<TextField
+						margin="normal"
+						label="Reward"
+						helperText="Introduce Reward in HYDRO"
+						onChange={this.handleChangeReportReward.bind(this)}
+						value={this.state.reportReward}
+						type="number"
+						InputProps={{
+							startAdornment: (
+								<InputAdornment position="start">
+									<MoneyIcon />
+								</InputAdornment>
+							)
+						}}
+						fullWidth
+					/>
+					<TextField
+						margin="normal"
+						label="Report Claimer Hydro ID"
+						helperText="Report Claimer HydroID"
+						value={this.state.reportClaimerHydroId}
+						InputProps={{
+							readOnly: true,
+							startAdornment: (
+								<InputAdornment position="start">
+									<RecordVoiceOver />
+								</InputAdornment>
+							)
+						}}
+						fullWidth
+					/>
+				</form>
+			</DialogContent>
+			<DialogActions>
+				{
+					//new, removed or rewarded are states that allow new report creation
+				}
+				{this.state.reportStatus==="0" || this.state.reportStatus==="3" || this.state.reportStatus==="4"?(
+					<TransactionButton 
+						readyText='Submit New Report Details...'
+						method = {() => this.props.resolverContract.methods.putLostReport(this.props.hydroId,this.props.petId,this.state.reportSceneDescription, this.state.reportReward)}
+						onConfirmation={() => {
+							this.props.handleClose()
+						}}
+					/>
 				):''}
 				{
 					//Pending (lost) can only remove by the owner
 				}
 				{this.state.reportStatus==="1"?(
-				<div>
-				 <TransactionButton 
-                  readyText='Update Report...'
-                 method = { () => this.props.resolverContract.methods.updateLostReport(this.props.hydroId,this.props.petId,this.state.reportSceneDescription, this.state.reportReward)}
-                 onConfirmation={() => {
-					this.props.handleClose()
-                  }}
-                />
-				<TransactionButton 
-                  readyText='Remove Report...'
-                 method = {() =>  this.props.resolverContract.methods.removeLostReport(this.props.hydroId,this.props.petId)}
-                 onConfirmation={() => {
-                    this.props.handleClose()
-                  }}
-                /> 
-				</div>
+					<div>
+						<TransactionButton 
+							readyText='Update Report...'
+							method = { () => this.props.resolverContract.methods.updateLostReport(this.props.hydroId,this.props.petId,this.state.reportSceneDescription, this.state.reportReward)}
+							onConfirmation={() => {
+								this.props.handleClose()
+							}}
+						/>
+						<TransactionButton 
+							readyText='Remove Report...'
+							method = {() =>  this.props.resolverContract.methods.removeLostReport(this.props.hydroId,this.props.petId)}
+							onConfirmation={() => {
+								this.props.handleClose()
+							}}
+						/> 
+					</div>
 				):''}
 				{
 					//Found by other can only transit to confirm or pending
 				}
 				{this.state.reportStatus==="2"?(
-				<div>
-				<TransactionButton 
-                  readyText='Confirm Reward...'
-                 method = { () => this.props.resolverContract.methods.confirmReward(this.props.hydroId,this.props.petId)}
-                 onConfirmation={() => {
-                    this.props.handleClose()
-                  }}
-                />
-				<TransactionButton 
-                  readyText=' Wrong Alert!  Revert Pet Found...'
-                 method = { this.props.resolverContract.methods.unclaimLostReport(this.props.petId)}
-                 onConfirmation={() => {
-                    this.handleClickUnclaimReport()
-                  }}
-                />
-				</div>
+					<div>
+						<TransactionButton 
+							readyText='Confirm Reward...'
+							method = { () => this.props.resolverContract.methods.confirmReward(this.props.hydroId,this.props.petId)}
+							onConfirmation={() => {
+								this.props.handleClose()
+							}}
+						/>
+						<TransactionButton 
+							readyText=' Wrong Alert!  Revert Pet Found...'
+							method = { this.props.resolverContract.methods.unclaimLostReport(this.props.petId)}
+							onConfirmation={() => {
+								this.handleClickUnclaimReport()
+							}}
+						/>
+					</div>
 				):''}
-				
-			<Button onClick={this.props.handleClose} color="primary">
-              Close
-            </Button>
-          
-          </DialogActions>
-        </Dialog>
-      </div>
-	  
-     
-    );
+				<Button onClick={this.props.handleClose} color="primary">
+					Close
+				</Button>
+			</DialogActions>
+		</Dialog>
+     </div>
+	);
   }
 }
 

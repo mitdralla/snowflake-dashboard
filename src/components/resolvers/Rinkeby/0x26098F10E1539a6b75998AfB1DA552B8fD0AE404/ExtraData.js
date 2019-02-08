@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Info from '@material-ui/icons/Info';
 import { useWeb3Context } from 'web3-react/hooks'
 
-export default function extraDataComponent ({ ein , sendExtraData}) {
+export default function extraDataComponent ({sendExtraData}) {
   
   const context = useWeb3Context()
   const [contactName, setContactName]  = useState('')
@@ -18,41 +18,41 @@ export default function extraDataComponent ({ ein , sendExtraData}) {
 
     return (
 		<div style={{width: '100%'}}>
-		<form noValidate autoComplete="off">
-			<TextField
-			  margin="normal"
-			  label="Contact Name"
-			  helperText="Introduce Contact Name or Alias"
-			  onChange={(event) => setContactName(event.target.value)}
-			  value={contactName}
-			  InputProps={{
-				startAdornment: (
-				  <InputAdornment position="start">
-					<Info />
-				  </InputAdornment>
-				)
-			  }}
-			  fullWidth
-			/>
-			<TextField
-			  margin="normal"
-			  label="Contact Data"
-			  helperText="Introduce public Contact Data, as facebook Id, telegram Id or public email"
-			  onChange={(event) => setContactData(event.target.value)}
-			  value={contactData}
-			  InputProps={{
-				startAdornment: (
-				  <InputAdornment position="start">
-					 <Info />
-				  </InputAdornment>
-				)
-			  }}
-			  fullWidth
-			/>
-		  </form>
-		  <Button onClick={handleClick} color="primary" autoFocus>
-				  Submit...
-		 </Button>
+			<form noValidate autoComplete="off">
+				<TextField
+					margin="normal"
+					label="Contact Name"
+					helperText="Introduce Contact Name or Alias"
+					onChange={(event) => setContactName(event.target.value)}
+					value={contactName}
+					InputProps={{
+						startAdornment: (
+							<InputAdornment position="start">
+								<Info />
+							</InputAdornment>
+						)
+					}}
+					fullWidth
+				/>
+				<TextField
+					margin="normal"
+					label="Contact Data"
+					helperText="Introduce public Contact Data, as facebook Id, telegram Id or public email"
+					onChange={(event) => setContactData(event.target.value)}
+					value={contactData}
+					InputProps={{
+						startAdornment: (
+							<InputAdornment position="start">
+								<Info />
+							</InputAdornment>
+						)
+					}}
+					fullWidth
+				/>
+			</form>
+			<Button onClick={handleClick} color="primary" autoFocus>
+				Submit...
+			</Button>
 		</div>
     )
 }

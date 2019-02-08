@@ -40,123 +40,117 @@ class MenuAppBar extends React.Component {
 	contactData:''
   };
 
-  componentDidMount(){
-	 this.props.resolverContract.methods.getOwner(this.props.hydroId).call()
-    .then(anOwner =>{
-	  this.setState(
-			{
-				contactName:anOwner.contactName,
-				contactData:anOwner.contactData
+	componentDidMount(){
+		this.props.resolverContract.methods.getOwner(this.props.hydroId).call()
+			.then(anOwner =>{
+				this.setState(
+					{
+						contactName:anOwner.contactName,
+						contactData:anOwner.contactData
+					})
 			})
-	})
-				
-  }
- 
-  handleOpenMenu = event => {
-	  this.setState({ openMenu:true});
-  };
+	}
 
- 
-  handleCloseMenu = () => {
-	  this.setState({ openMenu: false });
-  }
-   handleMyAccount = () => {
-	this.setState({ openMyAccount: true ,  openMenu: false});
-  }; 
+	handleOpenMenu = () => {
+		this.setState({ openMenu:true});
+	};
+
+	handleCloseMenu = () => {
+		this.setState({ openMenu: false });
+	}
+
+	handleMyAccount = () => {
+		this.setState({ openMyAccount: true ,  openMenu: false});
+	}; 
+
+	handleAbout = () => {
+		this.setState({ openAbout: true });
+	};
   
-  handleAbout = () => {
-	this.setState({ openAbout: true });
-  };
+	handleCloseMyAccount = () => {
+		this.setState({ openMyAccount: false });
+	};
+
+	handleCloseAbout = () => {
+		this.setState({ openAbout: false });
+	};
   
-  handleCloseMyAccount = () => {
-	this.setState({ openMyAccount: false });
-  };
-  
-   handleCloseAbout = () => {
-	this.setState({ openAbout: false });
-  };
-  
-  render() {
-	 
-    const { classes } = this.props;
+	render() {
+
+	const { classes } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
     return (
-      <div className={classes.root}>
-
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-				{"Pet Friend v0.3"}
-            </Typography>
-        
-              <div>
-                <IconButton
-                  aria-owns={open ? 'menu-appbar' : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleOpenMenu}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={this.state.openMenu}
-                  //onClose={this.handleCloseMenu}
-                >
-                  <MenuItem onClick={this.handleMyAccount}>My account...</MenuItem>
-				  <EditAccountDialog 
-						hydroId={this.props.hydroId}
-						open={this.state.openMyAccount}
-						resolverContract={this.props.resolverContract}
-						handleClose={this.handleCloseMyAccount}
-						contactName={this.state.contactName}
-						contactData={this.state.contactData}
-				  />
-                  <MenuItem onClick={this.handleAbout}>About...</MenuItem>
-				  <Dialog
-					  open={this.state.openAbout}
-					  onClose={this.handleCloseAbout}
-					  aria-labelledby="alert-dialog-title"
-					  aria-describedby="alert-dialog-description"
-					   modal={true}
-				   >
-				  <DialogTitle id="alert-dialog-title">{"FriendOfPets, a PocC of Snowflake Resolver"}</DialogTitle>
-				  <DialogContent>
-					<DialogContentText id="alert-dialog-description">
-					  This is a PoC of Snowflake Resolver, a DApp made for Snowflake Dashboard. This DApp allow to register several pets of your own, 
-					  make a report in case of pet lost, and helping others finding their pets, contributing to Community of Friend of Pets, and 
-					  earning a symbolic reward by the way! Please give me feedback at jzafradelpozo@gmail.com.
-				  
-					</DialogContentText>
-				  </DialogContent>
-				  <DialogActions>
-					<Button onClick={this.handleCloseAbout} color="primary" autoFocus>
-					  Ok
-					</Button>
-					
-				  </DialogActions>
-				</Dialog>
-                </Menu>
-              </div>
-            
-          </Toolbar>
-        </AppBar>
-      </div>
-    );
-  }
+		<div className={classes.root}>
+			<AppBar position="static">
+				<Toolbar>
+					<IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+						<MenuIcon />
+					</IconButton>
+					<Typography variant="h6" color="inherit" className={classes.grow}>
+						{"Pet Friend v1.0.1"}
+					</Typography>
+					<div>
+						<IconButton
+							aria-owns={open ? 'menu-appbar' : undefined}
+							aria-haspopup="true"
+							onClick={this.handleOpenMenu}
+							color="inherit"
+						>
+							<AccountCircle />
+						</IconButton>
+						<Menu
+							id="menu-appbar"
+							anchorOrigin={{
+								vertical: 'top',
+								horizontal: 'right',
+							}}
+							transformOrigin={{
+								vertical: 'top',
+								horizontal: 'right',
+							}}
+							open={this.state.openMenu}
+							//onClose={this.handleCloseMenu}
+						>
+							<MenuItem onClick={this.handleMyAccount}>My account...</MenuItem>
+							<EditAccountDialog 
+								hydroId={this.props.hydroId}
+								open={this.state.openMyAccount}
+								resolverContract={this.props.resolverContract}
+								handleClose={this.handleCloseMyAccount}
+								contactName={this.state.contactName}
+								contactData={this.state.contactData}
+							/>
+							<MenuItem onClick={this.handleAbout}>About...</MenuItem>
+							<Dialog
+								open={this.state.openAbout}
+								onClose={this.handleCloseAbout}
+								aria-labelledby="alert-dialog-title"
+								aria-describedby="alert-dialog-description"
+								modal={true}
+							>
+								<DialogTitle id="alert-dialog-title">{"FriendOfPets, a PocC of Snowflake Resolver"}</DialogTitle>
+								<DialogContent>
+									<DialogContentText id="alert-dialog-description">
+							This is a PoC of Snowflake Resolver, a DApp made for Snowflake Dashboard. This DApp allow to register several pets of your own, 
+							make a report in case of pet lost, and helping others finding their pets, contributing to Community of Friend of Pets, and 
+							earning a symbolic reward by the way! Please give me feedback at jzafradelpozo@gmail.com.
+									</DialogContentText>
+								</DialogContent>
+								<DialogActions>
+									<Button onClick={this.handleCloseAbout} color="primary" autoFocus>
+										Ok
+									</Button>
+								</DialogActions>
+							</Dialog>
+						</Menu>
+					</div>
+				</Toolbar>
+			</AppBar>
+		</div>
+	);
+	}
 }
 
 MenuAppBar.propTypes = {

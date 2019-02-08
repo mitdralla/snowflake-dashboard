@@ -66,68 +66,56 @@ export default class ReportHistoryTable extends React.Component {
 			}
 		)
 	}
-  
 
-
-	  
-    
-   render() {
-    return(
-		
-		<div>
-       
-        <Dialog
-          open={this.props.open}
-		  fullScreen={true}
-          //TransitionComponent={Transition}
-          onClose={this.handleClose}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle id="alert-dialog-slide-title">
-            {"Report history of Pet ID:"+this.props.chipId+", Name: "+this.props.name}
-          </DialogTitle>
-          <DialogContent>
-		  <div>
-			<Table>
-				<TableHead>
-					<TableRow >
-						<TableCell>Date</TableCell>
-						<TableCell >Status</TableCell>
-						<TableCell >Scene Desc</TableCell>
-						<TableCell >Claimer EIN</TableCell>
-						<TableCell ><MoneyIcon/></TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-				
-					
-						{this.state.events.map( ev => 
-							<TableRow key={this.props.petId+'_'+ev.returnValues.date}>
-								<TableCell>{this.formatTimestamp(ev.returnValues[2])}</TableCell>
-								<TableCell>{this.props.getStatusTxt(ev.returnValues[3])}</TableCell>
-								<TableCell>{ev.returnValues[4]}</TableCell>
-								<TableCell>{ev.returnValues[6]!==0?ev.returnValues[6]:''}</TableCell>
-								<TableCell>{ev.returnValues[5]}</TableCell>
-							</TableRow>
-						)}
-				</TableBody>
-			</Table>
-			{this.state.loading && <CircularProgress size={68} style={circularProgressStyle} />}
-			</div>
-		</DialogContent>
-		 <DialogActions>
-		  
-			<Button onClick={this.props.handleClose} color="primary">
-              Close
-            </Button>
-          
-          </DialogActions>
-		</Dialog>
-		
+	render() {
+		return(
+			<div>
+				<Dialog
+					open={this.props.open}
+					fullScreen={true}
+					//TransitionComponent={Transition}
+					onClose={this.handleClose}
+					aria-labelledby="alert-dialog-slide-title"
+					aria-describedby="alert-dialog-slide-description"
+				>
+				<DialogTitle id="alert-dialog-slide-title">
+					{"Report history of Pet ID:"+this.props.chipId+", Name: "+this.props.name}
+				</DialogTitle>
+				<DialogContent>
+					<div>
+						<Table>
+							<TableHead>
+								<TableRow >
+									<TableCell>Date</TableCell>
+									<TableCell >Status</TableCell>
+									<TableCell >Scene Desc</TableCell>
+									<TableCell >Claimer EIN</TableCell>
+									<TableCell ><MoneyIcon/></TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{this.state.events.map( ev => 
+									<TableRow key={this.props.petId+'_'+ev.returnValues.date}>
+										<TableCell>{this.formatTimestamp(ev.returnValues[2])}</TableCell>
+										<TableCell>{this.props.getStatusTxt(ev.returnValues[3])}</TableCell>
+										<TableCell>{ev.returnValues[4]}</TableCell>
+										<TableCell>{ev.returnValues[6]!==0?ev.returnValues[6]:''}</TableCell>
+										<TableCell>{ev.returnValues[5]}</TableCell>
+									</TableRow>
+								)}
+							</TableBody>
+						</Table>
+					{this.state.loading && <CircularProgress size={68} style={circularProgressStyle} />}
+					</div>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={this.props.handleClose} color="primary">
+						Close
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</div>
-    )
-  }
-
+		)
+	}
 }
 

@@ -13,28 +13,27 @@ import AboutDialog from './AboutDialog';
 export default class EditAccountDialog extends Component {
   
   
-  constructor(props) {
-    super(props)
-     this.state = {
-      contactName: '',
-      contactData: '',
-	  openAbout:false
- 	
-    }
-  }
+	constructor(props) {
+		super(props)
+			this.state = {
+			contactName: '',
+			contactData: '',
+			openAbout:false
+		}
+	}
   
   
-  componentDidMount(){
-	  this.props.resolverContract.methods.getOwner(this.props.hydroId).call()
-    .then(anOwner =>{
-	  this.setState(
-			{
-				contactName:anOwner.contactName,
-				contactData:anOwner.contactData,
-				openAbout:false
+	componentDidMount(){
+		this.props.resolverContract.methods.getOwner(this.props.hydroId).call()
+			.then(anOwner =>{
+				this.setState(
+				{
+					contactName:anOwner.contactName,
+					contactData:anOwner.contactData,
+					openAbout:false
+				})
 			})
-	})
-  }
+	}
 
 
   
@@ -97,36 +96,26 @@ export default class EditAccountDialog extends Component {
                 
                  
 				
-              </form>
-			  <div>
-			  </div>
-			   <TransactionButton
-                  readyText='Update account details...'
-               
-				 method = { () => this.props.resolverContract.methods.updateOwner(this.props.hydroId,this.state.contactName,this.state.contactData)}
-                 onConfirmation={() => {
-					this.props.handleSubmit()
-                  }}
-				/>
-				<Button onClick={this.handleOpenAbout.bind(this)} color="primary" autoFocus>
-					  About...
+			</form>
+			<div>
+				</div>
+					<TransactionButton
+						readyText='Update account details...'
+						method = { () => this.props.resolverContract.methods.updateOwner(this.props.hydroId,this.state.contactName,this.state.contactData)}
+						onConfirmation={() => {
+							this.props.handleSubmit()
+						}}
+					/>
+					<Button onClick={this.handleOpenAbout.bind(this)} color="primary" autoFocus>
+						About...
 					</Button>
 					<AboutDialog
 						openAbout={this.state.openAbout}
 						onClose={this.handleCloseAbout.bind(this)}
-						/>
-		 
-		  
-  
-				
+					/>
             </div>
-   
-
-       
-            
-     
-    );
-  }
+		);
+	}
 }
 
 
