@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import green from '@material-ui/core/colors/green';
 import { MetaMaskConnector } from 'web3-react/connectors'
 
-import InitializingWeb3 from './TEMP/InitializingWeb3'
+import InitializingWeb3 from './networkConnectors/InitializingWeb3'
 
 import App from './App'
 

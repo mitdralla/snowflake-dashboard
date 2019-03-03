@@ -9,9 +9,9 @@ import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import { Link } from 'react-router-dom'
 
-import { useNamedContract, useDebounce } from '../common/hooks'
-import SignatureButton from './common/SignatureButton'
-import TransactionButton from './common/TransactionButton'
+import { useNamedContract, useDebounce } from '../../common/hooks'
+import SignatureButton from '../common/SignatureButton'
+import TransactionButton from '../common/TransactionButton'
 
 export default function NoEIN () {
   const context = useWeb3Context()

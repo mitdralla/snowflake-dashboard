@@ -2,8 +2,8 @@ import React from 'react'
 import { Typography } from '@material-ui/core'
 import { useWeb3Context } from 'web3-react/hooks'
 
-import { useNamedContract } from '../common/hooks'
-import TransactionButton from './common/TransactionButton'
+import { useNamedContract } from '../../common/hooks'
+import TransactionButton from '../common/TransactionButton'
 
 export default function NoHydroId () {
   const context = useWeb3Context()
