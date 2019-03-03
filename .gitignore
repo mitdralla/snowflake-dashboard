@@ -19,6 +19,8 @@
 .idea/workspace.xml
 .idea*
 
+src/components/resolvers/Rinkeby/index.js
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
