@@ -6,9 +6,9 @@ import { useEIN, useHydroId, useEINDetails, useNamedContract } from '../common/h
 import AccountHeader from './AccountHeader'
 import SnowflakeHeader from './SnowflakeHeader'
 
-const NoSnowflakeProvider = lazy(() => import('./errors/NoSnowflakeProvider'))
-const NoEIN = lazy(() => import('./errors/NoEIN'))
-const NoHydroId = lazy(() => import('./errors/NoHydroId'))
+const NoSnowflakeProvider = lazy(() => import('./errors/NoSnowflakeProviderError'))
+const NoEIN = lazy(() => import('./errors/NoEINError'))
+const NoHydroId = lazy(() => import('./errors/NoHydroIdError'))
 const RouteTabs = lazy(() => import('./RouteTabs'))
 const FinalizeClaim = lazy(() => import('./routes/FinalizeClaim'))
 
