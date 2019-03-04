@@ -1,9 +1,8 @@
 import React from 'react';
-import Web3Provider from 'web3-react';
+import { Web3Provider, Connectors } from 'web3-react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom';
 import green from '@material-ui/core/colors/green';
-import { MetaMaskConnector } from 'web3-react/connectors'
 
 import InitializingWeb3 from './networkConnectors/InitializingWeb3'
 
@@ -40,6 +39,7 @@ const theme = createMuiTheme({
 })
 theme.palette.success.contrastText = theme.palette.getContrastText(green[700])
 
+const { MetaMaskConnector } = Connectors
 const metamask = new MetaMaskConnector({ supportedNetworks: [4] })
 const connectors = { metamask }
 

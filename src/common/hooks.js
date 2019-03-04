@@ -1,10 +1,49 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { useWeb3Context, useNetworkName, useERC20Balance, useAccountEffect } from 'web3-react/hooks'
+import { useWeb3Context} from 'web3-react'
 import { toDecimal } from 'web3-react/utilities'
 
 import contracts from './contracts'
 import { GENERIC_SNOWFLAKE_RESOLVER_ABI } from './utilities'
 import { default as defaultLogo } from '../components/resolvers/defaultLogo.png'
+
+
+export function useNetworkName (networkId) {
+  const context = useWeb3Context()
+  return useMemo(() => getNetworkName(networkId || context.networkId), [networkId, context.networkId])
+}
+
+export function useAccountEffect(effect, depends = []) {
+  const context = useWeb3Context()
+  useEffect(effect, [...depends, context.networkId, context.account, context.reRenderers.accountReRenderer])
+}
+
+export function useAccountBalance (address, {numberOfDigits = 3, format} = {}) {
+  const context = useWeb3Context()
+  const [ balance, setBalance ] = useState(undefined)
+
+  useAccountEffect(() => {
+    getAccountBalance(context.web3js, address || context.account, format)
+      .then(balance =>
+        setBalance(Number(balance).toLocaleString(undefined, { maximumFractionDigits: numberOfDigits }))
+      )
+  })
+
+  return balance
+}
+
+export function useERC20Balance (ERC20Address, address, numberOfDigits = 3) {
+  const context = useWeb3Context()
+  const [ ERC20Balance, setERC20Balance ] = useState(undefined)
+
+  useAccountEffect(() => {
+    getERC20Balance(context.web3js, ERC20Address, address || context.account)
+      .then(balance =>
+        setERC20Balance(Number(balance).toLocaleString(undefined, { maximumFractionDigits: numberOfDigits }))
+      )
+  })
+
+  return ERC20Balance
+}
 
 export function useNamedContract(name) {
   const networkName = useNetworkName()

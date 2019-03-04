@@ -6,7 +6,7 @@ import WalletConnectQRCodeModal from 'walletconnect-qrcode-modal'
 
 import Web3Error from './Web3Error'
 import Loader from './Loader'
-import { Connector, MetaMaskConnector, InfuraConnector, WalletConnectConnector } from 'web3-react/connectors'
+import { Connector, MetaMaskConnector, WalletConnectConnector } from 'web3-react'
 import Common, { Button, ButtonLink, Text, Link } from './common'
 
 import metamaskLogo from './assets/metamask.svg'
@@ -112,10 +112,6 @@ const MetamaskLogo = styled(Logo)`
   background-image: url(${metamaskLogo});
 `
 
-const InfuraLogo = styled(Logo)`
-  background-image: url(${infuraLogo});
-`
-
 const WalletConnectLogo = styled(Logo)`
   background-image: url(${walletConnectLogo});
 `
@@ -132,18 +128,6 @@ function getDetails(connector: Connector) {
         </>
       ),
       buttonText: 'Connect to MetaMask'
-    }
-  if (connector instanceof InfuraConnector)
-    return {
-      logo: <InfuraLogo />,
-      text: (
-        <>
-          View with{' '}
-          <Link href='https://infura.io/' target='_blank' rel='noopener noreferrer'>Infura</Link>
-          .
-        </>
-      ),
-      buttonText: 'View'
     }
 
   if (!(connector instanceof WalletConnectConnector))
@@ -190,7 +174,7 @@ export default function InitializingWeb3 ({ children, connectors }) {
   useEffect(() => {
     const cleanup: Array<Function> = []
     for (const connector of Object.keys(connectors).map(k => connectors[k])) {
-      if (connector instanceof MetaMaskConnector || connector instanceof InfuraConnector) {
+      if (connector instanceof MetaMaskConnector) {
         connector.on('Activated', ActivatedHandler)
         cleanup.push(() => connector.removeListener('Activated', ActivatedHandler))
       }
