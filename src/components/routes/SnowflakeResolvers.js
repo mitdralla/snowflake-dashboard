@@ -203,6 +203,8 @@ export default
         </TableBody>
         <TableFooter>
           <TableRow>
+
+            {/* Button to add a resolver (dApp) - redirects to dApp store. */}
             <TableCell className={classes.addResolver}>
               <Button component={Link} to="/dapp-store" variant="fab" color="primary">
                 <AddIcon />
