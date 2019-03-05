@@ -140,7 +140,7 @@ export default
                 Once you enter text in the field, "UPDATE ALLOWANCES" button appears, which you can click to SAVE the data.
                 Upon savin the data MetaMask opens. Once you confirm the transaction, the button toggles to processing and an
                 animation appears. Once the transaction succeeds, your ammount is reflected in the row, and your total balance is updated.
-                Currently not working? */}
+                Currently not certain if fully working/buggy. It ultimately updated buy only after page load. Could be due to confirmation times. */}
               <TableCell padding="checkbox">
                 <Checkbox checked={selectedResolvers[i]} onClick={() => handleCheckboxClick(resolver, i)} />
               </TableCell>
