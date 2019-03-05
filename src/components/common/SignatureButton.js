@@ -1,3 +1,5 @@
+// Button used when transacting. Can be used in multiple places where signing transations, but currently is generic. Has states for ready, sending, error and success.
+
 import React from 'react';
 import { Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress'

@@ -1,0 +1,4 @@
+What is "oldClientRaindropContract"?
+
+const oldClientRaindropContract = useNamedContract('oldClientRaindrop')
+const clientRaindropContract = useNamedContract('clientRaindrop')

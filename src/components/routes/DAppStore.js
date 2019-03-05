@@ -94,6 +94,8 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
     <div>
       {!ready ? undefined : (
         <>
+
+          {/* A user needs to paste in the resolver (dApp) ETH address. */}
           <TextField
             label="Resolver Address"
             helperText="A Resolver address."
@@ -102,6 +104,8 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
             onChange={e => setResolverAddress(e.target.value)}
             fullWidth
           />
+
+          {/* A user needs to determine the allowance (in HYDRO) they are giving to the dApp. */}
           <TextField
             label="Allowance"
             type="number"
@@ -112,6 +116,7 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
             fullWidth
           />
 
+        {/* Once filled in and valid, a modal pops up. */}
         {recognizedResolver && resolverDetails[recognizedResolverIndex].extraDataComponent &&
             <Dialog
               fullScreen
@@ -153,6 +158,10 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
           />
 
           <div className={classes.root}>
+
+            {/* A list of all resolvers (dApps) in the store. Just by looking, a user can determine if they
+              have added the resolver (dApp) or not. If they have added the dApp, a checkmark appears.
+              If a user click on a dApp they have added, it opens a modal to use it. */}
             <GridList className={classes.gridList} spacing={6} cellHeight={200} cols={3}>
               {allResolvers.map((resolver, i) => (
                 <GridListTile
@@ -179,6 +188,8 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
                     title={resolverDetails[i].name}
                     subtitle={<span>{resolverDetails[i].description}</span>}
                     actionIcon={
+
+                      {/* A checkmark showing the dApp has already been installed. Clicking on the dApp opens the dApp. */}
                       <DoneIcon
                         style={einDetails.resolvers.includes(resolver) ? {} : { display: 'none' }}
                         className={classes.icon}
@@ -191,6 +202,8 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
           </div>
 
           <div>
+          {/* If the user pastes in a resolver they have already added they are presented
+            with a notice they have already added the dApp. */}
             <Snackbar
               anchorOrigin={{
                 vertical: 'bottom',

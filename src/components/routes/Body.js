@@ -24,6 +24,8 @@ export default function Body ({ ein, hydroIdAddress }) {
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography variant="h5">Resolver Management</Typography>
             </ExpansionPanelSummary>
+
+            {/* Toggles all expansion of module */}
             <ExpansionPanelDetails style={{overflowX: 'auto'}}>
               <SnowflakeResolvers
                 key={JSON.stringify(einDetails.resolvers)}

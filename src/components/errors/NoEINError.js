@@ -95,6 +95,11 @@ export default function NoEIN () {
         !
       </Typography>
 
+
+      {/* When a user comes to the site for the first time and they have not set their EIN they are presented with this step.
+        A user then clicks a 'next' button.
+        IMO this should not be an error,.. but a possible state a user is in.
+        The user here is asked to pick a HydroID, a unique identifier. */}
       <Stepper activeStep={activeStep} orientation="vertical">
         <Step key={0}>
           <StepLabel>{activeStep === 0 ? 'Pick a Hydro ID' : `Hydro ID: ${hydroId}`}</StepLabel>
@@ -111,6 +116,8 @@ export default function NoEIN () {
               onChange={e => wrappedSetHydroId(e.target.value)}
               fullWidth
             />
+
+            {/* Clicking this button brings the user to step 2. */}
             <Button
               variant="contained"
               disabled={hydroId === '' || hydroIdError !== null}
@@ -121,6 +128,11 @@ export default function NoEIN () {
           </StepContent>
         </Step>
 
+        {/* A user is then presented with a 'back' button and a 'sign button', the user
+        can click 'back' and it returns them back to the text box where they picked their ID and can make modifications.
+        When a user clicks 'sign' it creates a MetaMAsk transaction you need to confirm (which is not obvious!!
+        You need to open MetaMask and SIGN the transaction.) You then move to step 3.
+         */}
         <Step key={1}>
           <StepLabel>Give Permission</StepLabel>
           <StepContent>
@@ -144,6 +156,7 @@ export default function NoEIN () {
           </StepContent>
         </Step>
 
+        {/* Once a user has signed the transaction, they could either go back to to step2, and step 1, or click 'claim' to claim it. */}
         <Step key={2}>
           <StepLabel>Claim your Identity</StepLabel>
           <StepContent>
@@ -156,6 +169,8 @@ export default function NoEIN () {
             >
               Back
             </Button>
+
+            {/* The final button in the process of claiming an identity. */}
             <TransactionButton
               readyText='Send'
               method={() => snowflakeContract.methods.createIdentityDelegated(

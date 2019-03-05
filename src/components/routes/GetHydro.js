@@ -37,6 +37,7 @@ export default withStyles(styles)(function GetHydro({ ein, classes }) {
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
 
+  // Gets the exchange rate for ETH -> Hydro conversions.
   async function getExchangeRate(hydroAmount) {
     return uniswapWidgetContract.methods
       .swapAndDepositOutput(hydroAmount, deadline, ein)
@@ -95,6 +96,9 @@ export default withStyles(styles)(function GetHydro({ ein, classes }) {
 
   return (
     <div style={{ width: "100%" }}>
+
+      {/* Text and H6 for buying HYDRO with ETH and depositing it into your Snowflake.
+        Currently there is an onchange which adjust the current exchange rate. */}
       <Typography
         variant="h6"
         gutterBottom
@@ -116,6 +120,8 @@ export default withStyles(styles)(function GetHydro({ ein, classes }) {
         fullWidth
       />
 
+      {/* Button for buying HYDRO with ETH and depositing it into your Snowflake.
+        Currently has a limit of 10,000 HYDRO. */}
       <TransactionButton
         readyText={
           buyAmount <= 10000
@@ -139,6 +145,8 @@ export default withStyles(styles)(function GetHydro({ ein, classes }) {
         disabled={buyAmount > 10000}
       />
 
+      {/* Text and H6 for depositing HYDRO from your current account into your Snowflake.
+        Currently there is an onchange which adjust the current exchange rate. */}
       <Typography
         variant="h6"
         gutterBottom
@@ -158,6 +166,7 @@ export default withStyles(styles)(function GetHydro({ ein, classes }) {
         fullWidth
       />
 
+      {/* Button for depositing HYDRO from your current account into your Snowflake. */}
       <TransactionButton
         readyText="Deposit Hydro"
         method={() =>
@@ -170,6 +179,8 @@ export default withStyles(styles)(function GetHydro({ ein, classes }) {
         onConfirmation={context.forceAccountReRender}
       />
 
+      {/* Text and H6 for withdrawing HYDRO from your Snowflake into your current account.
+        Currently there is an onchange which adjust the current exchange rate. */}
       <Typography
         variant="h6"
         gutterBottom
@@ -188,12 +199,14 @@ export default withStyles(styles)(function GetHydro({ ein, classes }) {
         fullWidth
       />
 
+      {/* Button for determining the max amount of HYDRO you can withdraw and fills the number into the textbox. */}
       <Button
         onClick={() => setWithdrawAmount(toDecimal(snowflakeBalance, 18))}
       >
         Max
       </Button>
 
+      {/* Button for withdrawing HYDRO from your Snowflake account into your current account. */}
       <TransactionButton
         readyText="Withdraw Hydro"
         method={() =>
