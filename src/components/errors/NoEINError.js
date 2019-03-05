@@ -169,6 +169,8 @@ export default function NoEIN () {
             >
               Back
             </Button>
+
+            {/* The final button in the process of claiming an identity. */}
             <TransactionButton
               readyText='Send'
               method={() => snowflakeContract.methods.createIdentityDelegated(
