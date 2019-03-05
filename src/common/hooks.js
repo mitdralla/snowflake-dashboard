@@ -6,6 +6,8 @@ import contracts from './contracts'
 import { GENERIC_SNOWFLAKE_RESOLVER_ABI } from './utilities'
 import { default as defaultLogo } from '../components/resolvers/defaultLogo.png'
 
+
+// Gets selected contract data.
 export function useNamedContract(name) {
   const networkName = useNetworkName()
   const contractVariables = contracts[networkName][name]
@@ -17,6 +19,7 @@ export function useGenericContract(address, ABI) {
   return useMemo(() => new context.library.eth.Contract(ABI, address), [address, ABI])
 }
 
+// Gets the users EIN.
 export function useEIN (address) {
   const context = useWeb3Context()
   const _1484Contract = useNamedContract('1484')
@@ -35,6 +38,7 @@ export function useEIN (address) {
   return ein
 }
 
+// Gets the users HydroId.
 export function useHydroId () {
   const clientRaindropContract = useNamedContract('clientRaindrop')
   const ein = useEIN()
@@ -54,6 +58,7 @@ export function useHydroId () {
     return hydroId === null ? [null, null] : [hydroId.hydroId, hydroId.hydroIdAddress]
 }
 
+// Use the users Hydro balance.
 export function useHydroBalance () {
   const context = useWeb3Context()
   const networkName = useNetworkName()
@@ -61,6 +66,7 @@ export function useHydroBalance () {
   return useERC20Balance(contracts[networkName].token.address, context.account)
 }
 
+// Use the users Snowflake balance.
 export function useSnowflakeBalance (ein, unconverted = false) {
   const snowflakeContract = useNamedContract('snowflake')
   const [snowflakeBalance, setSnowflakeBalance] = useState()
@@ -77,6 +83,7 @@ export function useSnowflakeBalance (ein, unconverted = false) {
   return ein === null ? "0" : snowflakeBalance
 }
 
+// Use get the identity of the selected Snowflke user and set their details.
 export function useEINDetails (ein) {
   const _1484Contract = useNamedContract('1484')
   const [einDetails, setEINDetails] = useState()
@@ -93,6 +100,7 @@ export function useEINDetails (ein) {
   return ein === null ? null : einDetails
 }
 
+// The resolver (dApp) has an allowance of Hydro it can use. The allowance gets set here.
 export function useResolverAllowances (resolvers = []) {
   const ein = useEIN()
   const snowflakeContract = useNamedContract('snowflake')
@@ -111,6 +119,7 @@ export function useResolverAllowances (resolvers = []) {
   return ein === null ? null : allowances
 }
 
+// Gets the details of the resolver (dApp) - Properties like its name and description are defined here.
 async function getResolverDetails(web3js, snowflakeContract, networkName, resolver) {
   const genericContract = new web3js.eth.Contract(GENERIC_SNOWFLAKE_RESOLVER_ABI, resolver)
 
@@ -127,6 +136,8 @@ async function getResolverDetails(web3js, snowflakeContract, networkName, resolv
       description: null
     }))
 
+  // Look for the resolvers (dApps) in the 'resolvers/{network_name}' folder and import their details. Network names are Rinkeby and Mainnet.
+  // Resolver properties will most likely be added on to here.
   const resolverPath = `components/resolvers/${networkName}/${resolver}`
   const localDetails = await import('../' + resolverPath)
     .then(details => ({
@@ -145,6 +156,7 @@ async function getResolverDetails(web3js, snowflakeContract, networkName, resolv
   return {...chainDetails, ...localDetails}
 }
 
+// Get the seleced resolvers (dApps) details.
 export function useResolverDetails (resolvers = []) {
   const context = useWeb3Context()
   const networkName = useNetworkName()
@@ -162,6 +174,7 @@ export function useResolverDetails (resolvers = []) {
   return resolverDetails
 }
 
+// Not entirely sure what this is doing, but a debounce limits the amount of times a function can fire.
 export function useDebounce (value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
