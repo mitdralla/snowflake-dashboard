@@ -27,6 +27,7 @@ const styles = theme => ({
   }
 })
 
+// Not sure what this is currently doing.
 function allowancesReducer (state, action) {
   switch (action.type) {
     case 'change': {
@@ -41,6 +42,7 @@ function allowancesReducer (state, action) {
   }
 }
 
+// Not sure what this is currently doing.
 function selectedReducer (state, action) {
   switch (action.type) {
     case 'toggle': {
@@ -102,6 +104,7 @@ export default
         />
       </Toolbar>
 
+      {/* Table for displaying the users resolvers (dApps). */}
       <Table>
         <TableHead>
           <TableRow>
