@@ -1,10 +1,11 @@
-import React from "react";
-import { Button } from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
-import { useWeb3Context, useTransactionManager } from "web3-react/hooks";
-import { getEtherscanLink } from "web3-react/utilities";
+import React from 'react';
+import { Button } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { withTheme, withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import { useWeb3Context } from 'web3-react';
+import { getEtherscanLink } from '../../common/utilities';
+import { useTransactionManager } from '../../common/hooks';
 
 const styles = theme => ({
   ready: {

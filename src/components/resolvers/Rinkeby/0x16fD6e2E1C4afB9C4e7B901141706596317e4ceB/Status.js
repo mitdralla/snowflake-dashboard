@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { TextField, Typography, Button } from '@material-ui/core'
 
-import { useAccountEffect, useWeb3Context } from 'web3-react/hooks'
-
-import { useGenericContract, useNamedContract } from '../../../../common/hooks'
+import { useWeb3Context } from 'web3-react'
+import { useGenericContract, useNamedContract, useAccountEffect } from '../../../../common/hooks'
 import TransactionButton from '../../../common/TransactionButton'
 
 import { ABI } from './index'

@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-
-import { useWeb3Context } from 'web3-react/hooks'
 import WalletConnectQRCodeModal from 'walletconnect-qrcode-modal'
 
 import Web3Error from './Web3Error'
 import Loader from './Loader'
-import { Connector, MetaMaskConnector, WalletConnectConnector } from 'web3-react'
+import { Connectors, useWeb3Context } from 'web3-react'
 import Common, { Button, ButtonLink, Text, Link } from './common'
 
 import metamaskLogo from './assets/metamask.svg'
-import infuraLogo from './assets/infura.svg'
+// import infuraLogo from './assets/infura.svg'
 import walletConnectLogo from './assets/walletConnect.svg'
 
+const { MetaMaskConnector, WalletConnectConnector } = Connectors;
 const greyTextColor = '#a3a5a8'
 const mobilePixelCutoff = '600px'
 

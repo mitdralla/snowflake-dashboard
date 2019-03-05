@@ -6,10 +6,10 @@ import { withStyles } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete'
 import Typography from '@material-ui/core/Typography';
-import { useWeb3Context } from 'web3-react/hooks'
-import { getEtherscanLink } from 'web3-react/utilities'
+import { useWeb3Context } from 'web3-react'
 
 import { useNamedContract } from '../../common/hooks'
+import { getEtherscanLink } from '../../common/utilities'
 import TransactionButton from '../common/TransactionButton'
 
 

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Connectors } from 'web3-react'
 import error from './assets/error.svg';
 import Common, { Text, Button } from './common'
-import { getNetworkName } from 'web3-react/utilities'
+import { getNetworkName } from '../../common/utilities'
 
 const Logo = styled.div`
   margin: 1em;

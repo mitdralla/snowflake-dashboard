@@ -1,11 +1,19 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
-import { useWeb3Context} from 'web3-react'
-import { toDecimal } from 'web3-react/utilities'
-
+import { useState, useEffect, useReducer, useMemo, useRef } from 'react'
+import { useWeb3Context, isValidWeb3ContextInterface } from 'web3-react'
 import contracts from './contracts'
-import { GENERIC_SNOWFLAKE_RESOLVER_ABI } from './utilities'
-import { default as defaultLogo } from '../components/resolvers/defaultLogo.png'
+import {
+  GENERIC_SNOWFLAKE_RESOLVER_ABI,
+  TRANSACTION_ERROR_CODES,
+  getNetworkName,
+  getAccountBalance,
+  getEtherscanLink,
+  getERC20Balance,
+  signPersonal,
+  sendTransaction,
+  toDecimal
+} from './utilities';
 
+import { default as defaultLogo } from '../components/resolvers/defaultLogo.png'
 
 export function useNetworkName (networkId) {
   const context = useWeb3Context()
@@ -31,18 +39,82 @@ export function useAccountBalance (address, {numberOfDigits = 3, format} = {}) {
   return balance
 }
 
+export function useEtherscanLink (type, data, networkId) {
+  const context = useWeb3Context()
+  return useMemo(
+    () => getEtherscanLink(networkId || context.networkId, type, data), [networkId, context.networkId, type, data]
+  )
+}
+
 export function useERC20Balance (ERC20Address, address, numberOfDigits = 3) {
   const context = useWeb3Context()
   const [ ERC20Balance, setERC20Balance ] = useState(undefined)
 
   useAccountEffect(() => {
-    getERC20Balance(context.web3js, ERC20Address, address || context.account)
-      .then(balance =>
-        setERC20Balance(Number(balance).toLocaleString(undefined, { maximumFractionDigits: numberOfDigits }))
-      )
+    if (isValidWeb3ContextInterface(context)) {
+      const addressToCheck = address ? address : context.account
+      if (addressToCheck === null) throw Error('tests')
+      getERC20Balance(context.library, ERC20Address, context.account || address)
+        .then((balance) =>
+          setERC20Balance(Number(balance).toLocaleString(undefined, { maximumFractionDigits: numberOfDigits }))
+        )
+    }
   })
 
   return ERC20Balance
+}
+
+const initialSignature = {
+  state: 'ready',
+  data: {
+    signature:      undefined,
+    signatureError: undefined
+  }
+}
+
+function signatureReducer (state, action) {
+  switch (action.type) {
+    case 'READY':
+      return initialSignature
+    case 'PENDING':
+      return { state: 'pending', data: initialSignature.data }
+    case 'SUCCESS':
+      return { state: 'success', data: { ...state.data, ...action.data } }
+    case 'ERROR':
+      return { state: 'error',   data: { ...state.data, ...action.data } }
+    default:
+      throw Error('No default case.')
+  }
+}
+
+export function useSignPersonalManager (message, { handlers = {} } = {}) {
+  const context = useWeb3Context()
+
+  const [signature, dispatch] = useReducer(signatureReducer, initialSignature)
+
+  function _signPersonal () {
+    if (!isValidWeb3ContextInterface(context))
+      throw Error('No library in context. Ensure your connector is configured correctly.')
+
+    if (context.account === null)
+      throw Error('No account in context. Ensure your connector is configured correctly.')
+
+    dispatch({ type: 'PENDING' })
+
+    signPersonal(context.library, context.account, message)
+      .then((signature: any) => {
+        dispatch({ type: 'SUCCESS', data: { signature: signature } })
+        handlers.success && handlers.success(signature)
+      })
+      .catch((error: Error) => {
+        dispatch({ type: 'ERROR', data: { signatureError: error } })
+        handlers.error && handlers.error(error)
+      })
+  }
+
+  function resetSignature () { dispatch({ type: 'READY' }) }
+
+  return [signature.state, signature.data, _signPersonal, resetSignature]
 }
 
 export function useNamedContract(name) {
@@ -238,4 +310,81 @@ export function useSessionStorageState(defaultValue, key) {
   }
 
   return [sessionStorageState, setSessionStorageStateWrapper, removeSessionStorageState]
+}
+
+const initialTransaction = {
+  state: 'ready',
+  data: {
+    transactionHash:          undefined,
+    transactionReceipt:       undefined,
+    transactionConfirmations: undefined,
+    transactionError:         undefined,
+    transactionErrorCode:     undefined
+  }
+}
+
+function transactionReducer (state: any, action: any) {
+  switch (action.type) {
+    case 'READY':
+      return initialTransaction
+    case 'SENDING':
+      return { state: 'sending', data: initialTransaction.data }
+    case 'PENDING':
+      return { state: 'pending', data: { ...state.data, ...action.data } }
+    case 'SUCCESS':
+      return { state: 'success', data: { ...state.data, ...action.data } }
+    case 'ERROR':
+      return { state: 'error',   data: { ...state.data, ...action.data } }
+    default:
+      throw Error('No default case.')
+  }
+}
+
+export function useTransactionManager (method, { handlers = {}, transactionOptions = {}, maximumConfirmations } = {} ) {
+  const context = useWeb3Context()
+
+  const [transaction, dispatch] = useReducer(transactionReducer, initialTransaction)
+
+  const wrappedHandlers = {
+    transactionHash: (transactionHash: any) => {
+      dispatch({ type: 'PENDING', data: { transactionHash: transactionHash } })
+      handlers.transactionHash && handlers.transactionHash(transactionHash)
+    },
+    receipt: (transactionReceipt: any) => {
+      dispatch({ type: 'SUCCESS', data: { transactionReceipt: transactionReceipt } })
+      handlers.receipt && handlers.receipt(transactionReceipt)
+    },
+    confirmation: (transactionConfirmations: any, transactionReceipt: any) => {
+      if (maximumConfirmations && transactionConfirmations <= maximumConfirmations) {
+        dispatch({
+          type: 'SUCCESS',
+          data: { transactionConfirmations: transactionConfirmations, transactionReceipt: transactionReceipt }
+        })
+        handlers.confirmation && handlers.confirmation(transactionConfirmations, transactionReceipt)
+      }
+    }
+  }
+
+  function _sendTransaction () {
+    if (!isValidWeb3ContextInterface(context))
+      throw Error('No library in context. Ensure your connector is configured correctly.')
+
+    if (context.account === null)
+      throw Error('No account in context. Ensure your connector is configured correctly.')
+
+    dispatch({ type: 'SENDING' })
+
+    sendTransaction(context.library, context.account, method, wrappedHandlers, transactionOptions)
+      .catch((error: any) => {
+        const transactionErrorCode = error.code ?
+          (TRANSACTION_ERROR_CODES.includes(error.code) ? error.code : undefined) :
+          undefined
+        dispatch({ type: 'ERROR', data: { transactionError: error, transactionErrorCode: transactionErrorCode } })
+        handlers.error && handlers.error(error)
+      })
+  }
+
+  function resetTransaction () { dispatch({ type: 'READY' }) }
+
+  return [transaction.state, transaction.data, _sendTransaction, resetTransaction, TRANSACTION_ERROR_CODES]
 }

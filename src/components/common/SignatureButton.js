@@ -3,7 +3,8 @@ import { Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { withTheme, withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types';
-import { useSignPersonalManager } from 'web3-react/hooks'
+// import { useSignPersonalManager } from 'web3-react/hooks'
+import { useSignPersonalManager } from '../../common/hooks'
 
 const styles = theme => ({
   ready: {

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Typography } from '@material-ui/core'
-import { useWeb3Context, useAccountEffect } from 'web3-react/hooks'
+import { useWeb3Context } from 'web3-react'
 import { Button } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import Stepper from '@material-ui/core/Stepper';
@@ -9,7 +9,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import { Link } from 'react-router-dom'
 
-import { useNamedContract, useDebounce } from '../../common/hooks'
+import { useNamedContract, useDebounce, useAccountEffect} from '../../common/hooks'
 import SignatureButton from '../common/SignatureButton'
 import TransactionButton from '../common/TransactionButton'
 
