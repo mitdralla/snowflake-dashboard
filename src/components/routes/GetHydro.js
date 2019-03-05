@@ -1,3 +1,5 @@
+// This is the current 'Get HYDRO' tab. This tab contains 3 modules - 'Buying', 'Depositing' and 'Withdrawing'.
+
 import React, { useState, useEffect, useMemo } from "react";
 import { TextField } from "@material-ui/core";
 import { Button } from "@material-ui/core";

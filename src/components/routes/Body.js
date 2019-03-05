@@ -1,3 +1,5 @@
+// This is the current 'Home' tab. This tab contains two modules - 'Resolvers' and 'Address Management'.
+
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';

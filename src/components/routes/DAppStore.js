@@ -1,3 +1,6 @@
+// This is the current 'dApp Store' tab. This tab contains text fields to add a resolver and set it's allowance.
+// It also contains a list of all resolvers (dApps) in the store in a grid.
+
 import React, { useState, useReducer, Suspense } from 'react';
 import { TextField, Button, GridList, GridListTile, GridListTileBar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -10,6 +13,7 @@ import { useWeb3Context, useNetworkName } from 'web3-react/hooks'
 import { fromDecimal } from 'web3-react/utilities'
 import { Dialog, DialogActions, DialogContent } from '@material-ui/core';
 
+// A constant that holds all resolver data.
 import ALL_SNOWFLAKE_RESOLVERS from '../resolvers'
 
 import { useEINDetails, useResolverDetails, useSnowflakeBalance, useNamedContract } from '../../common/hooks'
@@ -183,13 +187,14 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
                     }
                   }}
                   >
+
                   <img src={resolverDetails[i].logo} alt={resolverDetails[i].name}/>
+                  
+                  {/* A checkmark showing the dApp has already been installed. Clicking on the dApp opens the dApp. */}
                   <GridListTileBar
                     title={resolverDetails[i].name}
                     subtitle={<span>{resolverDetails[i].description}</span>}
                     actionIcon={
-
-                      {/* A checkmark showing the dApp has already been installed. Clicking on the dApp opens the dApp. */}
                       <DoneIcon
                         style={einDetails.resolvers.includes(resolver) ? {} : { display: 'none' }}
                         className={classes.icon}

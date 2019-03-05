@@ -1,3 +1,5 @@
+// This is the current 'Claim Address' tab. This tab contains steps to link an address to an EIN.
+
 import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router'
 import { withStyles } from '@material-ui/core/styles';
