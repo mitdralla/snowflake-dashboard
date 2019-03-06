@@ -15,10 +15,10 @@ jobs:
     script:
     - npm run lint
     - npm run build
-  - stage: deploy
-    if: type = push
-    install:
-    - npm install
-    script:
-    - echo -e "machine github.com\n  login $GH_TOKEN" > ~/.netrc
-    - npm run deploy
+  # - stage: deploy
+  #   if: type = push
+  #   install:
+  #   - npm install
+  #   script:
+  #   - echo -e "machine github.com\n  login $GH_TOKEN" > ~/.netrc
+  #   - npm run deploy
