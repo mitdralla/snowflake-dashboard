@@ -184,12 +184,13 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
                   }}
                   >
                   <img src={resolverDetails[i].logo} alt={resolverDetails[i].name}/>
+
+                  {/* A checkmark showing the dApp has already been installed.
+                    Clicking on the dApp opens the dApp. */}
                   <GridListTileBar
                     title={resolverDetails[i].name}
                     subtitle={<span>{resolverDetails[i].description}</span>}
                     actionIcon={
-
-                      {/* A checkmark showing the dApp has already been installed. Clicking on the dApp opens the dApp. */}
                       <DoneIcon
                         style={einDetails.resolvers.includes(resolver) ? {} : { display: 'none' }}
                         className={classes.icon}

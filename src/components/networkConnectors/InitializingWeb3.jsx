@@ -150,7 +150,7 @@ export default function InitializingWeb3 ({ children, connectors }) {
   const [initializationOver, setInitializationOver] = useState(false)
 
   useEffect(() => {
-    context.setConnector('metamask')
+    context.setConnector('metamask', true)
       .catch(() => {
         setInitializationOver(true)
         console.log('Unable to automatically activate MetaMask') // eslint-disable-line no-console
@@ -159,6 +159,7 @@ export default function InitializingWeb3 ({ children, connectors }) {
 
   const walletConnectCalled = useRef(false)
   const activeTimeouts = useRef([])
+
   useEffect(() => () => activeTimeouts.current.forEach(t => window.clearTimeout(t)), [])
 
   useEffect(() => {
@@ -190,6 +191,7 @@ export default function InitializingWeb3 ({ children, connectors }) {
   function ActivatedHandler () {
     activeTimeouts.current = activeTimeouts.current.slice().concat([window.setTimeout(() => setShowLoader(true), 150)])
   }
+
   function URIAvailableHandler (connector: Connector, URI: string) {
     if (connector.isConnected)
       activeTimeouts.current = activeTimeouts.current.slice().concat([window.setTimeout(() => setShowLoader(true), 150)])
@@ -213,8 +215,12 @@ export default function InitializingWeb3 ({ children, connectors }) {
     context.unsetConnector()
   }
 
+  console.log("initializationOver:", initializationOver)
+  // console.log(context)
   if (!initializationOver && !context.active) return null
+
   if (context.error) return <Web3Error error={context.error} connectors={connectors} connectorName={context.connectorName} unsetConnector={unsetConnectorWrapper} />
+
   if (context.active) return children
 
   return showLoader ? <Loader /> :
