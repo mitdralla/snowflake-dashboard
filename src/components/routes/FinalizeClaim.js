@@ -86,6 +86,10 @@ function SignWithApproving ({ ein, setCurrentClaim }) {
         Link a new address to your EIN.
       </Typography>
 
+      {/* This is step 1 in claiming an address.
+      A user pastes in their ETH address into the text field. On change it is either accepted or an error is thrown
+      to alert the user that it is either invalid or already used. Once a user pastes in a valid unclaimed address, they can click 'next'.
+      This will be reqorked into the onboarding screens of welcoming a user to the experience. */}
       <Stepper activeStep={activeStep} orientation="vertical">
         <Step key={0}>
           <StepLabel>{activeStep === 0 ? 'Address to Add' : `Address to Add: ${targetAddress}`}</StepLabel>
@@ -112,6 +116,8 @@ function SignWithApproving ({ ein, setCurrentClaim }) {
           </StepContent>
         </Step>
 
+        {/* This is step 2 in claiming an address.
+         Once accepted, the user needs to grant permission to link the wallet address. */}
         <Step key={1}>
           <StepLabel>Give Permission</StepLabel>
           <StepContent>
@@ -275,6 +281,8 @@ export default withRouter(function FinalizeClaim ({ ein, location, history }) {
           <Typography gutterBottom color="textPrimary">
             If you are trying to link your current account to an existing identity, you need a signature! Visit your existing Provider to get one.
           </Typography>
+
+          {/* If a user has come to the store and has not claimed an address, they see this buttin */}
           <Button component={Link} to="/">Creating a new Identity?</Button>
         </>
       }

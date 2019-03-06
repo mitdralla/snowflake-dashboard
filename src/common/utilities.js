@@ -89,6 +89,7 @@ export function getERC20Balance (web3js, ERC20Address, address) {
     .then(([decimals, balance]) => toDecimal(balance, decimals))
 }
 
+// Get the selected contract.
 export function getContract (contractName) {
   const contractData = contracts[this.props.w3w.getNetworkName()][contractName]
   return this.props.w3w.getContract(contractData.ABI, contractData.address)
@@ -96,6 +97,7 @@ export function getContract (contractName) {
 
 export const GENERIC_SNOWFLAKE_RESOLVER_ABI = [{"constant":false,"inputs":[],"name":"renounceOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"snowflakeDescription","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"snowflakeName","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"callOnRemoval","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isOwner","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"callOnSignUp","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"snowflakeAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_snowflakeName","type":"string"},{"name":"_snowflakeDescription","type":"string"},{"name":"_snowflakeAddress","type":"address"},{"name":"_callOnSignUp","type":"bool"},{"name":"_callOnRemoval","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"constant":false,"inputs":[{"name":"_snowflakeAddress","type":"address"}],"name":"setSnowflakeAddress","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]
 
+// Get the details of a resolver (dApp).
 export async function getResolverDetails (address) {
   const resolverPath = `components/resolvers/${this.props.w3w.getNetworkName()}/${address}`
   const resolverData = await import('../' + resolverPath)
@@ -119,11 +121,13 @@ export async function getResolverDetails (address) {
   }
 }
 
+// Get a list of all resolvers (dApps) in the store.
 export async function getAllResolvers () {
   // eslint-disable-next-line
   return (await import('../' + `components/resolvers/${this.props.w3w.getNetworkName()}`)).default
 }
 
+// Get the resolvers properties.
 export async function getResolverData (resolverAddress, hydroId) {
   const snowflakeContract = getContract.bind(this)('snowflake')
   const resolverDetails = await getResolverDetails.bind(this)(resolverAddress)
@@ -140,7 +144,7 @@ export async function getResolverData (resolverAddress, hydroId) {
       })
       .catch(() => '')
 
-  // this never throws
+  // this never throws (but why?)
   return Promise.all([name, description, allowance])
     .then(([name, description, allowance]) => {
       return {
@@ -206,6 +210,7 @@ export async function signPersonal (library, address, message) {
     })
 }
 
+// Links to Etherscans txn.
 export function linkify (type, data, display, variant) {
   display = display === undefined ? data : display
 

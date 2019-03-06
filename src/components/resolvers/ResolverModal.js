@@ -1,3 +1,6 @@
+// The main modal for a resolver (dApp). When a user opens a dApp it opens within a modal
+// with its components body and a close button.
+
 import React, { useState, Suspense } from 'react'
 import { IconButton } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'

@@ -26,6 +26,7 @@ const styles = theme => ({
   }
 })
 
+// Not sure what this is currently doing.
 function allowancesReducer (state, action) {
   switch (action.type) {
     case 'change': {
@@ -40,6 +41,7 @@ function allowancesReducer (state, action) {
   }
 }
 
+// Not sure what this is currently doing.
 function selectedReducer (state, action) {
   switch (action.type) {
     case 'toggle': {
@@ -87,6 +89,9 @@ export default
       <Typography>Manage Resolvers linked to your 1484 Snowflake Identity.</Typography>
 
       <Toolbar style={{visibility: anySelected ? 'visible' : 'hidden'}}>
+
+       {/* This button is initially hidden but appears when you check off the resolver (dApp) row in the table.
+         This allows the user to edit the HYDRO allowance. This button confirms the update and preforms the transaction. */}
         <TransactionButton
           show={allowanceChanged}
           readyText={<React.Fragment>Update Allowances<SwapVertIcon/></React.Fragment>}
@@ -98,9 +103,12 @@ export default
         />
       </Toolbar>
 
+      {/* Table for displaying the users resolvers (dApps). */}
       <Table>
         <TableHead>
           <TableRow>
+
+            {/* Toggles all rows as 'selected' or as 'unselected' */}
             <TableCell padding="checkbox">
               {resolvers.length === 0 ? '' : (
                 <Checkbox
@@ -129,9 +137,17 @@ export default
               key={resolver}
               selected={selectedResolvers[i]}
             >
+
+              {/* Toggles the editability of the resolver row, the HYDRO allowance amount becomes a text input field.
+                Once you enter text in the field, "UPDATE ALLOWANCES" button appears, which you can click to SAVE the data.
+                Upon savin the data MetaMask opens. Once you confirm the transaction, the button toggles to processing and an
+                animation appears. Once the transaction succeeds, your ammount is reflected in the row, and your total balance is updated.
+                Currently not certain if fully working/buggy. It ultimately updated buy only after page load. Could be due to confirmation times. */}
               <TableCell padding="checkbox">
                 <Checkbox checked={selectedResolvers[i]} onClick={() => handleCheckboxClick(resolver, i)} />
               </TableCell>
+
+              {/* Link to open Smart Contract in Etherscan. - potential enhancement, link to #tokentxns */}
               <TableCell>
                 <a
                   href={getEtherscanLink(context.networkId, 'address', resolver)}
@@ -141,7 +157,11 @@ export default
                   {resolver}
                 </a>
               </TableCell>
+
+              {/* The name of the resolver (dApp). */}
               <TableCell>{resolverDetails[i].name}</TableCell>
+
+              {/* Icon/link to open the resolver (dApp). */}
               <TableCell padding="checkbox">
                 {resolverDetails[i].component === null ? '' :
                   <ResolverModal ein={ein}>
@@ -149,7 +169,11 @@ export default
                   </ResolverModal>
                 }
               </TableCell>
+
+              {/* The description of the resolver (dApp). */}
               <TableCell>{resolverDetails[i].description}</TableCell>
+
+              {/* A number display of the amount of HYDRO in the resolvers (dApps) allowance. Example: 500 */}
               <TableCell >
                 {!selectedResolvers[i] ? resolverAllowances[i] :
                   <TextField
@@ -162,6 +186,8 @@ export default
                   />
                 }
               </TableCell>
+
+              {/* Button/icon to remove resolver (dApp) from Snowflake. */}
               <TableCell padding="checkbox">
                 {resolver !== clientRaindropAddress &&
                   <TransactionButton
@@ -176,6 +202,8 @@ export default
         </TableBody>
         <TableFooter>
           <TableRow>
+
+            {/* Button to add a resolver (dApp) - redirects to dApp store. */}
             <TableCell className={classes.addResolver}>
               <Button component={Link} to="/dapp-store" variant="fab" color="primary">
                 <AddIcon />

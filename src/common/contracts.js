@@ -1,3 +1,5 @@
+/* Contract definitions for the dAppStore */
+
 export default {
   Mainnet: {
     1484: {
