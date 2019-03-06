@@ -1,5 +1,6 @@
 import { useState, useEffect, useReducer, useMemo, useRef } from 'react'
-import { useWeb3Context, isValidWeb3ContextInterface } from 'web3-react'
+import { useWeb3Context } from 'web3-react'
+import { isValidWeb3ContextInterface } from 'web3-react/dist/types'
 import contracts from './contracts'
 import {
   GENERIC_SNOWFLAKE_RESOLVER_ABI,
@@ -30,7 +31,7 @@ export function useAccountBalance (address, {numberOfDigits = 3, format} = {}) {
   const [ balance, setBalance ] = useState(undefined)
 
   useAccountEffect(() => {
-    getAccountBalance(context.web3js, address || context.account, format)
+    getAccountBalance(context.library, address || context.account, format)
       .then(balance =>
         setBalance(Number(balance).toLocaleString(undefined, { maximumFractionDigits: numberOfDigits }))
       )

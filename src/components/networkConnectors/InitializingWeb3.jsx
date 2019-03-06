@@ -215,8 +215,6 @@ export default function InitializingWeb3 ({ children, connectors }) {
     context.unsetConnector()
   }
 
-  console.log("initializationOver:", initializationOver)
-  // console.log(context)
   if (!initializationOver && !context.active) return null
 
   if (context.error) return <Web3Error error={context.error} connectors={connectors} connectorName={context.connectorName} unsetConnector={unsetConnectorWrapper} />

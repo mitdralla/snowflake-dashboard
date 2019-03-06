@@ -64,9 +64,9 @@ export function getNetworkName (networkId) {
   return networkDataById[networkId].name
 }
 
-export function getAccountBalance (web3js, address, format = 'ether') {
-  return web3js.eth.getBalance(address)
-    .then(balance => web3js.utils.fromWei(balance, format))
+export function getAccountBalance (library, address, format = 'ether') {
+  return library.eth.getBalance(address)
+    .then(balance => library.utils.fromWei(balance, format))
 }
 
 export function getEtherscanLink(networkId, type, data) {
