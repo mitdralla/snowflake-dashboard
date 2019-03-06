@@ -1,3 +1,7 @@
+// This is the 'Resolver Management' module on the 'Home' tab. It allows a user to add and view their added resolvers (dApps).
+// It currently shows the user a table row list of wallet addresses that have been added that links to Etherscan.
+// The plus button links to 'Claim Address' tab.
+
 import React, { useReducer } from 'react'
 import { Toolbar, Checkbox, Table, TableHead, TableBody, TableRow, TableCell, TableFooter } from '@material-ui/core'
 import { Link } from 'react-router-dom'

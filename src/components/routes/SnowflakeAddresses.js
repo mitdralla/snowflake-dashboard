@@ -1,3 +1,7 @@
+// This is the 'Address Management' module on the 'Home' tab. It allows a user to add a new wallet address to access their Snowflake.
+// It currently shows the user a table row list of wallet addresses that have been added that links to Etherscan.
+// The plus button links to 'Claim Address' tab.
+
 import React from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableFooter } from '@material-ui/core';
 import { Button } from '@material-ui/core';
@@ -37,6 +41,8 @@ export default withStyles(styles)(function SnowflakeAddresses ({ classes, associ
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
+
+        {/* A table list row of address that have access to a users Snowflake */}
         <TableBody>
           {associatedAddresses.map(address => (
             <TableRow key={address}>
@@ -61,6 +67,8 @@ export default withStyles(styles)(function SnowflakeAddresses ({ classes, associ
             </TableRow>
           ))}
         </TableBody>
+
+        {/* Redirect to claim address tab */}
         <TableFooter>
           <TableRow>
             <TableCell className={classes.addAddress}>
