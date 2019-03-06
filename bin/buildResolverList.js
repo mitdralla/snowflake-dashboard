@@ -1,3 +1,5 @@
+#!/bin/node
+
 const { readdirSync, statSync, writeFileSync } = require('fs')
 const { join } = require('path')
 
