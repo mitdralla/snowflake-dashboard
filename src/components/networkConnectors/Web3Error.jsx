@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Connector, InjectedConnector } from 'web3-react/connectors'
+import { Connectors } from 'web3-react'
 import error from './assets/error.svg';
 import Common, { Text, Button } from './common'
-import { getNetworkName } from 'web3-react/utilities'
+import { getNetworkName } from '../../common/utilities'
 
 const Logo = styled.div`
   margin: 1em;
@@ -42,15 +42,16 @@ const ErrorText = styled(Text)`
 export default function Web3Error ({ error, connectors, connectorName, unsetConnector }) {
   console.error(`The '${connectorName}' connector threw an error.`) // eslint-disable-line no-console
   console.error(error) // eslint-disable-line no-console
+  const { Connector, MetaMaskConnector } = Connectors
 
   const getErrorMessage = () => {
-    if (error.code === InjectedConnector.errorCodes.ETHEREUM_ACCESS_DENIED)
+    if (error.code === MetaMaskConnector.errorCodes.ETHEREUM_ACCESS_DENIED)
       return 'Grant access to continue.'
-    if (error.code === InjectedConnector.errorCodes.NO_WEB3)
+    if (error.code === MetaMaskConnector.errorCodes.NO_WEB3)
       return 'No Web3 Provider Found.'
-    if (error.code === InjectedConnector.errorCodes.LEGACY_PROVIDER)
+    if (error.code === MetaMaskConnector.errorCodes.LEGACY_PROVIDER)
       return 'Update your legacy Web3 Provider.'
-    if (error.code === InjectedConnector.errorCodes.UNLOCK_REQUIRED)
+    if (error.code === MetaMaskConnector.errorCodes.UNLOCK_REQUIRED)
       return 'Unlock your Ethereum Account.'
     if (error.code === Connector.errorCodes.UNSUPPORTED_NETWORK) {
       const supportedNetworkNames = connectors[connectorName].supportedNetworks.map((networkId: number) => getNetworkName(networkId))

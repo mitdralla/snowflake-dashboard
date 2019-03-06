@@ -3,11 +3,11 @@ import { TextField } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { toDecimal, fromDecimal } from "web3-react/utilities";
-import { useWeb3Context } from "web3-react/hooks";
+import { useWeb3Context } from "web3-react";
 
 import TransactionButton from "../common/TransactionButton";
 import { useNamedContract, useSnowflakeBalance } from "../../common/hooks";
+import { toDecimal, fromDecimal } from "../../common/utilities";
 
 const MAX_UINT_256 = "0xffffffffffffffffffffffffffffff";
 

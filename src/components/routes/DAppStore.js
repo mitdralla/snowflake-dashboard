@@ -6,13 +6,13 @@ import { Snackbar, SnackbarContent } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { Link } from 'react-router-dom'
-import { useWeb3Context, useNetworkName } from 'web3-react/hooks'
-import { fromDecimal } from 'web3-react/utilities'
+import { useWeb3Context } from 'web3-react'
 import { Dialog, DialogActions, DialogContent } from '@material-ui/core';
 
 import ALL_SNOWFLAKE_RESOLVERS from '../resolvers'
 
-import { useEINDetails, useResolverDetails, useSnowflakeBalance, useNamedContract } from '../../common/hooks'
+import { fromDecimal } from "../../common/utilities";
+import { useEINDetails, useResolverDetails, useSnowflakeBalance, useNamedContract, useNetworkName } from '../../common/hooks'
 
 import TransactionButton from '../common/TransactionButton'
 
@@ -184,12 +184,13 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
                   }}
                   >
                   <img src={resolverDetails[i].logo} alt={resolverDetails[i].name}/>
+
+                  {/* A checkmark showing the dApp has already been installed.
+                    Clicking on the dApp opens the dApp. */}
                   <GridListTileBar
                     title={resolverDetails[i].name}
                     subtitle={<span>{resolverDetails[i].description}</span>}
                     actionIcon={
-
-                      {/* A checkmark showing the dApp has already been installed. Clicking on the dApp opens the dApp. */}
                       <DoneIcon
                         style={einDetails.resolvers.includes(resolver) ? {} : { display: 'none' }}
                         className={classes.icon}

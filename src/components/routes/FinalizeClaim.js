@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router'
 import { withStyles } from '@material-ui/core/styles';
-import { getEtherscanLink } from 'web3-react/utilities'
-import { useAccountEffect, useWeb3Context } from 'web3-react/hooks'
+import { useWeb3Context } from 'web3-react'
 import { Link, Redirect } from 'react-router-dom'
 import { TextField } from '@material-ui/core';
 import { fromRpcSig, toRpcSig, isValidChecksumAddress } from 'ethereumjs-util'
@@ -16,7 +15,8 @@ import { Typography } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
-import { useNamedContract, useEIN, useSessionStorageState } from '../../common/hooks'
+import { useNamedContract, useEIN, useSessionStorageState, useAccountEffect } from '../../common/hooks'
+import { getEtherscanLink } from '../../common/utilities'
 import TransactionButton from '../common/TransactionButton'
 import SignatureButton from '../common/SignatureButton'
 import Copyable from '../common/Copyable'

@@ -13,32 +13,32 @@ import EditPetDialog from './EditPetDialog';
 import LostReportCardv2 from './LostReportCardv2';
 
 import { ABI } from './index'
-import { useGenericContract } from '../../../../common/hooks'
-import { useAccountEffect, useWeb3Context } from 'web3-react/hooks'
+import { useGenericContract, useAccountEffect } from '../../../../common/hooks'
+import { useWeb3Context } from 'web3-react'
 
 
 const reportStatusResources=['Lively', 'Lost', 'Found', 'Removed', 'Rewarded'];
 
 
 export default function PetOwnerView ({ ein }) {
-  
+
 	const context = useWeb3Context()
-  
+
   const resolverContract = useGenericContract('0x26098F10E1539a6b75998AfB1DA552B8fD0AE404', ABI)
-  
+
   const [ownerPets, setOwnerPets] = useState([])
   const [lostReportKeys, setLostReportKeys] = useState([])
   const [openNewPet, setOpenNewPet] = useState(false)
-  
+
   useAccountEffect(() => {
     resolverContract.methods.getAllLostReportKeys().call().then(theKeys => setLostReportKeys(theKeys))
 	resolverContract.methods.getOwnerPets(ein).call().then(theKeys => setOwnerPets(theKeys))
   })
-  
-		
+
+
 	function getStatusTxt(status){
 		return reportStatusResources[status];
-		
+
 	}
 
 	function handleClickOpenNewPet(){
@@ -65,7 +65,7 @@ export default function PetOwnerView ({ ein }) {
 		//no nothing at the moment
 		context.forceAccountReRender();
 	}
-  
+
 	function refreshReports(){
 		context.forceAccountReRender();
 	}
@@ -77,7 +77,7 @@ export default function PetOwnerView ({ ein }) {
 					<Typography variant={"h6"}>Your Account details</Typography>
 				</ExpansionPanelSummary>
 				<ExpansionPanelDetails>
-				<EditAccountDialog 
+				<EditAccountDialog
 						hydroId={ein}
 						resolverContract={resolverContract}
 						handleSubmit= {handleRefreshOwnerData}
@@ -91,17 +91,17 @@ export default function PetOwnerView ({ ein }) {
 				<ExpansionPanelDetails>
 					<div style={{width: '100%'}}>
 						<div>
-							<GridList 
+							<GridList
 								spacing={3}
 								cellHeight={'auto'}
 								cols={3}
 							>
 							{ownerPets.map( aPetId =>
 								<GridListTile key={aPetId}>
-									<PetCard 
+									<PetCard
 										key ={aPetId}
 										petId={aPetId}
-										resolverContract={resolverContract} 
+										resolverContract={resolverContract}
 										hydroId = {ein}
 										refreshPets = {refreshPets}
 										getStatusTxt = {getStatusTxt}
@@ -109,13 +109,13 @@ export default function PetOwnerView ({ ein }) {
 									/>
 								</GridListTile>
 							)}
-							</GridList>	 
+							</GridList>
 						</div>
 						<div>
 							<Button variant="outlined" size="medium" color="default" onClick={handleClickOpenNewPet}>
 								Register New Pet...
 							</Button>
-							<EditPetDialog 
+							<EditPetDialog
 								hydroId={ein}
 								petId={''}
 								petType={''}
@@ -137,14 +137,14 @@ export default function PetOwnerView ({ ein }) {
 				</ExpansionPanelSummary>
 				<ExpansionPanelDetails>
 					<div style={{width: '100%'}}>
-						<GridList 
+						<GridList
 							spacing={3}
 							cellHeight={'auto'}
 							cols={3}
 						>
-						{lostReportKeys.map( akey => 
+						{lostReportKeys.map( akey =>
 							<GridListTile key={'lost_'+akey}>
-								<LostReportCardv2 
+								<LostReportCardv2
 									key={akey}
 									petId={akey}
 									resolverContract={resolverContract}
@@ -154,17 +154,10 @@ export default function PetOwnerView ({ ein }) {
 								/>
 							</GridListTile>
 						)}
-						</GridList>	 
+						</GridList>
 					</div>
 				</ExpansionPanelDetails>
 			</ExpansionPanel>
         </div>
 	);
 }
-
-
-
-
-
-
-

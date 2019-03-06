@@ -1,5 +1,5 @@
 import React from 'react';
-import { useWeb3Context, useAccountBalance, useEtherscanLink } from 'web3-react/hooks';
+import { useWeb3Context } from 'web3-react'
 import * as classNames from "classnames"
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
@@ -7,7 +7,7 @@ import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import { withStyles } from '@material-ui/core/styles';
 
-import { useHydroBalance, useNamedContract } from '../common/hooks'
+import { useHydroBalance, useAccountBalance, useEtherscanLink, useNamedContract } from '../common/hooks'
 
 const styles = theme => ({
   root: {

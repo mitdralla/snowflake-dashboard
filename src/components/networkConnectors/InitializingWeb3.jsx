@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-
-import { useWeb3Context } from 'web3-react/hooks'
 import WalletConnectQRCodeModal from 'walletconnect-qrcode-modal'
 
 import Web3Error from './Web3Error'
 import Loader from './Loader'
-import { Connector, MetaMaskConnector, InfuraConnector, WalletConnectConnector } from 'web3-react/connectors'
+import { Connectors, useWeb3Context } from 'web3-react'
 import Common, { Button, ButtonLink, Text, Link } from './common'
 
 import metamaskLogo from './assets/metamask.svg'
-import infuraLogo from './assets/infura.svg'
+// import infuraLogo from './assets/infura.svg'
 import walletConnectLogo from './assets/walletConnect.svg'
 
+const { MetaMaskConnector, WalletConnectConnector } = Connectors;
 const greyTextColor = '#a3a5a8'
 const mobilePixelCutoff = '600px'
 
@@ -112,10 +111,6 @@ const MetamaskLogo = styled(Logo)`
   background-image: url(${metamaskLogo});
 `
 
-const InfuraLogo = styled(Logo)`
-  background-image: url(${infuraLogo});
-`
-
 const WalletConnectLogo = styled(Logo)`
   background-image: url(${walletConnectLogo});
 `
@@ -132,18 +127,6 @@ function getDetails(connector: Connector) {
         </>
       ),
       buttonText: 'Connect to MetaMask'
-    }
-  if (connector instanceof InfuraConnector)
-    return {
-      logo: <InfuraLogo />,
-      text: (
-        <>
-          View with{' '}
-          <Link href='https://infura.io/' target='_blank' rel='noopener noreferrer'>Infura</Link>
-          .
-        </>
-      ),
-      buttonText: 'View'
     }
 
   if (!(connector instanceof WalletConnectConnector))
@@ -167,7 +150,7 @@ export default function InitializingWeb3 ({ children, connectors }) {
   const [initializationOver, setInitializationOver] = useState(false)
 
   useEffect(() => {
-    context.setConnector('metamask')
+    context.setConnector('metamask', true)
       .catch(() => {
         setInitializationOver(true)
         console.log('Unable to automatically activate MetaMask') // eslint-disable-line no-console
@@ -176,6 +159,7 @@ export default function InitializingWeb3 ({ children, connectors }) {
 
   const walletConnectCalled = useRef(false)
   const activeTimeouts = useRef([])
+
   useEffect(() => () => activeTimeouts.current.forEach(t => window.clearTimeout(t)), [])
 
   useEffect(() => {
@@ -190,7 +174,7 @@ export default function InitializingWeb3 ({ children, connectors }) {
   useEffect(() => {
     const cleanup: Array<Function> = []
     for (const connector of Object.keys(connectors).map(k => connectors[k])) {
-      if (connector instanceof MetaMaskConnector || connector instanceof InfuraConnector) {
+      if (connector instanceof MetaMaskConnector) {
         connector.on('Activated', ActivatedHandler)
         cleanup.push(() => connector.removeListener('Activated', ActivatedHandler))
       }
@@ -207,6 +191,7 @@ export default function InitializingWeb3 ({ children, connectors }) {
   function ActivatedHandler () {
     activeTimeouts.current = activeTimeouts.current.slice().concat([window.setTimeout(() => setShowLoader(true), 150)])
   }
+
   function URIAvailableHandler (connector: Connector, URI: string) {
     if (connector.isConnected)
       activeTimeouts.current = activeTimeouts.current.slice().concat([window.setTimeout(() => setShowLoader(true), 150)])
@@ -231,7 +216,9 @@ export default function InitializingWeb3 ({ children, connectors }) {
   }
 
   if (!initializationOver && !context.active) return null
+
   if (context.error) return <Web3Error error={context.error} connectors={connectors} connectorName={context.connectorName} unsetConnector={unsetConnectorWrapper} />
+
   if (context.active) return children
 
   return showLoader ? <Loader /> :

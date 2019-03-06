@@ -28,10 +28,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import { useAccountEffect, useWeb3Context } from 'web3-react/hooks'
-import { toDecimal, fromDecimal } from 'web3-react/utilities'
-
-import { useSnowflakeBalance, useGenericContract } from '../../../../common/hooks'
+import { useWeb3Context } from 'web3-react'
+import { toDecimal, fromDecimal } from '../../../../common/utilities'
+import { useSnowflakeBalance, useGenericContract, useAccountEffect } from '../../../../common/hooks'
 import TransactionButton from '../../../common/TransactionButton'
 
 import { ABI } from './index'

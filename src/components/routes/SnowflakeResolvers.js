@@ -9,11 +9,10 @@ import { withStyles } from '@material-ui/core'
 import { TextField } from '@material-ui/core'
 import SwapVertIcon from '@material-ui/icons/SwapVert'
 import Typography from '@material-ui/core/Typography'
-import { useWeb3Context } from 'web3-react/hooks'
-import { fromDecimal } from 'web3-react/utilities'
-import { getEtherscanLink } from 'web3-react/utilities'
+import { useWeb3Context } from 'web3-react'
 
 import { useNamedContract } from '../../common/hooks'
+import { getEtherscanLink, fromDecimal } from '../../common/utilities'
 import TransactionButton from '../common/TransactionButton'
 import ResolverModal from '../resolvers/ResolverModal'
 
