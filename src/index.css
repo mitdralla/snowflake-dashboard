@@ -14,3 +14,27 @@ body {
 #root {
   height: 100%;
 }
+
+.HeroCarouselWrapper {
+  height: 210px;
+  background-color: #ccc;
+  padding: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.HeroCarouselWrapper .ItemWrapper {
+  height: 150px;
+  width: 300px;
+  background-color: #929292;
+  padding: 30px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-right: 15px;
+  margin-bottom: 40px;
+}
+
+.HeroCarouselWrapper .ItemWrapper:hover {
+  background-color: #616161;
+  cursor: pointer;
+}

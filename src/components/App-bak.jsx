@@ -3,11 +3,8 @@ import { withRouter, Switch, Route, Redirect } from 'react-router'
 import { withStyles } from '@material-ui/core/styles'
 import { useEIN, useHydroId, useEINDetails, useNamedContract } from '../common/hooks'
 
-import '../index.css'
+import AccountHeader from './AccountHeader'
 import SnowflakeHeader from './SnowflakeHeader'
-import Header from '../templates/sections/Header'
-import Footer from '../templates/sections/Footer'
-import HeroCarousel from '../templates/sections/HeroCarousel'
 
 const NoSnowflakeProvider = lazy(() => import('./states/NoSnowflakeProvider'))
 const NoEIN = lazy(() => import('./states/NoEIN'))
@@ -79,9 +76,8 @@ export default withRouter(withStyles(styles)(function App ({ classes, location }
 
   return (
     <div>
-      <Header />
-      <HeroCarousel />
-      <br />
+      <AccountHeader />
+      <hr />
       <SnowflakeHeader ein={ein} hydroId={hydroId} />
 
       <div className={classes.width}>
@@ -90,9 +86,6 @@ export default withRouter(withStyles(styles)(function App ({ classes, location }
           {Display()}
         </Suspense>
       </div>
-
-      <br />
-      <Footer />
     </div>
   )
 }))
