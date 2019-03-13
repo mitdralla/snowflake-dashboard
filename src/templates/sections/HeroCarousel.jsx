@@ -10,10 +10,10 @@ import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import { withStyles } from '@material-ui/core/styles';
 import OwlCarousel from 'react-owl-carousel2'
-import '../../index.css';
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.css';
 import '../../../node_modules/react-owl-carousel2/src/owl.theme.green.css';
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.js';
+import '../../index.css';
 
 // Placeholder Images
 import demoBG1 from './../../assets/img/angry_birds_logo.jpg'
@@ -32,7 +32,7 @@ import { Nav, Navbar, NavDropdown, Form, FormControl, Jumbotron, Button, Grid, C
 const options = {
   items: config.HERO_CAROUSEL_MAX_ITEMS,
   loop: true,
-  margin: 10,
+  margin: 20,
   responsiveClass: true,
   responsive:{
       0:{
@@ -48,13 +48,13 @@ const options = {
       1000:{
           items: 5,
           nav: true,
-          loop: true
+          loop: true,
       }
   },
   autoplay: false,
   autoplayTimeout: 3000,
   autoplayHoverPause: false,
-  autoWidth: true,
+  autoWidth: false,
   navigation: false
 };
 
@@ -62,9 +62,7 @@ const options = {
 const events = {
   onDragged: function(event) {},
   onChanged: function(event) {}
-}
-
-
+};
 
 const styles = theme => ({
   root: {
@@ -78,7 +76,7 @@ const styles = theme => ({
 })
 
 var slideBG1 = {
-  backgroundImage: "url(" + demoBG1 + ")"
+  backgroundImage: "url(" + demoBG1 + ")",
 };
 
 var slideBG2 = {
@@ -113,28 +111,44 @@ function HeroCarousel({ classes }) {
   return (
     <OwlCarousel options={options} events={events} >
       <div className="item dAppCarouselItem" style={slideBG1}>
-        <div className=""></div>
+        <div className="itemContent slideWidth">
+          <h4>Title</h4>
+        </div>
       </div>
       <div className="item dAppCarouselItem" style={slideBG2}>
-        <div className=""></div>
+        <div className="itemContent slideWidth">
+          <h4>Title</h4>
+        </div>
       </div>
       <div className="item dAppCarouselItem" style={slideBG3}>
-        <div className=""></div>
+        <div className="itemContent slideWidth">
+          <h4>Title</h4>
+        </div>
       </div>
       <div className="item dAppCarouselItem" style={slideBG4}>
-        <div className=""></div>
+        <div className="itemContent slideWidth">
+          <h4>Title</h4>
+        </div>
       </div>
       <div className="item dAppCarouselItem" style={slideBG5}>
-        <div className=""></div>
+        <div className="itemContent slideWidth">
+          <h4>Title</h4>
+        </div>
       </div>
       <div className="item dAppCarouselItem" style={slideBG6}>
-        <div className=""></div>
+        <div className="itemContent slideWidth">
+          <h4>Title</h4>
+        </div>
       </div>
       <div className="item dAppCarouselItem" style={slideBG7}>
-        <div className=""></div>
+        <div className="itemContent slideWidth">
+          <h4>Title</h4>
+        </div>
       </div>
       <div className="item dAppCarouselItem" style={slideBG8}>
-        <div className=""></div>
+        <div className="itemContent slideWidth">
+          <h4>Title</h4>
+        </div>
       </div>
     </OwlCarousel>
   )

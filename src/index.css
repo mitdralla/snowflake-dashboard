@@ -23,29 +23,15 @@ body {
 }
 
 .owl-carousel .owl-stage-outer {
-    overflow: hidden;
-    padding: 30px;
-    background-color: #afafaf;
-}
-
-.owl-item {
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: translate(0) scale(1.0, 1.0);
-  max-width: 300px;
-  opacity: 0;
-  transition: opacity 500ms;
+  overflow: hidden;
+  background-color: #afafaf;
+  height: 290px;
+  padding-top: 30px;
+  padding-left: 15px;
 }
 
 .owl-item.active {
-    opacity: 1;
-}
-
-.HeroCarouselWrapper {
-  height: 210px;
-  background-color: #ccc;
-  padding: 30px;
-  overflow: hidden;
-  white-space: nowrap;
+  opacity: 1;
 }
 
 .owl-carousel .item {
@@ -53,12 +39,10 @@ body {
   color: #fff;
   font-size: 14px;
   min-height: 150px;
-  width: 300px;
   height: 230px;
   text-align: center;
   vertical-align: middle;
   border-radius: 10px;
-  margin-right: 150px;
 }
 
 .owl-carousel .item h5 {
@@ -70,14 +54,20 @@ body {
   color: #333;
 }
 
-.dapp_carousel {
-  padding-bottom: 0px;
-  padding-top: 50px;
-  padding-right: 0px;
-}
-
 .owl-nav, .owl-dots {
   display: none;
+}
+
+.owl-carousel.owl-loaded {
+  display: block;
+}
+
+.HeroCarouselWrapper {
+  height: 210px;
+  background-color: #ccc;
+  padding: 30px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .dAppCarouselItem:hover {
@@ -105,18 +95,10 @@ body {
   color: #fff;
 }
 
-.HeroCarouselWrapper .ItemWrapper {
-  height: 150px;
-  width: 300px;
-  background-color: #929292;
-  padding: 30px;
-  border-radius: 10px;
-  display: inline-block;
-  margin-right: 15px;
-  margin-bottom: 40px;
+.slideWidth {
+  width: 430px;
 }
 
-.HeroCarouselWrapper .ItemWrapper:hover {
-  background-color: #616161;
-  cursor: pointer;
+.itemContent {
+  display: none;
 }
