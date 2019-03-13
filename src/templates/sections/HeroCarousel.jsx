@@ -9,14 +9,52 @@ import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import { withStyles } from '@material-ui/core/styles';
+import OwlCarousel from 'react-owl-carousel2'
+import '../../index.css';
+import '../../../node_modules/react-owl-carousel2/src/owl.carousel.css';
+import '../../../node_modules/react-owl-carousel2/src/owl.theme.green.css';
+import '../../../node_modules/react-owl-carousel2/src/owl.carousel.js';
 
 import { useHydroBalance, useAccountBalance, useEtherscanLink, useNamedContract } from '../../common/hooks'
-import { Nav, Navbar, NavDropdown, Form, FormControl, Jumbotron, Button, Container, Row, Column } from 'react-bootstrap'
+import { Nav, Navbar, NavDropdown, Form, FormControl, Jumbotron, Button, Grid, Container, Row, Column } from 'react-bootstrap'
 
 // Owl Carousel Config.
 const options = {
-    items: config.HERO_CAROUSEL_MAX_ITEMS,
+  items: config.HERO_CAROUSEL_MAX_ITEMS,
+  loop: true,
+  margin: 10,
+  responsiveClass: true,
+  responsive:{
+      0:{
+          items: 1,
+          nav: true,
+          loop: true
+      },
+      600:{
+          items: 3,
+          nav: false,
+          loop: true
+      },
+      1000:{
+          items: 5,
+          nav: true,
+          loop: true
+      }
+  },
+  autoplay: false,
+  autoplayTimeout: 3000,
+  autoplayHoverPause: false,
+  autoWidth: true,
+  navigation: false
 };
+
+// Owl Events.
+const events = {
+  onDragged: function(event) {},
+  onChanged: function(event) {}
+}
+
+
 
 const styles = theme => ({
   root: {
@@ -30,44 +68,19 @@ const styles = theme => ({
 })
 
 function HeroCarousel({ classes }) {
-
   return (
-    <>
-      <div class="HeroCarouselWrapper">
-        <div class="HeroCarousel">
-          <div class="ItemWrapper">
-            <h4>Item 1</h4>
-          </div>
-          <div class="ItemWrapper">
-            <h4>Item 2</h4>
-          </div>
-          <div class="ItemWrapper">
-            <h4>Item 3</h4>
-          </div>
-          <div class="ItemWrapper">
-            <h4>Item 4</h4>
-          </div>
-          <div class="ItemWrapper">
-            <h4>Item 5</h4>
-          </div>
-          <div class="ItemWrapper">
-            <h4>Item 6</h4>
-          </div>
-          <div class="ItemWrapper">
-            <h4>Item 7</h4>
-          </div>
-          <div class="ItemWrapper">
-            <h4>Item 8</h4>
-          </div>
-          <div class="ItemWrapper">
-            <h4>Item 9</h4>
-          </div>
-          <div class="ItemWrapper">
-            <h4>Item 10</h4>
-          </div>
-        </div>
-      </div>
-    </>
+    <OwlCarousel options={options} events={events} >
+      <div className="item dAppCarouselItem"><img src="" alt=""/></div>
+      <div className="item dAppCarouselItem"><img src="" alt=""/></div>
+      <div className="item dAppCarouselItem"><img src="" alt=""/></div>
+      <div className="item dAppCarouselItem"><img src="" alt=""/></div>
+      <div className="item dAppCarouselItem"><img src="" alt=""/></div>
+      <div className="item dAppCarouselItem"><img src="" alt=""/></div>
+      <div className="item dAppCarouselItem"><img src="" alt=""/></div>
+      <div className="item dAppCarouselItem"><img src="" alt=""/></div>
+      <div className="item dAppCarouselItem"><img src="" alt=""/></div>
+      <div className="item dAppCarouselItem"><img src="" alt=""/></div>
+    </OwlCarousel>
   )
 }
 

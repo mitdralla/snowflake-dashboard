@@ -15,12 +15,105 @@ body {
   height: 100%;
 }
 
+.owl-stage{
+  min-width: 100%;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.owl-item {
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate(0) scale(1.0, 1.0);
+}
+
+.owl-carousel {
+  height: 310px;
+}
+
 .HeroCarouselWrapper {
   height: 210px;
   background-color: #ccc;
   padding: 30px;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.owl-item {
+  max-width: 300px;
+}
+
+.owl-carousel .item {
+  background-color: #f7f7f7;
+  color: #fff;
+  font-size: 14px;
+  min-height: 150px;
+  width: 430px;
+  height: 230px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 10px;
+}
+
+.owl-carousel .item h5 {
+  padding-top: 100px;
+  font-weight: 300;
+}
+
+.owl-dot {
+  color: #333;
+}
+
+.dapp_carousel {
+  padding-bottom: 0px;
+  padding-top: 50px;
+  padding-right: 0px;
+}
+
+.owl-nav {
+  display: none;
+}
+
+.owl-carousel .owl-stage-outer {
+    overflow: visible !important;
+}
+
+.owl-stage{
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+.owl-item {
+  opacity: 0;
+  transition: opacity 500ms;
+}
+.owl-item.active {
+  opacity: 1;
+}
+
+.dAppCarouselItem:hover {
+  opacity: 0.4;
+  transition: .4s ease all;
+}
+
+.dAppCarouselItem {
+  border-radius: 5px;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  -webkit-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+}
+
+.dapp_hero_meta_wrapper {
+  background-color: #333;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  padding: 15px 15px 10px 30px;
+  color: #fff;
 }
 
 .HeroCarouselWrapper .ItemWrapper {
