@@ -2,12 +2,9 @@
 // Powered by Hydro, Footer Links, and Github powered and hosted line.
 
 import React from 'react';
-import { useWeb3Context } from 'web3-react'
-import * as classNames from "classnames"
 import { withStyles } from '@material-ui/core/styles';
 
-import { useHydroBalance, useAccountBalance, useEtherscanLink, useNamedContract } from '../../common/hooks'
-import { Nav, Navbar, NavDropdown, Form, FormControl, Jumbotron, Button } from 'react-bootstrap';
+import { Nav, Navbar, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 
 const styles = theme => ({
   root: {

@@ -1,13 +1,7 @@
 // Template for a featured hero section of rotating dApps.
 
 import React from 'react';
-import * as config from '../../config.jsx'
-import { useWeb3Context } from 'web3-react'
-import * as classNames from "classnames"
-import Typography from '@material-ui/core/Typography';
-import Chip from '@material-ui/core/Chip';
-import Avatar from '@material-ui/core/Avatar';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import config from '../../config.jsx'
 import { withStyles } from '@material-ui/core/styles';
 import OwlCarousel from 'react-owl-carousel2'
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.css';
@@ -25,12 +19,9 @@ import demoBG6 from './../../assets/img/uber_logo.jpg'
 import demoBG7 from './../../assets/img/uno_logo.jpg'
 import demoBG8 from './../../assets/img/temple_run_logo.png'
 
-import { useHydroBalance, useAccountBalance, useEtherscanLink, useNamedContract } from '../../common/hooks'
-import { Nav, Navbar, NavDropdown, Form, FormControl, Jumbotron, Button, Grid, Container, Row, Column } from 'react-bootstrap'
-
 // Owl Carousel Config.
 const options = {
-  items: config.HERO_CAROUSEL_MAX_ITEMS,
+  items: config.heroCarousel.maxItems,
   loop: true,
   margin: 20,
   responsiveClass: true,
