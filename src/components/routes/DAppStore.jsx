@@ -95,7 +95,7 @@ export default withStyles(styles)(function DAppStore ({ classes, ein }) {
   const recognizedResolverIndex = allResolvers.findIndex(e => e === resolverAddress)
 
   return (
-    <div>
+    <div className="tabbedContent dappStore">
       {!ready ? undefined : (
         <>
 

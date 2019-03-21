@@ -97,7 +97,7 @@ export default withStyles(styles)(function GetHydro({ ein, classes }) {
     .join(" | ");
 
   return (
-    <div style={{ width: "100%" }}>
+    <div className="tabbedContent getHydro">
 
       {/* Text and H6 for buying HYDRO with ETH and depositing it into your Snowflake.
         Currently there is an onchange which adjust the current exchange rate. */}
@@ -202,9 +202,7 @@ export default withStyles(styles)(function GetHydro({ ein, classes }) {
       />
 
       {/* Button for determining the max amount of HYDRO you can withdraw and fills the number into the textbox. */}
-      <Button
-        onClick={() => setWithdrawAmount(toDecimal(snowflakeBalance, 18))}
-      >
+      <Button onClick={() => setWithdrawAmount(toDecimal(snowflakeBalance, 18))}>
         Max
       </Button>
 

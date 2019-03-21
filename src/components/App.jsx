@@ -1,31 +1,25 @@
 import React, { Suspense, lazy } from 'react';
 import { withRouter, Switch, Route, Redirect } from 'react-router'
+import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import { useEIN, useHydroId, useEINDetails, useNamedContract } from '../common/hooks'
 
 import '../index.css'
+import config from '../config.jsx'
 import SnowflakeHeader from './SnowflakeHeader'
 import Header from '../templates/sections/Header'
 import Footer from '../templates/sections/Footer'
 import HeroCarousel from '../templates/sections/HeroCarousel'
 
+const sidebarNavItems = config.dappCategories.categories;
 const NoSnowflakeProvider = lazy(() => import('./states/NoSnowflakeProvider'))
 const NoEIN = lazy(() => import('./states/NoEIN'))
 const NoHydroId = lazy(() => import('./states/NoHydroId'))
 const RouteTabs = lazy(() => import('./RouteTabs'))
 const FinalizeClaim = lazy(() => import('./routes/FinalizeClaim'))
+const DAppCategories = lazy(() => import('../pages/DAppCategories'))
 
-const styles = theme => ({
-  width: {
-    margin: 'auto',
-    [theme.breakpoints.down('md')]: {
-      width: '90%',
-    },
-    [theme.breakpoints.up('md')]: {
-      width: '75%',
-    },
-  },
-})
+const styles = theme => ({})
 
 export default withRouter(withStyles(styles)(function App ({ classes, location }) {
   const ein = useEIN()
@@ -81,17 +75,36 @@ export default withRouter(withStyles(styles)(function App ({ classes, location }
     <div>
       <Header />
       <HeroCarousel />
-      <br />
-      <SnowflakeHeader ein={ein} hydroId={hydroId} />
+      <div className="bodyWrapper">
+        <div className="sidebar">
+          <div className="container">
+            <div className="row">
+              <div className="column">
+              <ul className="dappSidebarAuxNav">
+                <Link to="/wallet"><li>dApp Store Wallet</li></Link>
+                <Link to="/your-dapps"><li>Your Added dApps</li></Link>
+                <Link to="/identity"><li>Manage Your Identity (EIN)</li></Link>
+                <Link to="/submit"><li>Submit Your dApp</li></Link>
+              </ul>
+              <h2 className="text-grey">Categories</h2>
+              <ul className="dappSidebarCategoryNav">
+                {sidebarNavItems.map((category, i) => {
+                  return <Link to={'/dapps/category/'+category.link} component={DAppCategories} key={i}><li data-category={category.name.replace(/\s+/g, '-').toLowerCase()} key={i}><i className={category.icon}></i> {category.name}</li></Link>
+                })}
+              </ul>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <div className={classes.width}>
-        <Suspense fallback={<div />}>
-          {ClaimingAddress()}
-          {Display()}
-        </Suspense>
+        <div className="bodyContent">
+          <SnowflakeHeader ein={ein} hydroId={hydroId} />
+          <Suspense fallback={<div />}>
+            {ClaimingAddress()}
+            {Display()}
+          </Suspense>
+        </div>
       </div>
-
-      <br />
       <Footer />
     </div>
   )

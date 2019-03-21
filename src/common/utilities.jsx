@@ -331,3 +331,32 @@ export function fromDecimal (number, decimals) {
 
   return integer + fraction
 }
+
+// Function to camel case string
+export function toTitleCase(str) {
+  return str.replace(
+      /\w\S*/g,
+      function(txt) {
+          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      }
+  );
+}
+
+// Function to remove dashes '-' from a string
+export function removeDashes(str) {
+  return str.replace(/-/g, ' ');
+}
+
+// Function to remove forward slashes '/' from a string
+export function removeForwardSlashes(str) {
+  return str.replace(/\//g, '')
+}
+
+// Function to convert a url string to formatted text: convert dashes to spaces and camel case.
+export function titalizeText(str) {
+  const removedForwardSlashes = removeForwardSlashes(str)
+  const removedDashes = removeDashes(removedForwardSlashes)
+  const titalizeText = toTitleCase(removedDashes)
+
+  return titalizeText
+}

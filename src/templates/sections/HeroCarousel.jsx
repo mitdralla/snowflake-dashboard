@@ -37,12 +37,12 @@ const options = {
           loop: true
       },
       1000:{
-          items: 5,
+          items: 4,
           nav: true,
           loop: true,
       }
   },
-  autoplay: false,
+  autoplay: true,
   autoplayTimeout: 3000,
   autoplayHoverPause: false,
   autoWidth: false,

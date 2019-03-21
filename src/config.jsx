@@ -2,7 +2,7 @@
 const config = {
   general: {
     dappStoreName: "SNOWFLAKE",
-    dappSearchPlaceholderText: "Search the dApp Store",
+    dappSearchPlaceholderText: "Search the dApp Store...",
     featuredDappsSection: "on",
     popularDappsSection: "on",
     latestDappsSection: "on",
@@ -19,62 +19,69 @@ const config = {
     maxItems: 10,
   },
   dappCategories: {
-    caegoryies: [
+    categories: [
       {
-        name:    "All Categories",
-        link:    "/all-categories",
-        icon:    "ion-android-folder-open",
-        order:   1,
-        active:  "yes"
+        name:        "All Categories",
+        link:        "all-categories",
+        icon:        "ion-android-folder-open",
+        description: "",
+        order:       1,
+        active:      "yes"
       },
       {
-        name:    "Entertainment",
-        link:    "/entertainment",
-        icon:    "ion-ios-film",
-        order:   2,
-        active:  "yes"
+        name:        "Entertainment",
+        link:        "entertainment",
+        icon:        "ion-ios-film",
+        description: "",
+        order:       2,
+        active:      "yes"
       },
       {
-        name:    "Fintech",
-        link:    "/fintech",
-        icon:    "ion-card",
-        order:   3,
-        active:  "yes"
+        name:        "Fintech",
+        link:        "fintech",
+        icon:        "ion-card",
+        description: "",
+        order:       3,
+        active:      "yes"
       },
       {
-        name:    "Business",
-        link:    "/business",
-        icon:    "ion-ios-world",
-        order:   4,
-        active:  "yes"
+        name:        "Business",
+        link:        "business",
+        icon:        "ion-ios-world",
+        order:       4,
+        active:      "yes"
       },
       {
-        name:    "Gaming",
-        link:    "/gaming",
-        icon:    "ion-ios-game-controller-a",
-        order:   5,
-        active:  "yes"
+        name:        "Gaming",
+        link:        "gaming",
+        icon:        "ion-ios-game-controller-a",
+        description: "",
+        order:       5,
+        active:      "yes"
       },
       {
-        name:    "Community",
-        link:    "/community",
-        icon:    "ion-ios-people",
-        order:   6,
-        active:  "yes"
+        name:        "Community",
+        link:        "community",
+        icon:        "ion-ios-people",
+        description: "",
+        order:       6,
+        active:      "yes"
       },
       {
-        name:    "Tools",
-        link:    "/tools",
-        icon:    "ion-ios-calculator",
-        order:   7,
-        active:  "yes"
+        name:        "Tools",
+        link:        "tools",
+        icon:        "ion-ios-calculator",
+        description: "",
+        order:       7,
+        active:      "yes"
       },
       {
-        name:    "Other",
-        link:    "/other",
-        icon:    "ion-gear-a",
-        order:   8,
-        active:  "yes"
+        name:        "Other",
+        link:        "other",
+        icon:        "ion-gear-a",
+        description: "",
+        order:       8,
+        active:      "yes"
       }
     ]
   },
@@ -107,7 +114,7 @@ const config = {
     ]
   },
   dappFooterNavigation: {
-    filters: [
+    items: [
       {
         name:    "Audits",
         link:    "/audits",
@@ -138,6 +145,58 @@ const config = {
         order:   5,
         active:  "yes"
       }
+    ]
+  },
+  jumbotrons: {
+    items: [
+      {
+        id:           "1",
+        jumbotron:    "default",
+        title:        "Get Involved",
+        description:  "Are you a developer? Do you have a dApp idea? Do you want to partner with us?",
+        buttonText:   "Let Us Know",
+        buttonLink:   "/developers"
+      }
+    ]
+  },
+  faqs: {
+    items: [
+      {
+        id:           "1",
+        question:     "What is this all about?",
+        answer:       "It is about this and that. It also has a lot to do with x, y and z.",
+        category:     "general",
+        active:       "yes"
+      },
+      {
+        id:           "2",
+        question:     "What is this all about?",
+        answer:       "It is about this and that. It also has a lot to do with x, y and z.",
+        category:     "general",
+        active:       "yes"
+      },
+      {
+        id:           "3",
+        question:     "What is this all about?",
+        answer:       "It is about this and that. It also has a lot to do with x, y and z.",
+        category:     "general",
+        active:       "yes"
+      },
+      {
+        id:           "4",
+        question:     "What is this all about?",
+        answer:       "It is about this and that. It also has a lot to do with x, y and z.",
+        category:     "general",
+        active:       "yes"
+      },
+      {
+        id:           "5",
+        question:     "What is this all about?",
+        answer:       "It is about this and that. It also has a lot to do with x, y and z.",
+        category:     "general",
+        active:       "yes"
+      },
+
     ]
   }
 }

@@ -19,7 +19,7 @@ export default function Body ({ ein, hydroIdAddress }) {
   const ready = resolverDetails && resolverAllowances
 
   return (
-    <div>
+    <div className="tabbedContent home">
       {!ready ? undefined :
         <>
           <ExpansionPanel defaultExpanded>

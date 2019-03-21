@@ -12,8 +12,21 @@ const Body = lazy(() => import('./routes/Body'))
 const Store = lazy(() => import('./routes/DAppStore'))
 const GetHydro = lazy(() => import('./routes/GetHydro'))
 const FinalizeClaim = lazy(() => import('./routes/FinalizeClaim'))
+const Faq = lazy(() => import('../pages/FAQ'))
+const Stats = lazy(() => import('../pages/Stats'))
+const Audits = lazy(() => import('../pages/Audits'))
+const Terms = lazy(() => import('../pages/Terms'))
+const Privacy = lazy(() => import('../pages/Privacy'))
+const About = lazy(() => import('../pages/About'))
+const Contact = lazy(() => import('../pages/Contact'))
+const SubmitDApp = lazy(() => import('../pages/SubmitDApp'))
+const ManageIdentity = lazy(() => import('../pages/ManageYourIdentity'))
+const ManageWallet = lazy(() => import('../pages/DAppStoreWallet'))
+const ManageDApps = lazy(() => import('../pages/DAppsAdded'))
+const DAppCategories = lazy(() => import('../pages/DAppCategories'))
+const DAppDetails = lazy(() => import('../pages/DAppDetails'))
 
-const routeNames = ['/', '/dapp-store', '/get-hydro', '/claim-address']
+const routeNames = ['/', '/dapp-store', '/get-hydro', '/claim-address', '/faq']
 const MyTabs = withRouter(({ location, children, ...rest }) => {
   const { match, history, staticContext, ...tabProps } = rest // eslint-disable-line no-unused-vars
 
@@ -73,6 +86,19 @@ export default withRouter(function RouteTabs ({ ein, hydroIdAddress }) {
           <Redirect from='/get-hydro(.+)' to='/get-hydro'/>
           <Route path="/get-hydro" render={() => <GetHydro ein={ein} />} />
           <Route path="/claim-address" render={() => <FinalizeClaim ein={ein} />} />
+          <Route path="/faq" render={() => <Faq />} />
+          <Route path="/stats" render={() => <Stats />} />
+          <Route path="/audits" render={() => <Audits />} />
+          <Route path="/terms-of-use" render={() => <Terms />} />
+          <Route path="/privacy-policy" render={() => <Privacy />} />
+          <Route path="/about" render={() => <About />} />
+          <Route path="/contact" render={() => <Contact />} />
+          <Route path="/submit" render={() => <SubmitDApp />} />
+          <Route path="/wallet" render={() => <ManageWallet />} />
+          <Route path="/your-dapps" render={() => <ManageDApps />} />
+          <Route path="/identity" render={() => <ManageIdentity />} />
+          <Route path="/dapps/category*" component={DAppCategories} render={() => <DAppCategories />} />
+          <Route path="/dapp*" component={DAppDetails} render={() => <DAppDetails />} />
           <Redirect to="/" />
         </Switch>
       </Suspense>

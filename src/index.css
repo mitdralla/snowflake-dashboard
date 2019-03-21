@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
+
 html {
   height: 100%;
 }
@@ -5,7 +7,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Nunito', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
@@ -20,6 +22,10 @@ body {
   width: 100%;
   padding: 0;
   margin-top: 8px 0 8px 0;
+}
+
+.owl-carousel {
+  margin-bottom: 0px;
 }
 
 .owl-carousel .owl-stage-outer {
@@ -101,4 +107,144 @@ body {
 
 .itemContent {
   display: none;
+}
+
+.searchBar {
+  min-width: 360px;
+}
+
+.form-control:focus {
+  box-shadow: 0;
+  outline: none;
+}
+
+footer .navbar-nav {
+  margin: 0 auto;
+}
+
+footer .jumbotron {
+  margin-bottom: 0px;
+  height: 320px;
+}
+
+.bodyWrapper {
+  min-height: 1200px;
+  margin-right: 30px;
+  margin-top: 30px;
+}
+
+
+.bodyContent {
+  width: 100%;
+  height: 100%;
+  min-height: 1200px;
+}
+
+.tabbedContent {
+  display: grid;
+}
+
+
+.sidebar {
+  float: left;
+  max-width: 320px;
+  width: 100%;
+  min-height: 100%;
+  height: 1230px;
+  background-color: #f9f9f9;
+  padding: 30px 15px 30px 15px;
+  display: block;
+  margin-right: 30px;
+  margin-top: -30px;
+}
+
+.sidebar h2 {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  margin-left: -28px;
+  padding-left: 0px;
+  width: 300px;
+  margin-bottom: 50px;
+}
+
+.sidebar ul li {
+  list-style-type: none;
+  padding: 10px 0 10px 30px;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  margin-bottom: 10px;
+  margin-left: -2px;
+  font-size: 17px;
+}
+
+.sidebar ul li i {
+  font-size: 24px;
+  position: relative;
+  top: 2px;
+  right: 0px;
+  margin-right: 10px;
+}
+
+.sidebar li.active {
+  background-color: #1d4cff;
+  color: #fff;
+  -webkit-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+}
+
+.sidebar li:hover {
+  background-color: #959595;
+  color: #fff;
+  cursor: pointer;
+  -webkit-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+}
+
+.sidebar li.active:hover {
+  background-color: #1739bb;
+}
+
+.sidebar ul li.active {
+    background-color: #1d4cff;
+    color: #fff;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+}
+
+.sidebar ul li.active:hover {
+    background-color: #1739bb;
+}
+
+.sidebar .dappSidebarAuxNav a, .sidebar .dappSidebarCategoryNav a {
+  color: #212529;
+}
+
+.sidebar .dappSidebarAuxNav a:hover, .sidebar .dappSidebarCategoryNav a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.text-grey {
+  color: #a9a9a9;
+}
+
+.card {
+  margin-right: 30px;
+  margin-bottom: 30px;
+  display: inline-block !important;
+}
+
+.dappWrapper {
+  margin-top: 50px;
+}
+
+.dappImagePlaceholder {
+  float:left;
+  padding-right: 15px;
+  padding-bottom: 15px;
 }

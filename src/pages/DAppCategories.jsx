@@ -1,18 +1,19 @@
-// Manage DApps page
+// dApp Categories landing page
 
 import React, { Component } from 'react'
 import { Button, Card, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { titalizeText } from '../common/utilities'
 
 //import config from '../config.jsx'
-//const statsConfig = config.stats.config;
+//const faqItems = config.faqs.items;
 
-class ManageDApps extends Component {
+class DAppCategories extends Component {
 
   render() {
     return (
       <div>
-        <h2>Manage Your dApps</h2>
+        <h2>DApp Category: {titalizeText(this.props.match.params[0])}</h2>
         <div className="dappWrapper">
           <Row>
           <Card style={{ width: '18rem' }}>
@@ -22,7 +23,7 @@ class ManageDApps extends Component {
                 Some quick example text to build on the card title and make up the bulk of
                 the card's content.
               </Card.Text>
-              <Link to="/dapp/hello-world"><Button variant="success">Open</Button></Link> <Button variant="danger">Remove</Button>
+              <Link to="/dapp/hello-world"><Button>View dApp</Button></Link>
             </Card.Body>
           </Card>
 
@@ -33,7 +34,7 @@ class ManageDApps extends Component {
                 Some quick example text to build on the card title and make up the bulk of
                 the card's content.
               </Card.Text>
-              <Link to="/dapp/uber"><Button variant="success">Open</Button></Link> <Button variant="danger">Remove</Button>
+              <Link to="/dapp/hello-world"><Button>View dApp</Button></Link>
             </Card.Body>
           </Card>
 
@@ -44,7 +45,7 @@ class ManageDApps extends Component {
                 Some quick example text to build on the card title and make up the bulk of
                 the card's content.
               </Card.Text>
-              <Link to="/dapp/crypto-kitties"><Button variant="success">Open</Button></Link> <Button variant="danger">Remove</Button>
+              <Link to="/dapp/crypto-kitties"><Button>View dApp</Button></Link>
             </Card.Body>
           </Card>
 
@@ -55,7 +56,7 @@ class ManageDApps extends Component {
                 Some quick example text to build on the card title and make up the bulk of
                 the card's content.
               </Card.Text>
-              <Link to="/dapp/robinhood"><Button variant="success">Open</Button></Link> <Button variant="danger">Remove</Button>
+              <Link to="/dapp/robinhood"><Button>View dApp</Button></Link>
             </Card.Body>
           </Card>
           </Row>
@@ -65,4 +66,4 @@ class ManageDApps extends Component {
   }
 }
 
-export default ManageDApps
+export default DAppCategories

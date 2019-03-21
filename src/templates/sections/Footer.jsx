@@ -1,49 +1,43 @@
 // Template for the global Footer, which includes three main sections:
 // Powered by Hydro, Footer Links, and Github powered and hosted line.
 
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
+import { Nav, Navbar, Button, Container, Jumbotron } from 'react-bootstrap'
+import config from '../../config.jsx'
 
-import { Nav, Navbar, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
+const footerNavItems = config.dappFooterNavigation.items;
+const jumbotron = config.jumbotrons.items[0];
 
-const styles = theme => ({
-  root: {
-    display:        'flex',
-    justifyContent: 'center',
-    flexWrap:       'wrap'
-  },
-  chip: {
-    margin: theme.spacing.unit
+class Footer extends Component {
+  render() {
+    return (
+      <footer>
+
+        <Jumbotron fluid className="text-center">
+          <Container>
+            <h1>{jumbotron.title}</h1>
+            <p>{jumbotron.description}</p>
+            <Button variant="outline-primary" to={jumbotron.buttonLink}>{jumbotron.buttonText}</Button>
+          </Container>
+        </Jumbotron>
+
+        <Navbar bg="light" expand="lg">
+          <Navbar.Brand href="#home">Powered by HYDRO</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              {footerNavItems.map((item, i) => {
+                return <Link className="nav-link" role="button" to={item.link} key={i}>{item.name}</Link>
+              })}
+            </Nav>
+          </Navbar.Collapse>
+          <Navbar.Brand href="#home">Maintained and hosted on Github</Navbar.Brand>
+        </Navbar>
+
+      </footer>
+    )
   }
-})
-
-function Footer({ classes }) {
-
-  return (
-    <>
-      <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="#home">FOOTER</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-          <Form inline>
-            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-            <Button variant="outline-success">Search</Button>
-          </Form>
-        </Navbar.Collapse>
-      </Navbar>
-    </>
-  )
 }
 
-export default withStyles(styles)(Footer)
+export default Footer

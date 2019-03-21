@@ -32,7 +32,7 @@ export default withStyles(styles)(function SnowflakeAddresses ({ classes, associ
   const _1484Contract = useNamedContract('1484')
 
   return (
-    <div style={{width: '100%'}}>
+    <div className="tabbedContent claimAddress">
       <Typography>Authorize another Ethereum wallet to access your Snowflake Identity.</Typography>
       <Table>
         <TableHead>
