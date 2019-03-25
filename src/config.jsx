@@ -17,6 +17,9 @@ const config = {
     leftArrow: "no",
     rightArrow: "yes",
     maxItems: 10,
+    itemsInViewDesktop: 6,
+    itemsInViewTablet: 4,
+    itemsInViewMobile: 2
   },
   dappCategories: {
     categories: [

@@ -27,17 +27,17 @@ const options = {
   responsiveClass: true,
   responsive:{
       0:{
-          items: 1,
+          items: config.heroCarousel.itemsInViewMobile,
           nav: true,
           loop: true
       },
       600:{
-          items: 3,
+          items: config.heroCarousel.itemsInViewTablet,
           nav: false,
           loop: true
       },
       1000:{
-          items: 5,
+          items: config.heroCarousel.itemsInViewDesktop,
           nav: true,
           loop: true,
       }

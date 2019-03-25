@@ -6,9 +6,9 @@ import { useEIN, useHydroId, useEINDetails, useNamedContract } from '../../commo
 
 import './Dashboard.css'
 import config from '../../config.jsx'
+import { Header } from '../Header'
+import { Footer } from '../Footer'
 import SnowflakeHeader from '../SnowflakeHeader'
-import Header from '../../templates/sections/Header'
-import Footer from '../../templates/sections/Footer'
 import HeroCarousel from '../../templates/sections/HeroCarousel'
 
 const sidebarNavItems = config.dappCategories.categories;

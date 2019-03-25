@@ -118,14 +118,7 @@ body {
   outline: none;
 }
 
-footer .navbar-nav {
-  margin: 0 auto;
-}
 
-footer .jumbotron {
-  margin-bottom: 0px;
-  height: 320px;
-}
 
 .bodyWrapper {
   min-height: 1200px;
@@ -257,9 +250,4 @@ footer .jumbotron {
 
 .sidebar .dappSidebarCategoryNav, .sidebar .dappSidebarAuxNav, .sidebar h2 {
   padding-left: 15px;
-}
-
-nav {
-  padding-left: 30px !important;
-  padding-right: 30px !important;
 }
