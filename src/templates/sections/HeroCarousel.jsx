@@ -7,7 +7,7 @@ import OwlCarousel from 'react-owl-carousel2'
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.css';
 import '../../../node_modules/react-owl-carousel2/src/owl.theme.green.css';
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.js';
-import '../../index.css';
+import '../../components/Dashboard/Dashboard.css';
 
 // Placeholder Images
 import demoBG1 from './../../assets/img/angry_birds_logo.jpg'

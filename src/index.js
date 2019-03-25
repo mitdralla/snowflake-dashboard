@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
+// import './index.css'
 
 // This can get cleaned up
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
 
-import AppWrapper from './components/AppWrapper'
+import App from './components/App'
 
-ReactDOM.render(<AppWrapper />, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById('root'))

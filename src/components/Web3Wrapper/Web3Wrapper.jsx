@@ -4,9 +4,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter as Router } from 'react-router-dom';
 import green from '@material-ui/core/colors/green';
 
-import InitializingWeb3 from './networkConnectors/InitializingWeb3'
-
-import App from './App'
+import InitializingWeb3 from '../networkConnectors/InitializingWeb3'
 
 const theme = createMuiTheme({
   overrides: {
@@ -43,13 +41,13 @@ const { MetaMaskConnector } = Connectors
 const metamask = new MetaMaskConnector({ supportedNetworks: [4] })
 const connectors = { metamask }
 
-export default function AppWrapper () {
+export default function Web3Wrapper (props) {
   return (
     <MuiThemeProvider theme={theme}>
       <Web3Provider connectors={connectors}>
         <InitializingWeb3 connectors={connectors}>
           <Router basename={process.env.PUBLIC_URL}>
-            <App />
+            {props.children}
           </Router>
         </InitializingWeb3>
       </Web3Provider>
