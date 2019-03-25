@@ -2,7 +2,6 @@ import React, { Suspense, lazy } from 'react';
 import { withRouter, Switch, Route, Redirect } from 'react-router'
 import { Link } from 'react-router-dom'
 import * as IonIcons from 'react-icons/io'
-import { withStyles } from '@material-ui/core/styles'
 import { useEIN, useHydroId, useEINDetails, useNamedContract } from '../../common/hooks'
 
 import './Dashboard.css'
@@ -20,9 +19,7 @@ const RouteTabs = lazy(() => import('../RouteTabs'))
 const FinalizeClaim = lazy(() => import('../routes/FinalizeClaim'))
 const DAppCategories = lazy(() => import('../../pages/DAppCategories'))
 
-const styles = theme => ({})
-
-export default withRouter(withStyles(styles)(function App ({ classes, location }) {
+export default withRouter((function App ({ classes, location }) {
   const ein = useEIN()
   const [hydroId, hydroIdAddress] = useHydroId()
   const einDetails = useEINDetails(ein)
