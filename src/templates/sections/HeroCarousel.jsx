@@ -23,7 +23,7 @@ import demoBG8 from './../../assets/img/temple_run_logo.png'
 const options = {
   items: config.heroCarousel.maxItems,
   loop: true,
-  margin: 20,
+  margin: 30,
   responsiveClass: true,
   responsive:{
       0:{
@@ -37,7 +37,7 @@ const options = {
           loop: true
       },
       1000:{
-          items: 4,
+          items: 5,
           nav: true,
           loop: true,
       }

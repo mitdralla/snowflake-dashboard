@@ -23,7 +23,7 @@ const config = {
       {
         name:        "All Categories",
         link:        "all-categories",
-        icon:        "ion-android-folder-open",
+        icon:        "IoMdFolderOpen",
         description: "",
         order:       1,
         active:      "yes"
@@ -31,7 +31,7 @@ const config = {
       {
         name:        "Entertainment",
         link:        "entertainment",
-        icon:        "ion-ios-film",
+        icon:        "IoIosFilm",
         description: "",
         order:       2,
         active:      "yes"
@@ -39,7 +39,7 @@ const config = {
       {
         name:        "Fintech",
         link:        "fintech",
-        icon:        "ion-card",
+        icon:        "IoMdCard",
         description: "",
         order:       3,
         active:      "yes"
@@ -47,14 +47,14 @@ const config = {
       {
         name:        "Business",
         link:        "business",
-        icon:        "ion-ios-world",
+        icon:        "IoIosGlobe",
         order:       4,
         active:      "yes"
       },
       {
         name:        "Gaming",
         link:        "gaming",
-        icon:        "ion-ios-game-controller-a",
+        icon:        "IoLogoGameControllerA",
         description: "",
         order:       5,
         active:      "yes"
@@ -62,7 +62,7 @@ const config = {
       {
         name:        "Community",
         link:        "community",
-        icon:        "ion-ios-people",
+        icon:        "IoIosPeople",
         description: "",
         order:       6,
         active:      "yes"
@@ -70,7 +70,7 @@ const config = {
       {
         name:        "Tools",
         link:        "tools",
-        icon:        "ion-ios-calculator",
+        icon:        "IoIosCalculator",
         description: "",
         order:       7,
         active:      "yes"
@@ -78,7 +78,7 @@ const config = {
       {
         name:        "Other",
         link:        "other",
-        icon:        "ion-gear-a",
+        icon:        "IoIosSettings",
         description: "",
         order:       8,
         active:      "yes"

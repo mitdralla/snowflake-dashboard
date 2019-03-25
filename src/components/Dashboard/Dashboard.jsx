@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { withRouter, Switch, Route, Redirect } from 'react-router'
 import { Link } from 'react-router-dom'
+import * as IonIcons from 'react-icons/io'
 import { withStyles } from '@material-ui/core/styles'
 import { useEIN, useHydroId, useEINDetails, useNamedContract } from '../../common/hooks'
 
@@ -89,7 +90,10 @@ export default withRouter(withStyles(styles)(function App ({ classes, location }
               <h2 className="text-grey">Categories</h2>
               <ul className="dappSidebarCategoryNav">
                 {sidebarNavItems.map((category, i) => {
-                  return <Link to={'/dapps/category/'+category.link} component={DAppCategories} key={i}><li data-category={category.name.replace(/\s+/g, '-').toLowerCase()} key={i}><i className={category.icon}></i> {category.name}</li></Link>
+                  const iconString = category.icon;
+                  const icon = React.createElement(IonIcons[iconString]);
+
+                  return <Link to={'/dapps/category/'+category.link} key={i} component={DAppCategories}><li data-category={category.name.replace(/\s+/g, '-').toLowerCase()} key={i}>{icon} {category.name}</li></Link>
                 })}
               </ul>
               </div>
