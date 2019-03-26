@@ -2,15 +2,11 @@
 // It also contains a list of all resolvers (dApps) in the store in a grid.
 
 import React, { useState, useReducer, Suspense } from 'react';
-import { TextField, Button, GridList, GridListTile, GridListTileBar } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
 import DoneIcon from '@material-ui/icons/Done';
-import { Snackbar, SnackbarContent } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
+import { TextField, Button, GridList, GridListTile, GridListTileBar, Snackbar, SnackbarContent, IconButton, Dialog, DialogActions, DialogContent, withStyles } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { Link } from 'react-router-dom'
 import { useWeb3Context } from 'web3-react'
-import { Dialog, DialogActions, DialogContent } from '@material-ui/core';
 
 // A constant that holds all resolver data.
 import ALL_SNOWFLAKE_RESOLVERS from '../resolvers'
