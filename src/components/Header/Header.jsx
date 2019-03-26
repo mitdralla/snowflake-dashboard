@@ -10,6 +10,7 @@ import config from '../../config.jsx'
 export default (function Header() {
   return (
     <header>
+      {/** Main Navigation: Links configured in config.js **/}
       <Navbar bg="light" expand="lg">
         <Link className="navbar-brand" to="/">{config.general.dappStoreName}</Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -14,6 +14,7 @@ const jumbotron = config.jumbotrons.items[0];
 export default (function Footer() {
   return (
     <footer>
+      {/** Dynamic Jumbotron: Content configured by config.js **/}
       <Jumbotron fluid className="text-center">
         <Container>
           <h1>{jumbotron.title}</h1>
@@ -22,6 +23,7 @@ export default (function Footer() {
         </Container>
       </Jumbotron>
 
+      {/** Footer Navigation: Links configured by config.js **/}
       <Navbar bg="light" expand="lg">
         <Navbar.Brand href="#home">Powered by HYDRO</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
