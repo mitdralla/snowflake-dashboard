@@ -1,12 +1,7 @@
 import React from 'react';
 import { useWeb3Context } from 'web3-react'
 import * as classNames from "classnames"
-import Typography from '@material-ui/core/Typography';
-import Chip from '@material-ui/core/Chip';
-import Avatar from '@material-ui/core/Avatar';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import { withStyles } from '@material-ui/core/styles';
-
+import { Chip, Avatar, SvgIcon, Typography, withStyles } from '@material-ui/core';
 import { useHydroBalance, useAccountBalance, useEtherscanLink, useNamedContract } from '../common/hooks'
 
 const styles = theme => ({

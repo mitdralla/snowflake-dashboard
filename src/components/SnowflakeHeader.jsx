@@ -1,11 +1,6 @@
 import React from 'react'
-import Chip from '@material-ui/core/Chip'
-import Avatar from '@material-ui/core/Avatar'
-import SvgIcon from '@material-ui/core/SvgIcon'
-import { Fingerprint } from '@material-ui/icons'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import { withStyles } from '@material-ui/core/styles'
-
+import { Chip, Avatar, SvgIcon, withStyles } from '@material-ui/core'
+import { Fingerprint, AccountCircle } from '@material-ui/icons'
 import { useSnowflakeBalance } from '../common/hooks'
 import Copyable from './common/Copyable'
 
