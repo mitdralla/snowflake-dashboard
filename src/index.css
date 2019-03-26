@@ -17,6 +17,10 @@ body {
   height: 100%;
 }
 
+.searchBar {
+  min-width: 360px;
+}
+
 .form-control:focus {
   box-shadow: 0;
   outline: none;
@@ -58,4 +62,8 @@ body {
   font-size: 28px;
   margin-top: -4px;
   margin-right: 5px;
+}
+
+.sidebar .dappSidebarCategoryNav, .sidebar .dappSidebarAuxNav, .sidebar h2 {
+  padding-left: 15px;
 }

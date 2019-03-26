@@ -1,13 +1,12 @@
 // Template for a featured hero section of rotating dApps.
 
 import React from 'react';
+import './HeroCarousel.css'
 import config from '../../config.jsx'
-import { withStyles } from '@material-ui/core/styles';
+
 import OwlCarousel from 'react-owl-carousel2'
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.css';
-import '../../../node_modules/react-owl-carousel2/src/owl.theme.green.css';
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.js';
-import '../../components/Dashboard/Dashboard.css';
 
 // Placeholder Images
 import demoBG1 from './../../assets/img/angry_birds_logo.jpg'
@@ -23,21 +22,21 @@ import demoBG8 from './../../assets/img/temple_run_logo.png'
 const options = {
   items: config.heroCarousel.maxItems,
   loop: true,
-  margin: 20,
+  margin: 30,
   responsiveClass: true,
   responsive:{
       0:{
-          items: 1,
+          items: config.heroCarousel.itemsInViewMobile,
           nav: true,
           loop: true
       },
       600:{
-          items: 3,
+          items: config.heroCarousel.itemsInViewTablet,
           nav: false,
           loop: true
       },
       1000:{
-          items: 4,
+          items: config.heroCarousel.itemsInViewDesktop,
           nav: true,
           loop: true,
       }
@@ -54,17 +53,6 @@ const events = {
   onDragged: function(event) {},
   onChanged: function(event) {}
 };
-
-const styles = theme => ({
-  root: {
-    display:        'flex',
-    justifyContent: 'center',
-    flexWrap:       'wrap'
-  },
-  chip: {
-    margin: theme.spacing.unit
-  }
-})
 
 var slideBG1 = {
   backgroundImage: "url(" + demoBG1 + ")",
@@ -98,7 +86,7 @@ var slideBG8 = {
   backgroundImage: "url(" + demoBG8 + ")"
 };
 
-function HeroCarousel({ classes }) {
+export default (function HeroCarousel() {
   return (
     <OwlCarousel options={options} events={events} >
       <div className="item dAppCarouselItem" style={slideBG1}>
@@ -143,6 +131,4 @@ function HeroCarousel({ classes }) {
       </div>
     </OwlCarousel>
   )
-}
-
-export default withStyles(styles)(HeroCarousel)
+})

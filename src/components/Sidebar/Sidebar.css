@@ -1,0 +1,87 @@
+.sidebar {
+  float: left;
+  max-width: 320px;
+  width: 100%;
+  min-height: 100%;
+  height: 1230px;
+  background-color: #f9f9f9;
+  padding: 30px 15px 30px 30px;
+  display: block;
+  margin-right: 30px;
+  margin-top: -30px;
+}
+
+.sidebar h2 {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  margin-left: -28px;
+  padding-left: 0px;
+  width: 300px;
+  margin-bottom: 50px;
+}
+
+.sidebar ul li {
+  list-style-type: none;
+  padding: 10px 0 10px 30px;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  margin-bottom: 10px;
+  margin-left: -2px;
+  font-size: 17px;
+}
+
+.sidebar ul li i {
+  font-size: 24px;
+  position: relative;
+  top: 2px;
+  right: 0px;
+  margin-right: 10px;
+}
+
+.sidebar li.active {
+  background-color: #1d4cff;
+  color: #fff;
+  -webkit-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+}
+
+.sidebar li:hover {
+  background-color: #959595;
+  color: #fff;
+  cursor: pointer;
+  -webkit-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+}
+
+.sidebar li.active:hover {
+  background-color: #1739bb;
+}
+
+.sidebar ul li.active {
+    background-color: #1d4cff;
+    color: #fff;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+}
+
+.sidebar ul li.active:hover {
+    background-color: #1739bb;
+}
+
+.sidebar .dappSidebarAuxNav a, .sidebar .dappSidebarCategoryNav a {
+  color: #212529;
+}
+
+.sidebar .dappSidebarAuxNav a:hover, .sidebar .dappSidebarCategoryNav a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.text-grey {
+  color: #a9a9a9;
+}
