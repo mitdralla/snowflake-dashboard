@@ -6,7 +6,6 @@ import config from '../../config.jsx'
 
 import OwlCarousel from 'react-owl-carousel2'
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.css';
-import '../../../node_modules/react-owl-carousel2/src/owl.theme.green.css';
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.js';
 
 // Placeholder Images
