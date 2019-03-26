@@ -7,9 +7,9 @@ import { useEIN, useHydroId, useEINDetails, useNamedContract } from '../../commo
 import './Dashboard.css'
 import config from '../../config.jsx'
 import { Header } from '../Header'
+import { HeroCarousel } from '../HeroCarousel'
 import { Footer } from '../Footer'
 import SnowflakeHeader from '../SnowflakeHeader'
-import HeroCarousel from '../../templates/sections/HeroCarousel'
 
 const sidebarNavItems = config.dappCategories.categories;
 const NoSnowflakeProvider = lazy(() => import('../states/NoSnowflakeProvider'))
