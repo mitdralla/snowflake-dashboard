@@ -1,6 +1,6 @@
 import React from 'react'
 import { ethers } from 'ethers'
-import { isWeb3, useWeb3Context } from 'web3-react'
+import { isWeb3 } from 'web3-react'
 import contracts from './contracts'
 import { default as defaultLogo } from '../components/resolvers/defaultLogo.png'
 import { Typography } from '@material-ui/core';

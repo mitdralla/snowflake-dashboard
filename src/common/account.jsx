@@ -1,10 +1,12 @@
-// Get users hydro balance from wallet.
-// TODO: This can be made more generic by adding parameters to change the button class, color and target.
+// General functions for dealthing with user account information.
+
 import React from 'react'
 import { useWeb3Context } from 'web3-react'
 import { useHydroBalance, useEtherscanLink, useNamedContract } from './hooks'
-import { Chip, Avatar, SvgIcon, Typography } from '@material-ui/core';
+import { Chip, Avatar, SvgIcon } from '@material-ui/core';
 
+// Get users hydro balance from wallet.
+// TODO: This can be made more generic by adding parameters to change the button class, color and target.
 export function GetUsersHydroBalanceFromWallet() {
   const context = useWeb3Context()
   const hydroBalance = useHydroBalance()
@@ -26,7 +28,26 @@ export function GetUsersHydroBalanceFromWallet() {
       href={`${hydroHolderLink}?a=${context.account}`}
       target="_blank"
       clickable
-      className="dAppStoreWalletUsersHydro"
+      className="GetUsersHydroBalanceFromWalletChip"
+    />
+  )
+}
+
+// Get users hydro balance from wallet.
+// TODO: This can be made more generic by adding parameters to change the button class, color and target.
+// TODO: Currently hardcoded.
+export function GetUsersAddedDAppTotal() {
+  const dappTotal = "10"
+
+  return (
+    <Chip
+      label={dappTotal}
+      color="default"
+      component="a"
+      href="#"
+      target="_blank"
+      clickable
+      className="GetUsersAddedDAppTotalChip"
     />
   )
 }
