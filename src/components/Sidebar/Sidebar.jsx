@@ -7,7 +7,7 @@ import './Sidebar.css'
 import config from '../../config.jsx'
 
 // TODO: clean up
-const DAppCategories = lazy(() => import('../../pages/DAppCategories'))
+const DAppCategories = lazy(() => import('../Views/DAppCategories'))
 
 const sidebarNavItems = config.dappCategories.categories;
 

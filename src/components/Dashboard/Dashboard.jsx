@@ -13,7 +13,7 @@ const NoSnowflakeProvider = lazy(() => import('../states/NoSnowflakeProvider'))
 const NoEIN = lazy(() => import('../states/NoEIN'))
 const NoHydroId = lazy(() => import('../states/NoHydroId'))
 const RouteTabs = lazy(() => import('../RouteTabs'))
-const FinalizeClaim = lazy(() => import('../routes/FinalizeClaim'))
+const FinalizeClaim = lazy(() => import('../Views/FinalizeClaim'))
 
 export default withRouter((function App ({ classes, location }) {
   const ein = useEIN()
