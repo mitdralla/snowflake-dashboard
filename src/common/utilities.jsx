@@ -1,10 +1,9 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
 import { ethers } from 'ethers'
-import { isWeb3 } from 'web3-react'
-
+import { isWeb3, useWeb3Context } from 'web3-react'
 import contracts from './contracts'
 import { default as defaultLogo } from '../components/resolvers/defaultLogo.png'
+import { Typography } from '@material-ui/core';
 
 const networkDataById = {
   1: {

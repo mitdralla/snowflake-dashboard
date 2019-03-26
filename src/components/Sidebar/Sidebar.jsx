@@ -5,13 +5,12 @@ import { Link } from 'react-router-dom';
 import * as IonIcons from 'react-icons/io'
 import './Sidebar.css'
 import config from '../../config.jsx'
+import { GetUsersHydroBalanceFromWallet } from '../../common/account'
 
-// TODO: clean up
 const DAppCategories = lazy(() => import('../Views/DAppCategories'))
-
 const sidebarNavItems = config.dappCategories.categories;
 
-export default (function Sidebar() {
+export default (function Sidebar({ classes }) {
   return (
     <div className="sidebar">
       <div className="container">
@@ -19,7 +18,7 @@ export default (function Sidebar() {
           <div className="column">
           {/** Top Section Nav **/}
           <ul className="dappSidebarAuxNav">
-            <Link to="/wallet"><li>dApp Store Wallet</li></Link>
+            <Link to="/wallet"><li>dApp Store Wallet {GetUsersHydroBalanceFromWallet()}</li></Link>
             <Link to="/your-dapps"><li>Your Added dApps</li></Link>
             <Link to="/identity"><li>Manage Your Identity (EIN)</li></Link>
             <Link to="/submit"><li>Submit Your dApp</li></Link>
