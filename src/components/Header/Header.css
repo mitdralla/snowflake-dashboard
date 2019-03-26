@@ -2,3 +2,7 @@ nav {
   padding-left: 30px !important;
   padding-right: 30px !important;
 }
+
+.searchBar {
+  min-width: 360px;
+}
