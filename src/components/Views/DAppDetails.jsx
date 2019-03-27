@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 import { Button } from 'react-bootstrap';
-import { titalizeText } from '../common/utilities';
+import { titalizeText } from '../../common/utilities';
 
 //import config from '../config.jsx'
 //const faqItems = config.faqs.items;

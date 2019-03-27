@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 
-import config from '../config.jsx'
+import config from '../../config.jsx'
 const faqItems = config.faqs.items;
 
 class Faq extends Component {

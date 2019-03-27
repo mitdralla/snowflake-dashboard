@@ -1,25 +1,29 @@
 // dApp Store Configuration File.
 const config = {
   general: {
-    dappStoreName: "SNOWFLAKE",
+    dappStoreName:             "SNOWFLAKE",
     dappSearchPlaceholderText: "Search the dApp Store...",
-    featuredDappsSection: "on",
-    popularDappsSection: "on",
-    latestDappsSection: "on",
+    featuredDappsSection:      "on",
+    popularDappsSection:       "on",
+    latestDappsSection:        "on",
+    theme: {
+      contentBackgroundColor: "#fff",
+      maxWidth:               "1700px"
+    }
   },
   homepage: {
-    heroCarousel: "on",
+    heroCarousel:         "on",
     featuredDappsSection: "on",
-    popularDappsSection: "on",
-    latestDappsSection: "on",
+    popularDappsSection:  "on",
+    latestDappsSection:   "on",
   },
   heroCarousel: {
-    leftArrow: "no",
-    rightArrow: "yes",
-    maxItems: 10,
-    itemsInViewDesktop: 6,
-    itemsInViewTablet: 4,
-    itemsInViewMobile: 2
+    leftArrow:          "no",
+    rightArrow:         "yes",
+    maxItems:           10,
+    itemsInViewDesktop: 4,
+    itemsInViewTablet:  4,
+    itemsInViewMobile:  1
   },
   dappCategories: {
     categories: [
@@ -153,12 +157,13 @@ const config = {
   jumbotrons: {
     items: [
       {
-        id:           "1",
-        jumbotron:    "default",
-        title:        "Get Involved",
-        description:  "Are you a developer? Do you have a dApp idea? Do you want to partner with us?",
-        buttonText:   "Let Us Know",
-        buttonLink:   "/developers"
+        id:              "1",
+        jumbotron:       "default",
+        title:           "Get Involved",
+        description:     "Are you a developer? Do you have a dApp idea? Do you want to partner with us?",
+        buttonText:      "Let Us Know",
+        buttonLink:      "/developers",
+        backgroundColor: "#e8e8e8"
       }
     ]
   },

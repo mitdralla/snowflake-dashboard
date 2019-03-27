@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { withRouter, Switch, Route, Redirect } from 'react-router'
 import { useEIN, useHydroId, useEINDetails, useNamedContract } from '../../common/hooks'
 import './Dashboard.css'
+import config from '../../config.jsx'
 
 import { Header } from '../Header'
 import { HeroCarousel } from '../HeroCarousel'
@@ -13,7 +14,7 @@ const NoSnowflakeProvider = lazy(() => import('../states/NoSnowflakeProvider'))
 const NoEIN = lazy(() => import('../states/NoEIN'))
 const NoHydroId = lazy(() => import('../states/NoHydroId'))
 const RouteTabs = lazy(() => import('../RouteTabs'))
-const FinalizeClaim = lazy(() => import('../routes/FinalizeClaim'))
+const FinalizeClaim = lazy(() => import('../Views/FinalizeClaim'))
 
 export default withRouter((function App ({ classes, location }) {
   const ein = useEIN()
@@ -23,6 +24,11 @@ export default withRouter((function App ({ classes, location }) {
 
   const ready = (ein || ein === null) && (hydroId || hydroId === null)
   const claimingAddress = location.pathname.match(/\/claim-address.*/)
+
+  const storeWrapperStyle = {
+    maxWidth: config.general.theme.maxWidth,
+    backgroundColor: config.general.theme.contentBackgroundColor
+  }
 
   const Display = () => {
     if (!ready) return null
@@ -66,7 +72,7 @@ export default withRouter((function App ({ classes, location }) {
   }
 
   return (
-    <div>
+    <div className="dashWrapper" style={storeWrapperStyle}>
       <Header />
       <HeroCarousel />
       <div className="bodyWrapper">

@@ -1,12 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Typography } from '@material-ui/core'
 import { useWeb3Context } from 'web3-react'
-import { Button } from '@material-ui/core';
-import { TextField } from '@material-ui/core';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
+import { Button, TextField, Typography, Stepper, Step, StepLabel, StepContent } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 
 import { useNamedContract, useDebounce, useAccountEffect} from '../../common/hooks'

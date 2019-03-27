@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import { Button, Card, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { titalizeText } from '../common/utilities'
+import { titalizeText } from '../../common/utilities'
 
 //import config from '../config.jsx'
 //const faqItems = config.faqs.items;

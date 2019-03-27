@@ -85,3 +85,13 @@
 .text-grey {
   color: #a9a9a9;
 }
+
+.GetUsersHydroBalanceFromWalletChip {
+  position: relative;
+  left: 30px;
+}
+
+.GetUsersAddedDAppTotalChip {
+  position: relative;
+  left: 70px;
+}
