@@ -20,30 +20,30 @@ import demoBG8 from './../../assets/img/temple_run_logo.png'
 
 // Owl Carousel Config.
 const options = {
-  items: config.heroCarousel.maxItems,
+  items: config.homepage.heroCarousel.desktopItemsInView,
   loop: true,
   margin: 30,
   responsiveClass: true,
   responsive:{
       0:{
-          items: config.heroCarousel.itemsInViewMobile,
+          items: config.homepage.heroCarousel.mobileItemsInView,
           nav: true,
           loop: true
       },
       600:{
-          items: config.heroCarousel.itemsInViewTablet,
+          items: config.homepage.heroCarousel.tabletItemsInView,
           nav: false,
           loop: true
       },
       1000:{
-          items: config.heroCarousel.itemsInViewDesktop,
+          items: config.homepage.heroCarousel.desktopItemsInView,
           nav: true,
           loop: true,
       }
   },
-  autoplay: true,
-  autoplayTimeout: 3000,
-  autoplayHoverPause: false,
+  autoplay: config.homepage.heroCarousel.autoplay,
+  autoplayTimeout: config.homepage.heroCarousel.rotationSpeed,
+  autoplayHoverPause: config.homepage.heroCarousel.pauseOnHover,
   autoWidth: false,
   navigation: false
 };

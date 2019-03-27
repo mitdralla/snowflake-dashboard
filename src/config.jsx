@@ -1,76 +1,81 @@
 // dApp Store Configuration File.
 const config = {
-  general: {
+  general: {                                       //******** General Store Settings ********//
     dappStoreName:                   "SNOWFLAKE",
     dappStoreMetaKeywords:           "dapps, dapp store, app store, decentralized applications, decentralized apps, snowflake, hydro dapp store",
     dappStoreMetaDescription:        "Hydro dApp store featuring decentralized applications powered by Snowflake.",
     dappSearchPlaceholderText:       "Search the dApp Store...",
-    featuredDappsSectionActive:      true,
-    popularDappsSectionActive:       true,
-    latestDappsSectionActive:        true,
-    theme: {
-      contentBackgroundColor:        "#fff",
-      maxWidth:                      "1700px"
+    maintenanceMode:                 false,        // Allows the store to display a temporary maintenance page or message. true/false
+    theme: {                                       //******** Settings pertaining to the stores theme. ********//
+      contentBackgroundColor:        "#fff",       // The background color of the main body wrapper in hex form (ex: #fff).
+      maxWidth:                      "1700px"      // The store wrapper max-width. Leave blank for 100% fluidity (ex: 1500px).
     }
   },
-  homepage: {
-    heroCarousel: {
-      active:                        true,
-      leftArrowActive:               false,
-      rightArrowActive:              true,
-      heroCarouselDesktopItemsTotal: 5,
-      heroCarouselTabletItemsTotal:  3,
-      heroCarouselMobileItemsTotal:  1,
-      carouselRotation:              true,
-      carouselRotationSpeed:         "3000"
+  homepage: {                                      //******** Settings pertaining to the homepage. ********//
+    heroCarousel: {                                //******** Settings pertaining to the hero carousel on the homepage. ********//
+      active:                        true,         // Turns the hero carousel on the homepage on/off. true/false
+      leftArrowActive:               false,        // Turns the left arrow on/off for manually moving through slides. true/false
+      rightArrowActive:              true,         // Turns the left arrow on/off for manually moving through slides. true/false
+      desktopItemsInView:            5,            // How many items are in view on desktop (1000px or greater).
+      tabletItemsInView:             3,            // How many items are in view on tablet (600px or greater).
+      mobileItemsInView:             1,            // How many items are in view on tablet (0px or greater).
+      autoplay:                      true,         // Will the carousel start rotating automatically? true/false.
+      rotationSpeed:                 3000,         // Rotation speed between each slide movement in milliseconds. (ex: 3000 = 3 seconds).
+      pauseOnHover:                  true,         // Will the carousel stop moving on hover? true/false
+      infiniteItemLoop:              true,         // Will it infinitely keep rotating? true/false
+      titleActive:                   true,         // Is there an app title visible? true/false
+      categoryActive:                true,         // Is there an app category visible? true/false
+      ratingsActive:                 true,         // Are there app ratings visible? true/false
+      hydroButtonActive:             true,         // Is there a button displaying a hydro ammount? true/false
+      inDappPurchasesActive:         true          // Is there in-dapp purchase text visible? true/false
     },
-    dapps: {
-      dappsPerRow:                   5,
-      dappPaginationActive:          false,
-      filterBarActive:               true,
-      featuredDappsSectionActive:    true,
-      popularDappsSectionActive:     true,
-      latestDappsSectionActive:      true,
+    dapps: {                                       //******** Settings pertaining to the dApps on the homepage. ********//
+      dappsPerRow:                   5,            // How many dapps are shown on each row of the main body content? 4-5 recommended on desktop.
+      dappPaginationActive:          false,        // Is there pagination to view more pages of dapps? true/false
+      filterBarActive:               true,         // Is the filter bar (featured, latest, popular) visible on the page? true/false
+      filterSubTitlesActive:         true,         // Display the line of text under section titles? true/false
+      featuredDappsSectionActive:    true,         // Is the featured dapp section on the homepage active? treu/false
+      popularDappsSectionActive:     true,         // Is the popular dapp section on the homepage active? treu/false
+      latestDappsSectionActive:      true,         // Is the latest dapp section on the homepage active? treu/false
+      detailsHoverButtonActive:      true,         // When hovering a dapp in the main body content, does a details button appear? true/false
     }
   },
-  dappSingleLandingPage: {
-    thumbnailActive:                 true,
-    titleActive:                     true,
-    authorActive:                    true,
-    categoryActive:                  true,
-    reviewsActive:                   false,
-    inAppPurchasesActive:            true,
-    screenshotsCarouselActive:       true,
-    maxScreenshotsAllowed:           5,
-    descriptionActive:               true,
-    expandDescriptionLinkActive:     true,
-    versionHistoryActive:            true,
-    additionalInformation: {
-      feeToUseActive:                true,
-      inDAppPurchasesActive:         true,
-      licenseActive:                 true,
-      categoryActive:                true,
-      authorActive:                  true,
-      initialReleaseDateActive:      true,
-      lastUpdateActive:              true,
-      currentVersion:                true,
-      reportActive:                  true,
+  dappSingleLandingPage: {                         //******** Settings pertaining to a single dApp landing page. ********//
+    general: {                                     //******** General settings on a single dapp landing page. *******//
+      thumbnailActive:               true,         // Is the thumbnail visible? true/false
+      titleActive:                   true,         // Is the title visible? true/false
+      authorActive:                  true,         // Is the author visible? true/false
+      categoryActive:                true,         // Is the category visible? true/false
+      reviewsActive:                 false,        // Are reviews visible? true/false
+      inAppPurchasesActive:          true,         // Are inapp purchases visible? true/false
+      screenshotsCarouselActive:     true,         // Are screenshots turned on? true/false
+      maxScreenshotsAllowed:         5,            // What is the max number of screenshots allowed in the slider? (would recommended no more than 5)
+      descriptionActive:             true,         // Is the app description active? true/false
+      expandDescriptionLinkActive:   true,         // Is the link to expand the description enabled? true/false
+      versionHistoryActive:          true,         // Is version history visible?
     },
-    social: {
-        active:                      true,
-        githubActive:                true,
-        facebookActive:              true,
-        twitterActive:               true,
-        mailActive:                  true
+    additional: {                                  //******** Additional settings on a single dapp landing page. *******//
+      feeToUseActive:                true,         // Is the fee to use this dapp text visible? true/false
+      inDAppPurchasesActive:         true,         // Is in-dapp purchases text visible? true/false
+      licenseActive:                 true,         // Is the license text visible? true/false
+      categoryActive:                true,         // Is the category text visible? true/false
+      authorActive:                  true,         // Is the author text visible? true/false
+      initialReleaseDateActive:      true,         // Is the initial release date text visible? true/false
+      lastUpdateActive:              true,         // Is the last update text visible? true/false
+      currentVersion:                true,         // Is the current version text visible? true/false
+      reportActive:                  true,         // Is the report dapp text link visible? true/false
     },
-    statisticsActive:                false,
-    moreFromThisDeveloper:           false,
-    moreFromThisDeveloperLimit:      5
+    social: {                                      //******** Social icons on a single dapp landing page. *******//
+        active:                      true,         // Are author social icons active? true/false
+        githubActive:                true,         // Is the Github link active? true/false
+        facebookActive:              true,         // Is the Facebook link active? true/false
+        twitterActive:               true,         // Is the Twitter link active? true/false
+        mailActive:                  true          // Is the Mail link active? true/false
+    },
+    statisticsActive:                false,        // Are statistics for this dApp visible? true/false
+    moreFromThisDeveloper:           false,        // Is the "more from this developer" for this dApp visible? true/false
+    moreFromThisDeveloperLimit:      5             // What is the max number of dApps from this developer that will be shown.
 
-  },
-  heroCarousel: {
-    leftArrowActive:                 false,
-    rightArrowActive:                true,
   },
   dappCategories: {
     categories: [
