@@ -1,29 +1,64 @@
 // dApp Store Configuration File.
 const config = {
   general: {
-    dappStoreName:             "SNOWFLAKE",
-    dappSearchPlaceholderText: "Search the dApp Store...",
-    featuredDappsSection:      "on",
-    popularDappsSection:       "on",
-    latestDappsSection:        "on",
+    dappStoreName:                   "SNOWFLAKE",
+    dappSearchPlaceholderText:       "Search the dApp Store...",
+    featuredDappsSectionActive:      true,
+    popularDappsSectionActive:       true,
+    latestDappsSectionActive:        true,
     theme: {
-      contentBackgroundColor: "#fff",
-      maxWidth:               "1700px"
+      contentBackgroundColor:        "#fff",
+      maxWidth:                      "1700px"
     }
   },
   homepage: {
-    heroCarousel:         "on",
-    featuredDappsSection: "on",
-    popularDappsSection:  "on",
-    latestDappsSection:   "on",
+    heroCarouselActive:              true,
+    featuredDappsSectionActive:      true,
+    popularDappsSectionActive:       true,
+    latestDappsSectionActive:        true,
+  },
+  dappSingleLandingPage: {
+    thumbnailActive:                 true,
+    titleActive:                     true,
+    authorActive:                    true,
+    categoryActive:                  true,
+    reviewsActive:                   false,
+    inAppPurchasesActive:            true,
+    screenshotsCarouselActive:       true,
+    maxScreenshotsAllowed:           5,
+    descriptionActive:               true,
+    expandDescriptionLinkActive:     true,
+    versionHistoryActive:            true,
+    additionalInformation: {
+      feeToUseActive:                true,
+      inDAppPurchasesActive:         true,
+      licenseActive:                 true,
+      categoryActive:                true,
+      authorActive:                  true,
+      initialReleaseDateActive:      true,
+      lastUpdateActive:              true,
+      currentVersion:                true,
+      reportActive:                  true,
+    },
+    social: {
+        active:                      true,
+        githubActive:                true,
+        facebookActive:              true,
+        twitterActive:               true,
+        mailActive:                  true
+    },
+    statisticsActive:                false,
+    moreFromThisDeveloper:           false,
+    moreFromThisDeveloperLimit:      5
+
   },
   heroCarousel: {
-    leftArrow:          "no",
-    rightArrow:         "yes",
-    maxItems:           10,
-    itemsInViewDesktop: 4,
-    itemsInViewTablet:  4,
-    itemsInViewMobile:  1
+    leftArrowActive:                 false,
+    rightArrowActive:                true,
+    maxItems:                        10,
+    itemsInViewDesktop:              4,
+    itemsInViewTablet:               4,
+    itemsInViewMobile:               1
   },
   dappCategories: {
     categories: [
@@ -33,7 +68,7 @@ const config = {
         icon:        "IoMdFolderOpen",
         description: "",
         order:       1,
-        active:      "yes"
+        active:      true
       },
       {
         name:        "Entertainment",
@@ -41,7 +76,7 @@ const config = {
         icon:        "IoIosFilm",
         description: "",
         order:       2,
-        active:      "yes"
+        active:      true
       },
       {
         name:        "Fintech",
@@ -49,14 +84,14 @@ const config = {
         icon:        "IoMdCard",
         description: "",
         order:       3,
-        active:      "yes"
+        active:      true
       },
       {
         name:        "Business",
         link:        "business",
         icon:        "IoIosGlobe",
         order:       4,
-        active:      "yes"
+        active:      true
       },
       {
         name:        "Gaming",
@@ -64,7 +99,7 @@ const config = {
         icon:        "IoLogoGameControllerA",
         description: "",
         order:       5,
-        active:      "yes"
+        active:      true
       },
       {
         name:        "Community",
@@ -72,7 +107,7 @@ const config = {
         icon:        "IoIosPeople",
         description: "",
         order:       6,
-        active:      "yes"
+        active:      true
       },
       {
         name:        "Tools",
@@ -80,7 +115,7 @@ const config = {
         icon:        "IoIosCalculator",
         description: "",
         order:       7,
-        active:      "yes"
+        active:      true
       },
       {
         name:        "Other",
@@ -88,7 +123,7 @@ const config = {
         icon:        "IoIosSettings",
         description: "",
         order:       8,
-        active:      "yes"
+        active:      true
       }
     ]
   },
@@ -98,25 +133,25 @@ const config = {
         name:    "All",
         link:    "#all",
         order:   1,
-        active:  "yes"
+        active:  true
       },
       {
         name:    "Featured",
         link:    "#featured",
         order:   2,
-        active:  "yes"
+        active:  true
       },
       {
         name:    "Most Popular",
         link:    "#most-popular",
         order:   3,
-        active:  "yes"
+        active:  true
       },
       {
         name:    "Latest Releases",
         link:    "#latest-releases",
         order:   4,
-        active:  "yes"
+        active:  true
       }
     ]
   },
@@ -126,31 +161,31 @@ const config = {
         name:    "Audits",
         link:    "/audits",
         order:   1,
-        active:  "yes"
+        active:  true
       },
       {
         name:    "Privacy Policy",
         link:    "/privacy-policy",
         order:   2,
-        active:  "yes"
+        active:  true
       },
       {
         name:    "Terms of Use",
         link:    "/terms-of-use",
         order:   3,
-        active:  "yes"
+        active:  true
       },
       {
         name:    "About",
         link:    "/about",
         order:   4,
-        active:  "yes"
+        active:  true
       },
       {
         name:    "Contact",
         link:    "/contact",
         order:   5,
-        active:  "yes"
+        active:  true
       }
     ]
   },
@@ -174,35 +209,35 @@ const config = {
         question:     "What is this all about?",
         answer:       "It is about this and that. It also has a lot to do with x, y and z.",
         category:     "general",
-        active:       "yes"
+        active:       true
       },
       {
         id:           "2",
         question:     "What is this all about?",
         answer:       "It is about this and that. It also has a lot to do with x, y and z.",
         category:     "general",
-        active:       "yes"
+        active:       true
       },
       {
         id:           "3",
         question:     "What is this all about?",
         answer:       "It is about this and that. It also has a lot to do with x, y and z.",
         category:     "general",
-        active:       "yes"
+        active:       true
       },
       {
         id:           "4",
         question:     "What is this all about?",
         answer:       "It is about this and that. It also has a lot to do with x, y and z.",
         category:     "general",
-        active:       "yes"
+        active:       true
       },
       {
         id:           "5",
         question:     "What is this all about?",
         answer:       "It is about this and that. It also has a lot to do with x, y and z.",
         category:     "general",
-        active:       "yes"
+        active:       true
       },
 
     ]
