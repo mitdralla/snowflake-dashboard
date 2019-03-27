@@ -23,7 +23,7 @@ const config = {
     maxItems:           10,
     itemsInViewDesktop: 4,
     itemsInViewTablet:  4,
-    itemsInViewMobile:  2
+    itemsInViewMobile:  1
   },
   dappCategories: {
     categories: [
