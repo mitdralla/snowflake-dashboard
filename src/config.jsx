@@ -2,6 +2,8 @@
 const config = {
   general: {
     dappStoreName:                   "SNOWFLAKE",
+    dappStoreMetaKeywords:           "dapps, dapp store, app store, decentralized applications, decentralized apps, snowflake, hydro dapp store",
+    dappStoreMetaDescription:        "Hydro dApp store featuring decentralized applications powered by Snowflake.",
     dappSearchPlaceholderText:       "Search the dApp Store...",
     featuredDappsSectionActive:      true,
     popularDappsSectionActive:       true,
@@ -13,6 +15,9 @@ const config = {
   },
   homepage: {
     heroCarouselActive:              true,
+    heroCarouselDesktopMaxItems:     5,
+    heroCarouselTabletMaxItems:      3,
+    heroCarouselMobileMaxItems:      1,
     featuredDappsSectionActive:      true,
     popularDappsSectionActive:       true,
     latestDappsSectionActive:        true,
