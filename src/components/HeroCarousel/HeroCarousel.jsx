@@ -21,7 +21,7 @@ import demoBG8 from './../../assets/img/temple_run_logo.png'
 // Owl Carousel Config.
 const options = {
   items: config.homepage.heroCarousel.desktopItemsInView,
-  loop: true,
+  loop: config.homepage.heroCarousel.infiniteItemLoop,
   margin: 30,
   responsiveClass: true,
   responsive:{

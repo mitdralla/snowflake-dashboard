@@ -176,10 +176,10 @@ const config = {
   dappFooterNavigation: {
     items: [
       {
-        name:    "Audits",
-        link:    "/audits",
-        order:   1,
-        active:  true
+        name:    "Audits",                         // Name of link.
+        link:    "/audits",                        // Link of the link.
+        order:   1,                                // Order in wich the link should display.
+        active:  true                              // Is this link active? true/false
       },
       {
         name:    "Privacy Policy",
