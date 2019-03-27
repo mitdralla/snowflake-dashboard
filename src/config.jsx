@@ -5,6 +5,7 @@ const config = {
     dappStoreMetaKeywords:           "dapps, dapp store, app store, decentralized applications, decentralized apps, snowflake, hydro dapp store",
     dappStoreMetaDescription:        "Hydro dApp store featuring decentralized applications powered by Snowflake.",
     dappSearchPlaceholderText:       "Search the dApp Store...",
+    dappSearchActive:                true,         // Is the header dApp search bar visible? true/false
     maintenanceMode:                 false,        // Allows the store to display a temporary maintenance page or message. true/false
     theme: {                                       //******** Settings pertaining to the stores theme. ********//
       contentBackgroundColor:        "#fff",       // The background color of the main body wrapper in hex form (ex: #fff).
@@ -77,15 +78,15 @@ const config = {
     moreFromThisDeveloperLimit:      5             // What is the max number of dApps from this developer that will be shown.
 
   },
-  dappCategories: {
+  dappCategories: {                                //******** Settings pertaining to dApp categories in the main sidebar. ********//
     categories: [
       {
-        name:        "All Categories",
-        link:        "all-categories",
-        icon:        "IoMdFolderOpen",
-        description: "",
-        order:       1,
-        active:      true
+        name:        "All Categories",             // The Name of the cateory
+        link:        "all-categories",             // The SEO slug for the category
+        icon:        "IoMdFolderOpen",             // The icon class name
+        description: "",                           // The category description.
+        order:       1,                            // The order this category should appear in the list.
+        active:      true                          // Is this category active? true/false
       },
       {
         name:        "Entertainment",
