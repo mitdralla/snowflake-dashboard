@@ -14,13 +14,24 @@ const config = {
     }
   },
   homepage: {
-    heroCarouselActive:              true,
-    heroCarouselDesktopMaxItems:     5,
-    heroCarouselTabletMaxItems:      3,
-    heroCarouselMobileMaxItems:      1,
-    featuredDappsSectionActive:      true,
-    popularDappsSectionActive:       true,
-    latestDappsSectionActive:        true,
+    heroCarousel: {
+      active:                        true,
+      leftArrowActive:               false,
+      rightArrowActive:              true,
+      heroCarouselDesktopItemsTotal: 5,
+      heroCarouselTabletItemsTotal:  3,
+      heroCarouselMobileItemsTotal:  1,
+      carouselRotation:              true,
+      carouselRotationSpeed:         "3000"
+    },
+    dapps: {
+      dappsPerRow:                   5,
+      dappPaginationActive:          false,
+      filterBarActive:               true,
+      featuredDappsSectionActive:    true,
+      popularDappsSectionActive:     true,
+      latestDappsSectionActive:      true,
+    }
   },
   dappSingleLandingPage: {
     thumbnailActive:                 true,
@@ -60,10 +71,6 @@ const config = {
   heroCarousel: {
     leftArrowActive:                 false,
     rightArrowActive:                true,
-    maxItems:                        10,
-    itemsInViewDesktop:              4,
-    itemsInViewTablet:               4,
-    itemsInViewMobile:               1
   },
   dappCategories: {
     categories: [
