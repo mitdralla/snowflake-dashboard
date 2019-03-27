@@ -5,7 +5,7 @@ const { join } = require('path')
 
 const dirs = path => readdirSync(path).filter(child => statSync(join(path, child)).isDirectory())
 
-const basePath = './src/components/resolvers'
+const basePath = './src/resolvers'
 const networkNames = dirs(basePath)
 
 // write index.js for each network

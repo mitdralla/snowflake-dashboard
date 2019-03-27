@@ -13,7 +13,7 @@ Visit the [live dashboard](https://HydroBlockchain.github.io/snowflake-dashboard
 ## Adding Your Resolver To the Dashboard
 
 1. Create a smart contract on Rinkeby that appropriately inherits from the canonical [`SnowflakeResolver` contract](https://github.com/hydrogen-dev/smart-contracts/blob/master/snowflake/contracts/SnowflakeResolver.sol). For examples, [see here](https://github.com/hydrogen-dev/smart-contracts/tree/master/snowflake/contracts/resolvers). **In order to be accepted to the dashboard, your smart contract source code must be verified on Etherscan.**
-2. Note the **checksummed** address of your smart contract and make a folder with this name in [src/components/resolvers/Rinkeby](./src/components/resolvers/Rinkeby).
+2. Note the **checksummed** address of your smart contract and make a folder with this name in [src/resolvers/Rinkeby](./src/resolvers/Rinkeby).
 3. Create an `index.js` file in the folder.
 4. This file should export the following exports:
 	- `default`: A React Component **wrapped in React.lazy**. This component will receive a user's EIN in the props as `ein`.
@@ -25,4 +25,4 @@ Visit the [live dashboard](https://HydroBlockchain.github.io/snowflake-dashboard
 	- `requiredAllowance`: An optional HYDRO amount a user must set as their initial allowance for your resolver on sign-up.
 
 Hints
-- Check out the existing [Status Resolver](./src/components/resolvers/Rinkeby/0xbB54D790860B07DE1E1b2db0eD553a6cB713E2f0) for best practices patterns.
+- Check out the existing [Status Resolver](./src/resolvers/Rinkeby/0xbB54D790860B07DE1E1b2db0eD553a6cB713E2f0) for best practices patterns.

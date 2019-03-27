@@ -2,7 +2,7 @@ import React from 'react'
 import { ethers } from 'ethers'
 import { isWeb3 } from 'web3-react'
 import contracts from './contracts'
-import { default as defaultLogo } from '../components/resolvers/defaultLogo.png'
+import { default as defaultLogo } from 'resolvers/defaultLogo.png'
 import { Typography } from '@material-ui/core';
 
 const networkDataById = {
@@ -98,8 +98,9 @@ export const GENERIC_SNOWFLAKE_RESOLVER_ABI = [{"constant":false,"inputs":[],"na
 
 // Get the details of a resolver (dApp).
 export async function getResolverDetails (address) {
-  const resolverPath = `components/resolvers/${this.props.w3w.getNetworkName()}/${address}`
-  const resolverData = await import('../' + resolverPath)
+  const resolverPath = `resolvers/${this.props.w3w.getNetworkName()}/${address}`
+  // need to define the path in the import statement or eslint complains 
+  const resolverData = await import(`resolvers/${this.props.w3w.getNetworkName()}/${address}`)
     .catch(() => null)
 
   // get contract object
@@ -123,7 +124,7 @@ export async function getResolverDetails (address) {
 // Get a list of all resolvers (dApps) in the store.
 export async function getAllResolvers () {
   // eslint-disable-next-line
-  return (await import('../' + `components/resolvers/${this.props.w3w.getNetworkName()}`)).default
+  return (await import(`resolvers/${this.props.w3w.getNetworkName()}`)).default
 }
 
 // Get the resolvers properties.

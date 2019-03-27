@@ -18,7 +18,7 @@ import { useWeb3Context } from 'web3-react'
 import { useNamedContract } from '../../common/hooks'
 import { getEtherscanLink, fromDecimal } from '../../common/utilities'
 import TransactionButton from '../common/TransactionButton'
-import ResolverModal from '../resolvers/ResolverModal'
+import ResolverModal from 'resolvers/ResolverModal'
 
 const styles = theme => ({
   addResolver: {

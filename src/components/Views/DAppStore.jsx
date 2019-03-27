@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { useWeb3Context } from 'web3-react'
 
 // A constant that holds all resolver data.
-import ALL_SNOWFLAKE_RESOLVERS from '../resolvers'
+import ALL_SNOWFLAKE_RESOLVERS from 'resolvers'
 
 import { fromDecimal } from "../../common/utilities";
 import { useEINDetails, useResolverDetails, useSnowflakeBalance, useNamedContract, useNetworkName } from '../../common/hooks'

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import TransactionButton from '../../../common/TransactionButton';
+import TransactionButton from 'components/common/TransactionButton';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,8 +22,8 @@ function Transition(props) {
 
 
 class EditReportDialog extends Component {
-  
-  
+
+
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -38,9 +38,9 @@ class EditReportDialog extends Component {
 			reportClaimerHydroId: props.reportClaimerHydroId,
 			open:false
 		}
-	
+
 	}
-  
+
  getStatusColor() {
 		if(this.state.reportStatus ==="1")
 			return {backgroundColor: red[500]}
@@ -62,7 +62,7 @@ class EditReportDialog extends Component {
 			open:nextProps.open
 		})
 	}
-  
+
 	UNSAFE_componentWillMount(){
 		this.setState({
 			reportStatus: this.props.reportStatus,
@@ -76,7 +76,7 @@ class EditReportDialog extends Component {
 			open:false
 		})
 	}
-  
+
 	componentDidMount(){
 		this.setState({
 			reportStatus: this.props.reportStatus,
@@ -91,7 +91,7 @@ class EditReportDialog extends Component {
 		})
 	}
 
-   
+
 
 	formatTimestamp(timestamp){
 		var date = new Date(parseInt(timestamp)*1000);
@@ -105,20 +105,20 @@ class EditReportDialog extends Component {
 		var time = month + ' ' + day + ' ' + year + ', ' + hour + ':' + min + ':' + sec ;
 		return time;
 	}
-  
+
 	handleChangeReportReward(event){
-		this.setState({reportReward: event.target.value}) 
+		this.setState({reportReward: event.target.value})
 	}
-  
+
 	handleReportSceneDesc(event){
-		this.setState({reportSceneDescription: event.target.value}) 
+		this.setState({reportSceneDescription: event.target.value})
 	}
 
 	handleClose = () => {
 		this.setState({ open: false });
 	}
- 
-  
+
+
 	render() {
 
 		return (
@@ -205,7 +205,7 @@ class EditReportDialog extends Component {
 					//new, removed or rewarded are states that allow new report creation
 				}
 				{this.state.reportStatus==="0" || this.state.reportStatus==="3" || this.state.reportStatus==="4"?(
-					<TransactionButton 
+					<TransactionButton
 						readyText='Submit New Report Details...'
 						method = {() => this.props.resolverContract.methods.putLostReport(this.props.hydroId,this.props.petId,this.state.reportSceneDescription, this.state.reportReward)}
 						onConfirmation={() => {
@@ -218,20 +218,20 @@ class EditReportDialog extends Component {
 				}
 				{this.state.reportStatus==="1"?(
 					<div>
-						<TransactionButton 
+						<TransactionButton
 							readyText='Update Report...'
 							method = { () => this.props.resolverContract.methods.updateLostReport(this.props.hydroId,this.props.petId,this.state.reportSceneDescription, this.state.reportReward)}
 							onConfirmation={() => {
 								this.props.handleClose()
 							}}
 						/>
-						<TransactionButton 
+						<TransactionButton
 							readyText='Remove Report...'
 							method = {() =>  this.props.resolverContract.methods.removeLostReport(this.props.hydroId,this.props.petId)}
 							onConfirmation={() => {
 								this.props.handleClose()
 							}}
-						/> 
+						/>
 					</div>
 				):''}
 				{
@@ -239,14 +239,14 @@ class EditReportDialog extends Component {
 				}
 				{this.state.reportStatus==="2"?(
 					<div>
-						<TransactionButton 
+						<TransactionButton
 							readyText='Confirm Reward...'
 							method = { () => this.props.resolverContract.methods.confirmReward(this.props.hydroId,this.props.petId)}
 							onConfirmation={() => {
 								this.props.handleClose()
 							}}
 						/>
-						<TransactionButton 
+						<TransactionButton
 							readyText=' Wrong Alert!  Revert Pet Found...'
 							method = { this.props.resolverContract.methods.unclaimLostReport(this.props.petId)}
 							onConfirmation={() => {
@@ -266,7 +266,3 @@ class EditReportDialog extends Component {
 }
 
 export default EditReportDialog;
-
-
-
-

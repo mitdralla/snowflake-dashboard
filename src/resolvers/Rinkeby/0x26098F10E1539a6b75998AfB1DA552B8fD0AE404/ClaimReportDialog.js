@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import VerifiedUser from '@material-ui/icons/VerifiedUser';
-import TransactionButton from '../../../common/TransactionButton';
+import TransactionButton from 'components/common/TransactionButton';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -20,8 +20,8 @@ function Transition(props) {
 
 
 class ClaimReportDialog extends Component {
-  
-  
+
+
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -69,7 +69,7 @@ class ClaimReportDialog extends Component {
 			petId: this.props.petId
 		})
 	}
-  
+
 	componentDidMount(){
 		this.setState({
 			reportStatus: this.props.reportStatus,
@@ -85,7 +85,7 @@ class ClaimReportDialog extends Component {
 		})
 	}
 
-   
+
 
 	formatTimestamp(timestamp){
 		var date = new Date(parseInt(timestamp)*1000);
@@ -102,19 +102,19 @@ class ClaimReportDialog extends Component {
 
 
 	handleChangeReportReward(event){
-		this.setState({reportReward: event.target.value}) 
+		this.setState({reportReward: event.target.value})
 	}
-  
+
 	handleReportSceneDesc(event){
-		this.setState({reportSceneDescription: event.target.value}) 
+		this.setState({reportSceneDescription: event.target.value})
 	}
 
 
 	handleClose = () => {
 		this.setState({ open: false });
 	}
- 
-  
+
+
 	render() {
 
 		return (
@@ -226,7 +226,7 @@ class ClaimReportDialog extends Component {
 				</DialogContent>
 				<DialogActions>
 					{this.state.reportStatus==="1"?(
-						<TransactionButton 
+						<TransactionButton
 							readyText='Claim Pet Found...'
 							method = { this.props.resolverContract.methods.claimLostReport(this.props.petId,this.props.hydroId)}
 							onConfirmation={() => {
@@ -246,7 +246,3 @@ class ClaimReportDialog extends Component {
 
 
 export default ClaimReportDialog;
-
-
-
-

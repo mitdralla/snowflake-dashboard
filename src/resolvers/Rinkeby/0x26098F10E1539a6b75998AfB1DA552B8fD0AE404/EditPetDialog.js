@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import TransactionButton from '../../../common/TransactionButton';
+import TransactionButton from 'components/common/TransactionButton';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -24,12 +24,12 @@ const textField = {
     marginRight: 8,
     width: 400,
   };
-  
+
 
 
 class EditPetDialog extends Component {
-  
-  
+
+
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -54,7 +54,7 @@ class EditPetDialog extends Component {
 			open:nextProps.open
 		})
 	}
-  
+
 	UNSAFE_componentWillMount(){
 		this.setState({
 			petType: this.props.petType,
@@ -65,7 +65,7 @@ class EditPetDialog extends Component {
 			open:false
 		})
 	}
-  
+
 	componentDidMount(){
 		this.setState({
 			petType: this.props.petType,
@@ -93,7 +93,7 @@ class EditPetDialog extends Component {
 
 
 	handleReportSceneDesc(event){
-		this.setState({reportSceneDescription: event.target.value}) 
+		this.setState({reportSceneDescription: event.target.value})
 	}
 
 	handleChangeImgUrl(event){
@@ -120,8 +120,8 @@ class EditPetDialog extends Component {
 	handleClose = () => {
 		this.setState({ open: false });
 	}
- 
-  
+
+
   render() {
 
     return (
@@ -249,7 +249,3 @@ class EditPetDialog extends Component {
 
 
 export default EditPetDialog;
-
-
-
-

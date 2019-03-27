@@ -14,7 +14,7 @@ import {
   toDecimal
 } from './utilities';
 
-import { default as defaultLogo } from '../components/resolvers/defaultLogo.png'
+import { default as defaultLogo } from 'resolvers/defaultLogo.png'
 
 export function useNetworkName (networkId) {
   const context = useWeb3Context()
@@ -249,8 +249,7 @@ async function getResolverDetails(web3js, snowflakeContract, networkName, resolv
 
   // Look for the resolvers (dApps) in the 'resolvers/{network_name}' folder and import their details. Network names are Rinkeby and Mainnet.
   // Resolver properties will most likely be added on to here.
-  const resolverPath = `components/resolvers/${networkName}/${resolver}`
-  const localDetails = await import('../' + resolverPath)
+  const localDetails = await import(`resolvers/${networkName}/${resolver}`)
     .then(details => ({
       component:          details.default,
       logo:               details.logo || defaultLogo,

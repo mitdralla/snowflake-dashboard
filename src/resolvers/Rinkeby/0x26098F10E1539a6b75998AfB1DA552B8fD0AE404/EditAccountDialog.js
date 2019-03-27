@@ -4,15 +4,15 @@ import Button from '@material-ui/core/Button';
 
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import TransactionButton from '../../../common/TransactionButton';
+import TransactionButton from 'components/common/TransactionButton';
 import Info from '@material-ui/icons/Info';
 import AboutDialog from './AboutDialog';
 
 
 
 export default class EditAccountDialog extends Component {
-  
-  
+
+
 	constructor(props) {
 		super(props)
 			this.state = {
@@ -21,8 +21,8 @@ export default class EditAccountDialog extends Component {
 			openAbout:false
 		}
 	}
-  
-  
+
+
 	componentDidMount(){
 		this.props.resolverContract.methods.getOwner(this.props.hydroId).call()
 			.then(anOwner =>{
@@ -36,31 +36,31 @@ export default class EditAccountDialog extends Component {
 	}
 
 
-  
+
 	handleChangeContactName(event){
 		this.setState({contactName: event.target.value})
 	}
-   
+
 	handleChangeContactData(event){
 		this.setState({contactData: event.target.value})
 	}
-  
+
 	handleOpenAbout(){
 		this.setState({openAbout:true});
 	}
-	
+
 	handleCloseAbout(){
 		this.setState({openAbout:false});
 	}
-  
+
   render() {
 
     return (
 
-	
+
 
             <div style={{width: '100%'}}>
-			
+
 			<form noValidate autoComplete="off">
 
                 <TextField
@@ -93,9 +93,9 @@ export default class EditAccountDialog extends Component {
                   }}
                   fullWidth
                 />
-                
-                 
-				
+
+
+
 			</form>
 			<div>
 				</div>
@@ -117,9 +117,3 @@ export default class EditAccountDialog extends Component {
 		);
 	}
 }
-
-
-
-
-
-

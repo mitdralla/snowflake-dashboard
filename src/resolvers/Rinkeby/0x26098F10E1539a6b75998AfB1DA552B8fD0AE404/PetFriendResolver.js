@@ -13,7 +13,7 @@ import EditPetDialog from './EditPetDialog';
 import LostReportCardv2 from './LostReportCardv2';
 
 import { ABI } from './index'
-import { useGenericContract, useAccountEffect } from '../../../../common/hooks'
+import { useGenericContract, useAccountEffect } from 'common/hooks'
 import { useWeb3Context } from 'web3-react'
 
 

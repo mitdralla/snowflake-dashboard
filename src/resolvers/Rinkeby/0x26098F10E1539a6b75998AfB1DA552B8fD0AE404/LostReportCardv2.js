@@ -19,14 +19,14 @@ import yellow from '@material-ui/core/colors/yellow';
 
 import ClaimReportDialog from './ClaimReportDialog';
 import Tooltip from '@material-ui/core/Tooltip';
-import TransactionButton from '../../../common/TransactionButton';
+import TransactionButton from 'components/common/TransactionButton';
 
 
 
 export default class LostReportCardv2 extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {	
+		this.state = {
 			openReport:false,
 			petId:'',
 			chipId:'',
@@ -42,14 +42,14 @@ export default class LostReportCardv2 extends React.Component {
 							contactData:'',
 							reward:'',
 							imgUrl:'',
-							ownerId:''							
+							ownerId:''
 		}
 	}
-	
+
 	componentDidMount() {
 		this.refreshLostReport();
 	}
-	
+
 	refreshLostReport(){
 		const _this = this;
 		const lr =_this.props.resolverContract.methods.getLostReport(this.props.petId).call();
@@ -74,25 +74,25 @@ export default class LostReportCardv2 extends React.Component {
 					ownerId:ow.ownerId,
 					chipId:pt.chipId
 			})
-					
+
 		});
 	}
-	
+
 	handleClickOpenReport = () => {
 		this.setState({ openReport: true });
 	};
-	
+
 	handleCloseReport = () => {
 		this.setState({ openReport: false });
 		//callback for refreshing active report data
 		//this.props.getActiveReport();
 	};
-  
+
 	//Refresh table after changed state
 	handleClickUnclaimReport = ()=>{
 		this.refreshLostReport();
 	}
-  
+
 	getStatusColor() {
 		if(this.state.reportStatus ==="1")
 			return {backgroundColor: red[500]}
@@ -137,7 +137,7 @@ export default class LostReportCardv2 extends React.Component {
 					</Button>
 				):''}
 				{this.state.reportStatus==="2" && this.state.hydroId === this.state.claimerHydroId?(
-					<TransactionButton 
+					<TransactionButton
 						readyText=' Sorry!  Unreport Pet Found'
 						method = { this.props.resolverContract.methods.unclaimLostReport(this.props.petId)}
 						onConfirmation={() => {
@@ -145,7 +145,7 @@ export default class LostReportCardv2 extends React.Component {
 						}}
 					/>
 				):''}
-				<ClaimReportDialog 
+				<ClaimReportDialog
 					OwnerHydroId={this.props.OwnerHydroId}
 					reportStatus ={this.state.reportStatus}
 					reportStatusTxt ={this.state.reportStatusTxt}
@@ -166,4 +166,3 @@ export default class LostReportCardv2 extends React.Component {
 }
 
 }
-
