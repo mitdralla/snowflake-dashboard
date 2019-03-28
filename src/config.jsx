@@ -5,6 +5,7 @@ const config = {
     dappStoreMetaKeywords:           "dapps, dapp store, app store, decentralized applications, decentralized apps, snowflake, hydro dapp store",
     dappStoreMetaDescription:        "Hydro dApp store featuring decentralized applications powered by Snowflake.",
     dappSearchPlaceholderText:       "Search the dApp Store...",
+    googleAnalyticsTag:              "UA-XXXXXXXXX",
     dappSearchActive:                true,         // Is the header dApp search bar visible? true/false
     maintenanceMode:                 false,        // Allows the store to display a temporary maintenance page or message. true/false
     theme: {                                       //******** Settings pertaining to the stores theme. ********//
