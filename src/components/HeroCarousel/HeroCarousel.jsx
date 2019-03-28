@@ -18,34 +18,34 @@ import demoBG6 from './../../assets/img/uber_logo.jpg'
 import demoBG7 from './../../assets/img/uno_logo.jpg'
 import demoBG8 from './../../assets/img/temple_run_logo.png'
 
+// Shorter path to hero config
+const heroConfig = config.homepage.heroCarousel
+
 // Owl Carousel Config.
 const options = {
-  items: config.heroCarousel.maxItems,
-  loop: true,
-  margin: 30,
-  responsiveClass: true,
+  items: heroConfig.desktopItemsInView,
+  loop: heroConfig.infiniteItemLoop,
+  margin: heroConfig.spaceBetweenItems,
+  responsiveClass: heroConfig.responsive,
   responsive:{
       0:{
-          items: config.heroCarousel.itemsInViewMobile,
-          nav: true,
-          loop: true
+          items: heroConfig.mobileItemsInView,
+          autoplay: heroConfig.autoplayMobile,
       },
       600:{
-          items: config.heroCarousel.itemsInViewTablet,
-          nav: false,
-          loop: true
+          items: heroConfig.tabletItemsInView,
+          autoplay: heroConfig.autoplayTablet,
       },
       1000:{
-          items: config.heroCarousel.itemsInViewDesktop,
-          nav: true,
-          loop: true,
+          items: heroConfig.desktopItemsInView,
+          autoplay: heroConfig.autoplayDesktop,
       }
   },
-  autoplay: true,
-  autoplayTimeout: 3000,
-  autoplayHoverPause: false,
-  autoWidth: false,
-  navigation: false
+  autoplay: heroConfig.autoplay,
+  autoplayTimeout: heroConfig.rotationSpeed,
+  autoplayHoverPause: heroConfig.pauseOnHover,
+  autoWidth: heroConfig.autoWidth,
+  navigation: heroConfig.navigation
 };
 
 // Owl Events.
