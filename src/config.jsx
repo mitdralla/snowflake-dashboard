@@ -21,10 +21,17 @@ const config = {
       desktopItemsInView:            5,            // How many items are in view on desktop (1000px or greater).
       tabletItemsInView:             3,            // How many items are in view on tablet (600px or greater).
       mobileItemsInView:             1,            // How many items are in view on tablet (0px or greater).
-      autoplay:                      true,         // Will the carousel start rotating automatically? true/false.
+      navigation:                    false,        // Is there a dot navigation below the carousel? true/false
+      responsive:                    true,         // Will the carousel respect responsive breakpoints and breakpoint specific config? True recommended. true/false
+      autoWidth:                     false,        // Will the carousel try to determine its container automatically? False recommended. true/false
+      autoplay:                      false,         // Will the carousel start rotating automatically as default? true/false
+      autoplayDesktop:               true,         // Will the carousel start rotating automatically on desktop? true/false
+      autoplayTablet:                true,         // Will the carousel start rotating automatically on tablet? true/false
+      autoplayMobile:                false,        // Will the carousel start rotating automatically on mobile? true/false
       rotationSpeed:                 3000,         // Rotation speed between each slide movement in milliseconds. (ex: 3000 = 3 seconds).
       pauseOnHover:                  true,         // Will the carousel stop moving on hover? true/false
       infiniteItemLoop:              true,         // Will it infinitely keep rotating? true/false
+      spaceBetweenItems:             30,           // The margin between items in px (ex: 30 = 30px).
       titleActive:                   true,         // Is there an app title visible? true/false
       categoryActive:                true,         // Is there an app category visible? true/false
       ratingsActive:                 true,         // Are there app ratings visible? true/false
