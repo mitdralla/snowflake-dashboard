@@ -24,9 +24,9 @@ const config = {
       navigation:                    false,        // Is there a dot navigation below the carousel? true/false
       responsive:                    true,         // Will the carousel respect responsive breakpoints and breakpoint specific config? True recommended. true/false
       autoWidth:                     false,        // Will the carousel try to determine its container automatically? False recommended. true/false
-      autoplay:                      false,         // Will the carousel start rotating automatically as default? true/false
-      autoplayDesktop:               true,         // Will the carousel start rotating automatically on desktop? true/false
-      autoplayTablet:                true,         // Will the carousel start rotating automatically on tablet? true/false
+      autoplay:                      false,        // Will the carousel start rotating automatically as default? (note desktop/tablet/mobile will trump) true/false
+      autoplayDesktop:               false,        // Will the carousel start rotating automatically on desktop? true/false
+      autoplayTablet:                false,        // Will the carousel start rotating automatically on tablet? true/false
       autoplayMobile:                false,        // Will the carousel start rotating automatically on mobile? true/false
       rotationSpeed:                 3000,         // Rotation speed between each slide movement in milliseconds. (ex: 3000 = 3 seconds).
       pauseOnHover:                  true,         // Will the carousel stop moving on hover? true/false

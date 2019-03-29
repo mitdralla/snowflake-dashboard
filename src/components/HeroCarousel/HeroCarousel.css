@@ -87,5 +87,15 @@
 }
 
 .itemContent {
-  display: none;
+  display: block;
+  text-align: left;
+  height: 100%;
+  max-width: 100%;
+  padding: 30px;
+  vertical-align: bottom;
+}
+
+.itemContent h4 {
+  font-size: 20px;
+  font-weight: 500;
 }
