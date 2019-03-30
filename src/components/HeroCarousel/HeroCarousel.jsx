@@ -116,6 +116,7 @@ const defaultConfig = {
   }
 }
 
+// This fails - but if you remove all divs and elements besides just printing item.title, it works.
 class OwlChildItems extends React.Component {
   render() {
     return (
