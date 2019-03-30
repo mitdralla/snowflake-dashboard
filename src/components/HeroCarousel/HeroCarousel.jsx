@@ -117,25 +117,23 @@ const defaultConfig = {
 }
 
 // This fails - but if you remove all divs and elements besides just printing item.title, it works.
-class OwlChildItems extends React.Component {
-  render() {
-    return (
-      defaultConfig.placeholderDapps.items.map((item, i) => (
-        <div className="item dAppCarouselItem" style={item.backgroundImage} key={i}>
-          <div className="itemContent slideWidth">
-            <h4>{item.title}</h4>
-            <h5>{item.category}</h5>
-          </div>
+function OwlClildItems() {
+  return (
+    defaultConfig.placeholderDapps.items.map((item, i) => (
+      <div className="item dAppCarouselItem" style={item.backgroundImage} key={i}>
+        <div className="itemContent slideWidth">
+          <h4>{item.title}</h4>
+          <h5>{item.category}</h5>
         </div>
-      ))
-    )
-  }
+      </div>
+    ))
+  )
 }
 
 function HeroCarousel() {
   return (
     <OwlCarousel options={options} events={events} >
-      <OwlChildItems />
+      {OwlClildItems()}
     </OwlCarousel>
   )
 }
