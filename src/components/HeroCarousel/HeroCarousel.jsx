@@ -3,7 +3,6 @@
 import React from 'react';
 import './HeroCarousel.css'
 import config from '../../config.jsx'
-
 import OwlCarousel from 'react-owl-carousel2'
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.css';
 import '../../../node_modules/react-owl-carousel2/src/owl.carousel.js';
@@ -52,7 +51,7 @@ const options = {
 const events = {
   onDragged: function(event) {},
   onChanged: function(event) {}
-};
+}
 
 const defaultConfig = {
   placeholderDapps: {
@@ -117,21 +116,27 @@ const defaultConfig = {
   }
 }
 
-const placeholderDAppItems = defaultConfig.placeholderDapps.items
+class OwlChildItems extends React.Component {
+  render() {
+    return (
+      defaultConfig.placeholderDapps.items.map((item, i) => (
+        <div className="item dAppCarouselItem" style={item.backgroundImage} key={i}>
+          <div className="itemContent slideWidth">
+            <h4>{item.title}</h4>
+            <h5>{item.category}</h5>
+          </div>
+        </div>
+      ))
+    )
+  }
+}
 
-export default (function HeroCarousel({ classes }) {
+function HeroCarousel() {
   return (
     <OwlCarousel options={options} events={events} >
-      {placeholderDAppItems.map((item, i) => {
-        return (
-          <div className="item dAppCarouselItem" style={item.backgroundImage}>
-            <div className="itemContent slideWidth">
-              <h4>{item.title}</h4>
-              <h5>{item.category}</h5>
-            </div>
-          </div>
-        )
-      })}
+      <OwlChildItems />
     </OwlCarousel>
   )
-})
+}
+
+export default HeroCarousel
